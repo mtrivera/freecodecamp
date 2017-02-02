@@ -55,7 +55,7 @@ function ifValidUser(user) {
 function displayChannelContent(channel) {
   const NOT_FOUND = 404;
   if (channel.status !== NOT_FOUND) {
-    console.log(channel.logo  + '<br />' + channel.name + '<br / >' + channel.status
+    console.log(addLogo(channel.logo, channel.name, channel.status)  + '<br />' + channel.name + '<br / >' + channel.status
                 + '<br / >' + channel.url + '<br />' + channel.game);
   } else {
     console.log('Invalid User. No Content to Display');
@@ -69,6 +69,15 @@ function isStreamOnline(data, stream) {
   } else {
     console.log(stream + ' channel is OFFLINE');
   }
+}
+
+// to display logo in list
+function addLogo(url, stream, status) {
+  var logoImage = new Image(96, 96);
+  logoImage.src = url;
+  logoImage.setAttribute('class', 'img-circle');
+  logoImage.alt = stream + ' ' + status;
+  document.body.appendChild(logoImage);
 }
 
 //use for creating list
