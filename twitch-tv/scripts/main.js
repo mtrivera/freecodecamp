@@ -1,29 +1,18 @@
-/*
-valid user
-if created_at AND updated_at EQUAL
-has not been updated
-API has changed, see link below:
-http://forum.freecodecamp.com/t/problem-to-find-closed-twitch-accounts/42652/4
-https://wind-bow.gomix.me/
-https://wind-bow.hyperdev.space/
-/users/:user, /channels/:channel, and /streams/:stream
-*/
-//use to see if user exists or has valid channel
-const API_URL = 'https://wind-bow.gomix.me/twitch-api';
-
 function ajaxModule() {
   //to see if a streamer is offline
   function findStream(stream) {
+    const API_URL = 'https://wind-bow.gomix.me/twitch-api';
     let request = new XMLHttpRequest();
     request.open('GET', API_URL + '/streams/' + stream, true);
     request.onload = function() {
       var data = JSON.parse(this.response);
-       console.log(data);
+       isStreamOnline(data, stream);
       }
     request.send();
   }
   //to see if a valid user
   function findUser(user) {
+    const API_URL = 'https://wind-bow.gomix.me/twitch-api';
     let request = new XMLHttpRequest();
     request.open('GET', API_URL + '/users/' + user, true);
     request.onload = function() {
@@ -34,6 +23,7 @@ function ajaxModule() {
   }
   //to get data to populate list
   function findChannel(channel) {
+    const API_URL = 'https://wind-bow.gomix.me/twitch-api';
     let request = new XMLHttpRequest();
     request.open('GET', API_URL + '/channels/' + channel, true);
     request.onload = function() {
@@ -72,12 +62,12 @@ function displayChannelContent(channel) {
   }
 }
 
-//NOT DISPLAYING CORRECTLY
-function isStreamOnline(data) {
+//to see if channel is online
+function isStreamOnline(data, stream) {
   if (data.stream !== null) {
     console.log(data.stream.channel.name + ' channel is ONLINE');
   } else {
-    console.log(data + ' channel is OFFLINE');
+    console.log(stream + ' channel is OFFLINE');
   }
 }
 
@@ -89,11 +79,12 @@ function addListItem(streamer, netStatus) {
   document.body.appendChild(listItem);
 }
 
-//WORKS!!
-var streamers = ["ESL_DOTA2", "BeyondTheSummit", "cretetion", "comster404", "freecodecamp", "storbeck", "brunofin", "habathcx", "RobotCaleb", "noobs2ninjas"];
-
-var test2 = new ajaxModule();
-
-for (let count = 0; count < streamers.length; count += 1) {
-  //test2.findStream(streamers[count]);
-}
+//Main Program
+(function main() {
+  var streamers = ["ESL_DOTA2", "BeyondTheSummit", "cretetion", "comster404", "freecodecamp",
+                   "storbeck", "brunofin", "habathcx", "RobotCaleb", "noobs2ninjas"];
+  var xhr = new ajaxModule();
+  for (let count = 0; count < streamers.length; count += 1) {
+      //xhr.findChannel(streamers[count]);
+  }
+}());
