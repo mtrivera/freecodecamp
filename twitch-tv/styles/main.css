@@ -1,3 +1,7 @@
 .logo {
   border: 2px solid #000;
 }
+
+.img-circle {
+  border-radius: 50%;
+}
