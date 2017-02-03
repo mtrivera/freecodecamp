@@ -90,8 +90,9 @@ function addListItem(streamer, netStatus) {
 
 //Main Program
 (function main() {
-  var streamers = ["ESL_DOTA2", "BeyondTheSummit", "cretetion", "comster404", "freecodecamp",
-                   "storbeck", "brunofin", "habathcx", "RobotCaleb", "noobs2ninjas"];
+  var streamers = ["ESL_DOTA2", "BeyondTheSummit", "cretetion",
+  "comster404", "freecodecamp", "storbeck", "brunofin", "habathcx",
+  "RobotCaleb", "noobs2ninjas"];
   var xhr = new ajaxModule();
   for (let count = 0; count < streamers.length; count += 1) {
       //xhr.findChannel(streamers[count]);
