@@ -17,7 +17,7 @@ function ajaxModule() {
     request.open('GET', API_URL + '/users/' + user, true);
     request.onload = function() {
       var data = JSON.parse(this.response);
-        ifValidUser(data);
+        isValidUser(data);
       }
     request.send();
   }
@@ -41,34 +41,38 @@ function ajaxModule() {
 }
 
 //use with findUser
-function ifValidUser(user) {
+function isValidUser(user) {
   const NOT_FOUND = 404,
         UNPROCESSABLE = 422;
   if (user.status !== NOT_FOUND && user.status !== UNPROCESSABLE) {
-    console.log(user.name + ' is VALID');
+    isStreamOnline(user);
   } else {
-    console.log(user.message);
+    var msg = document.createElement('p');
+    var msgText = document.createTextNode(user.message);
+    msg.appendChild(msgText);
+    document.body.appendChild(msg);
   }
 }
 
 //use with findChannel
 function displayChannelContent(channel) {
-  const NOT_FOUND = 404;
-  if (channel.status !== NOT_FOUND) {
-    console.log(addLogo(channel.logo, channel.name, channel.status)  + '<br />' + channel.name + '<br / >' + channel.status
-                + '<br / >' + channel.url + '<br />' + channel.game);
-  } else {
-    console.log('Invalid User. No Content to Display');
-  }
+    addLogo(channel.logo, channel.name, channel.status);  /*+ '<br />' +
+    channel.name + '<br / >' + channel.status + '<br / >' + channel.url +
+    '<br />' + channel.game;*/
 }
 
 //to see if channel is online
 function isStreamOnline(data, stream) {
+  const netStatus = document.createElement('p');
+  var netStatusTxt;
   if (data.stream !== null) {
-    console.log(data.stream.channel.name + ' channel is ONLINE');
+    netStatusTxt = document.createTextNode(data.stream.channel.name +
+    ' is ONLINE');
   } else {
-    console.log(stream + ' channel is OFFLINE');
+    netStatusTxt = document.createTextNode(stream + ' is OFFLINE');
   }
+  netStatus.appendChild(netStatusTxt);
+  document.body.appendChild(netStatus);
 }
 
 // to display logo in list
@@ -90,11 +94,23 @@ function addListItem(streamer, netStatus) {
 
 //Main Program
 (function main() {
+  var xhr = new ajaxModule();
+  var ul = document.createElement('ul');
+  ul.setAttribute('class', 'streamerList');
+
+  var t;
   var streamers = ["ESL_DOTA2", "BeyondTheSummit", "cretetion",
   "comster404", "freecodecamp", "storbeck", "brunofin", "habathcx",
   "RobotCaleb", "noobs2ninjas"];
-  var xhr = new ajaxModule();
-  for (let count = 0; count < streamers.length; count += 1) {
-      //xhr.findChannel(streamers[count]);
+
+  //document.getElementById('contentList').appendChild('ul');
+
+  for(let count = 0; count < streamers.length; count += 1) {
+    xhr.findUser(streamers[count]);
+    /*var li = document.createElement('li');
+    li.setAttribute('class', 'streamer');
+    ul.appendChild('li');
+    t = document.createTextNode(element);
+    li.innerHTML = li.innerHTML + element;*/
   }
 }());
