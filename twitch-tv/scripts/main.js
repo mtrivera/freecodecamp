@@ -30,40 +30,12 @@ function get(url) {
     req.send();
   });
 }
-/*
-function ajaxModule() {
-  //to see if a streamer is offline and get data
-  function findStream(stream) {
-    const API_URL = 'https://wind-bow.gomix.me/twitch-api';
-    let request = new XMLHttpRequest();
-    request.open('GET', API_URL + '/streams/' + stream, true);
-    request.onload = function streamDataParse() {
-      var data = JSON.parse(this.response);
-       isStreamOnline(data, stream);
-      }
-    request.send();
-  }
-
-  //to see if a valid user
-  function findUser(user) {
-    var streamer = {};
-    const API_URL = 'https://wind-bow.gomix.me/twitch-api';
-    let request = new XMLHttpRequest();
-    request.open('GET', API_URL + '/users/' + user, true);
-    request.onload = function userDataParse() {
-      var data = JSON.parse(this.response);
-      isUserValid(data, user);
-    }
-    request.send();
-  }
-
-  return {
-    findStream: findStream,
-    findUser: findUser
-  };
+// Returns a promise, fethces a url then parses the response as JSON
+function getJSON(url) {
+  return get(url).then(JSON.parse);
 }
-*/
-//use with findUser
+
+// use with findUser
 function isUserValid(data, user) {
   const NOT_FOUND = 404;
   const UNPROCESSABLE = 422;
@@ -79,25 +51,21 @@ function isUserValid(data, user) {
   return streamer;
 }
 
-//to see if channel is online
+// to see if channel is online
 function isStreamOnline(data, stream) {
-  const netStatus = document.createElement('p');
-  var netStatusTxt;
-  var statusP;
-  if (data.stream !== null) {
-    addLogo(data.stream.channel.logo, data.stream.channel.name, data.stream.channel.status);
-    netStatusTxt = document.createTextNode(data.stream.channel.name +
-    ' is ONLINE');
-    addElm(statusP, data.stream.channel.status, 'p');
-    /*var statusP = document.createElement('p');
-    var statusPText = document.createTextNode(data.stream.channel.status);
-    statusP.appendChild(statusPText);
-    document.body.appendChild(statusP);*/
+  var streamer = {};
+  if (data.stream === null) {
+    streamer.network_status = false;
   } else {
-    netStatusTxt = document.createTextNode(stream + ' is OFFLINE');
+    streamer.game = data.stream.game;
+    streamer.viewers = data.stream.viewers;
+    streamer.mature = data.stream.channel.mature;
+    streamer.logo_url = data.stream.channel.logo;
+    streamer.stream_status = data.stream.channel.status;
+    streamer.stream_url = data.stream.channel.url;
+    streamer.network_status = true;
   }
-  netStatus.appendChild(netStatusTxt);
-  document.body.appendChild(netStatus);
+  return streamer;
 }
 
 // to display logo in list
@@ -116,7 +84,7 @@ function addElm(name, data, tag) {
   document.body.appendChild(name);
 }
 
-//use for creating list
+// use for creating list
 function addListItem(streamer, netStatus) {
   var listItem = document.createElement('li');
   var listItemText = document.createTextNode(streamer + 'is ' + netStatus);
@@ -124,20 +92,32 @@ function addListItem(streamer, netStatus) {
   document.body.appendChild(listItem);
 }
 
-//Main Program
+// Main Program
 (function main() {
-  var xhr = new ajaxModule();
+  const API_URL = 'https://wind-bow.gomix.me/twitch-api';
+
   var ul = document.createElement('ul');
   ul.setAttribute('class', 'streamerList');
+  const dota = 'ESL_DOTA2';
+  var users = ['ESL_DOTA2', 'BeyondTheSummit', 'cretetion',
+  'comster404', 'freecodecamp', 'storbeck', 'brunofin', 'habathcx',
+  'RobotCaleb', 'noobs2ninjas'];
+  // Promise call
+  var promise = getJSON(API_URL + '/users/' + dota).then(function(data) {
+    // FIXME: Need to put isUserValid data into object
+    isUserValid(data, dota);
+    return getJSON(API_URL + '/streams/' + dota);
+  }).then(function(data) {
+    // FIXME: Need to put isStreamOnline data into object
+    isStreamOnline(data, dota);
+  }).catch(function(error) {
+    console.log(error);
+  });
+  /***
+  document.getElementById('contentList').appendChild('ul');
 
-  var users = ["ESL_DOTA2", "BeyondTheSummit", "cretetion",
-  "comster404", "freecodecamp", "storbeck", "brunofin", "habathcx",
-  "RobotCaleb", "noobs2ninjas"];
-
-  //document.getElementById('contentList').appendChild('ul');
-
-    //console.log(streamers);
-    /*var li = document.createElement('li');
+    console.log(streamers);
+    var li = document.createElement('li');
     li.setAttribute('class', 'streamer');
     ul.appendChild('li');
     t = document.createTextNode(element);
