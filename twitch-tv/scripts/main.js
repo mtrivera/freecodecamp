@@ -1,7 +1,7 @@
 /*promise get implementation
 polyfills for ie8+
 https://github.com/taylorhakes/promise-polyfill
-https://github.com/stefanpenner/es6-promise
+https://github.com/stefanpenner/es6-promise //based on standard
 https://developers.google.com/web/fundamentals/getting-started/primers/promises
 */
 function get(url) {
@@ -73,7 +73,7 @@ function addLogo(url, stream, status) {
   var logoImage = new Image(96, 96);
   logoImage.src = url;
   logoImage.setAttribute('class', 'img-circle');
-  logoImage.alt = stream + ' ' + status;
+  logoImage.alt = `${stream} ${status}`;
   document.body.appendChild(logoImage);
 }
 
@@ -102,14 +102,16 @@ function addListItem(streamer, netStatus) {
   var users = ['ESL_DOTA2', 'BeyondTheSummit', 'cretetion',
   'comster404', 'freecodecamp', 'storbeck', 'brunofin', 'habathcx',
   'RobotCaleb', 'noobs2ninjas'];
-  // Promise call
-  var promise = getJSON(API_URL + '/users/' + dota).then(function(data) {
-    // FIXME: Need to put isUserValid data into object
-    isUserValid(data, dota);
-    return getJSON(API_URL + '/streams/' + dota);
-  }).then(function(data) {
-    // FIXME: Need to put isStreamOnline data into object
-    isStreamOnline(data, dota);
+  // Promise calls
+  var userPromise = getJSON(`${API_URL}/users/${dota}`);
+  var streamPromise = getJSON(`${API_URL}/streams/${dota}`);
+
+  Promise.all([userPromise, streamPromise]).then(function(data) {
+    // TODO: Combine objects with spread operator
+    var obj1 = isUserValid(data[0]);
+    var obj2 = isStreamOnline(data[1]);
+    console.log(obj1);
+    console.log(obj2);
   }).catch(function(error) {
     console.log(error);
   });
