@@ -87,7 +87,7 @@ function addElm(name, data, tag) {
 // use for creating list
 function addListItem(streamer, netStatus) {
   var listItem = document.createElement('li');
-  var listItemText = document.createTextNode(streamer + 'is ' + netStatus);
+  var listItemText = document.createTextNode(`${streamer} is ${netStatus}`);
   listItem.appendChild(listItemText);
   document.body.appendChild(listItem);
 }
@@ -98,21 +98,29 @@ function addListItem(streamer, netStatus) {
 
   var ul = document.createElement('ul');
   ul.setAttribute('class', 'streamerList');
-  const dota = 'ESL_DOTA2';
+  const dota = 'comster404';
   var users = ['ESL_DOTA2', 'BeyondTheSummit', 'cretetion',
   'comster404', 'freecodecamp', 'storbeck', 'brunofin', 'habathcx',
   'RobotCaleb', 'noobs2ninjas'];
   // Promise calls
-  var userPromise = getJSON(`${API_URL}/users/${dota}`);
-  var streamPromise = getJSON(`${API_URL}/streams/${dota}`);
+  const userPromise = getJSON(`${API_URL}/users/${dota}`);
+  const streamPromise = getJSON(`${API_URL}/streams/${dota}`);
 
-  Promise.all([userPromise, streamPromise]).then(function(data) {
-    // TODO: Combine objects with spread operator
-    var obj1 = isUserValid(data[0]);
-    var obj2 = isStreamOnline(data[1]);
-    console.log(obj1);
-    console.log(obj2);
-  }).catch(function(error) {
+  Promise.all([userPromise, streamPromise]).then((data) => {
+    const userData = isUserValid(data[0], dota);
+  // TODO: Work on promise logic, ask why spread operator does not work
+    if (!userData.account_status) {
+      console.log(`${userData.name} Does Not Exist`);
+    } else {
+      const streamerData = isStreamOnline(data[1], dota);
+      if(!streamerData.network_status) {
+        console.log('User exists but is currently offline');
+      } else {
+        console.log('User Exists! Display Streamer Data');
+        console.log(streamerData);
+      }
+    }
+  }).catch((error) => {
     console.log(error);
   });
   /***
