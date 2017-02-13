@@ -82,6 +82,14 @@ function isStreamOnline(data, stream) {
   }
   return streamer;
 }
+// create link from stream status output
+function addLink(linkData) {
+  const link = document.createElement('a');
+  link.text = linkData.stream_status;
+  link.href = linkData.stream_url;
+  link.target = '_blank';
+  document.body.appendChild(link);
+}
 
 // to display logo in list
 function addLogo(url, stream, status) {
@@ -94,17 +102,9 @@ function addLogo(url, stream, status) {
 
 function addElm(name, data, tag) {
   var name = document.createElement(tag);
-  var nameText = document.createTextNode(data);
-  name.appendChild(nameText);
+  var text = document.createTextNode(data);
+  name.appendChild(text);
   document.body.appendChild(name);
-}
-
-// use for creating list
-function addListItem(streamer, netStatus) {
-  var listItem = document.createElement('li');
-  var listItemText = document.createTextNode(`${streamer} is ${netStatus}`);
-  listItem.appendChild(listItemText);
-  document.body.appendChild(listItem);
 }
 
 // Main Program
@@ -113,27 +113,33 @@ function addListItem(streamer, netStatus) {
 
   var ul = document.createElement('ul');
   ul.setAttribute('class', 'streamerList');
-  const testUser = 'baduser404';
+  const testUser = 'ppd';
   var users = ['ESL_DOTA2', 'BeyondTheSummit', 'zai',
   'baduser404', 'freecodecamp', 'storbeck', 'brunofin', 'habathcx',
   'RobotCaleb', 'noobs2ninjas'];
   // Promise calls
-  const userPromise = getJSON(`${API_URL}/users/${dota}`);
-  const streamPromise = getJSON(`${API_URL}/streams/${dota}`);
+  const userPromise = getJSON(`${API_URL}/users/${testUser}`);
+  const streamPromise = getJSON(`${API_URL}/streams/${testUser}`);
 
   Promise.all([userPromise, streamPromise]).then((data) => {
     const userData = isUserValid(data[0]);
-  // TODO: Work on promise logic, ask why spread operator does not work
+  // TODO: Ask why spread operator does not work
     if (!userData.account_status) {
-      console.log(userData.errorMsg);
+      const userStatusMsg = '';
+      addElm(userStatusMsg, userData.errorMsg,'p');
     } else {
-      const streamerData = isStreamOnline(data[1], dota);
-      if(!streamerData.network_status) {
-        //console.log(`${userData.name} is currently OFFLINE`);
+      const streamerData = isStreamOnline(data[1], testUser);
+      if (!streamerData.network_status) {
+        const msg = '';
+        addElm(msg, `${streamerData.name} is OFFLINE`, 'p');
       } else {
-        console.log('User Exists! Display Streamer Data');
+        const streamStatusMsg = '';
+        const streamName = '';
+        const viewersNum = 0;
         addLogo(streamerData.logo_url, streamerData.name, streamerData.stream_status);
-        console.log(streamerData);
+        addLink(streamerData);
+        addElm(streamName, streamerData.name, 'h3');
+        addElm(viewersNum, streamerData.viewers, 'p');
       }
     }
   }).catch((error) => {
