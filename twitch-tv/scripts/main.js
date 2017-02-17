@@ -40,12 +40,21 @@ function getJSON(url) {
 function isUserValid(data) {
   const NOT_FOUND = 404;
   const UNPROCESSABLE = 422;
+  var streamer = {};
 
   if (data.status !== NOT_FOUND && data.status !== UNPROCESSABLE) {
-    return true;
+    const account_status = true;
+    streamer = {
+      account_status
+    };
   } else {
-    return false;
+    const account_status = false;
+    const errorMsg = data.message;
+    streamer = {
+      account_status, errorMsg
+    };
   }
+  return streamer;
 }
 
 // to see if channel is online
@@ -116,8 +125,6 @@ function addElm(name, data, tag) {
   Promise.all(promises).then((data) => {
     //index 0-9 user promises
     //index 10-19 stream promises
-    const offset = 10;
-
     for( let count = 0; count < 10; count += 1)
     {
       console.log(isUserValid(data[count]));
