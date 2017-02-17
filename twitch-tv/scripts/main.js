@@ -115,42 +115,63 @@ function addElm(name, data, tag) {
   ul.setAttribute('class', 'streamerList');
 
   var users = ['BeyondTheSummit', 'zai','baduser404', 'freecodecamp',
-  'moonducktv', 'brunofin', 'habathcx', 'ESL_DOTA2', 'RobotCaleb',
+  'moonducktv', 'brunofin', 'dotacapitalist', 'ESL_DOTA2', 'RobotCaleb',
   'noobs2ninjas'];
 
   const userPromise = users.map(user => getJSON(`${API_URL}/users/${user}`));
   const streamPromise = users.map(stream => getJSON(`${API_URL}/streams/${stream}`));
   const promises = userPromise.concat(streamPromise);
-
-  Promise.all(promises).then((data) => {
-    //index 0-9 user promises
-    //index 10-19 stream promises
-    for( let count = 0; count < 10; count += 1)
-    {
-      console.log(isUserValid(data[count]));
-
-    }
-    //console.log(data);
-  }).catch((err) => {
-    console.error(err)
-  });
-}());
-    /*for(let count = 0; count < data.length; count += 1) {
-        console.log( isUserValid(data[count]) );
-      }*/
-
-  /*  for(let count = 0; count < vals.length; count += 1) {
-      console.log( isUserValid(vals[count]) );
-  }*/
-
   // Promise calls
-  //TODO: Get promise to work with array, maybe sequence will work
-  /*const userPromise = users.map(user => getJSON(`${API_URL}/users/${user}`));
-  const streamPromise = users.map(stream => getJSON(`${API_URL}/streams/${stream}`));
-*/
-  //const userPromise = getJSON(`${API_URL}/users/${users}`);
-  //const streamPromise = getJSON(`${API_URL}/streams/${users}`);
+  Promise.all(promises).then((data) => {
+    //index 0-9 user promises, index 10-19 stream promises
+    const userData = data.slice(0, 10);
+    const streamData = data.slice(10, 20);
 
+    //TODO: Filter out invalid users, with arr.filter() or copy properties over
+    //to streamData
+    //});//end streamerData forEach
+  }).catch((err) => {
+  console.error(err);
+});
+}());
+  /*  userData.forEach((elm, index, arr) => {
+      if (!isUserValid(elm).account_status) {
+        const userStatusMsg = '';
+        addElm(userStatusMsg, elm.message,'p');
+      } else {
+        const streamerData = data.slice(10, 20);
+        streamerData.forEach((elm, index, arr) => {
+          if (!getStreamData(elm).network_status) {
+              const msg = '';
+              const streamName = '';
+              console.log(elm.name);
+              addElm(streamName, users[index], 'h3');
+              addElm(msg, 'OFFLINE', 'p');
+          }
+      });
+    }
+    */
+
+
+        /*
+        const streamerData = data.slice(10, 20);
+        streamerData.forEach((elm, index, arr) => {
+          if (!getStreamData(elm).network_status) {
+
+              const msg = '';
+              const streamName = '';
+              console.log(elm.name);
+              addElm(streamName, users[index], 'h3');
+              addElm(msg, 'OFFLINE', 'p');
+          } else {
+              const streamStatusMsg = '';
+              const streamName = '';
+              const viewersNum = 0;
+              addLogo(elm.logo_url, elm.name, elm.stream_status);
+              addLink(elm);
+              addElm(streamName, elm.name, 'h3');
+              addElm(viewersNum, elm.viewers, 'p');
+          }*/
     /*
   // TODO: Ask why spread operator does not work
     if (!userData.account_status) {
