@@ -3,6 +3,7 @@ polyfills for ie8+
 https://github.com/taylorhakes/promise-polyfill
 https://github.com/stefanpenner/es6-promise //based on standard
 https://developers.google.com/web/fundamentals/getting-started/primers/promises
+https://bevacqua.github.io/promisees/#
 */
 function get(url) {
   // Return a new promise
@@ -47,19 +48,18 @@ function isUserValid(data) {
       account_status
     };
   } else {
-    const errorMsg = data.message;
     const account_status = false;
+    const errorMsg = data.message;
     streamer = {
-      errorMsg, account_status
+      account_status, errorMsg
     };
   }
   return streamer;
 }
 
 // to see if channel is online
-function isStreamOnline(data, stream) {
+function getStreamData(data, stream) {
   var streamer = {};
-
   if (data.stream === null) {
     const name = stream;
     const network_status = false;
@@ -113,16 +113,45 @@ function addElm(name, data, tag) {
 
   var ul = document.createElement('ul');
   ul.setAttribute('class', 'streamerList');
-  const testUser = 'ppd';
-  var users = ['ESL_DOTA2', 'BeyondTheSummit', 'zai',
-  'baduser404', 'freecodecamp', 'storbeck', 'brunofin', 'habathcx',
-  'RobotCaleb', 'noobs2ninjas'];
-  // Promise calls
-  const userPromise = getJSON(`${API_URL}/users/${testUser}`);
-  const streamPromise = getJSON(`${API_URL}/streams/${testUser}`);
 
-  Promise.all([userPromise, streamPromise]).then((data) => {
-    const userData = isUserValid(data[0]);
+  var users = ['BeyondTheSummit', 'zai','baduser404', 'freecodecamp',
+  'moonducktv', 'brunofin', 'habathcx', 'ESL_DOTA2', 'RobotCaleb',
+  'noobs2ninjas'];
+
+  const userPromise = users.map(user => getJSON(`${API_URL}/users/${user}`));
+  const streamPromise = users.map(stream => getJSON(`${API_URL}/streams/${stream}`));
+  const promises = userPromise.concat(streamPromise);
+
+  Promise.all(promises).then((data) => {
+    //index 0-9 user promises
+    //index 10-19 stream promises
+    for( let count = 0; count < 10; count += 1)
+    {
+      console.log(isUserValid(data[count]));
+
+    }
+    //console.log(data);
+  }).catch((err) => {
+    console.error(err)
+  });
+}());
+    /*for(let count = 0; count < data.length; count += 1) {
+        console.log( isUserValid(data[count]) );
+      }*/
+
+  /*  for(let count = 0; count < vals.length; count += 1) {
+      console.log( isUserValid(vals[count]) );
+  }*/
+
+  // Promise calls
+  //TODO: Get promise to work with array, maybe sequence will work
+  /*const userPromise = users.map(user => getJSON(`${API_URL}/users/${user}`));
+  const streamPromise = users.map(stream => getJSON(`${API_URL}/streams/${stream}`));
+*/
+  //const userPromise = getJSON(`${API_URL}/users/${users}`);
+  //const streamPromise = getJSON(`${API_URL}/streams/${users}`);
+
+    /*
   // TODO: Ask why spread operator does not work
     if (!userData.account_status) {
       const userStatusMsg = '';
@@ -131,7 +160,9 @@ function addElm(name, data, tag) {
       const streamerData = isStreamOnline(data[1], testUser);
       if (!streamerData.network_status) {
         const msg = '';
-        addElm(msg, `${streamerData.name} is OFFLINE`, 'p');
+        const streamName = '';
+        addElm(streamName, streamerData.name, 'h3');
+        addElm(msg, 'OFFLINE', 'p');
       } else {
         const streamStatusMsg = '';
         const streamName = '';
@@ -145,6 +176,7 @@ function addElm(name, data, tag) {
   }).catch((error) => {
     console.log(error);
   });
+}());*/
   /***
   document.getElementById('contentList').appendChild('ul');
 
@@ -153,5 +185,5 @@ function addElm(name, data, tag) {
     li.setAttribute('class', 'streamer');
     ul.appendChild('li');
     t = document.createTextNode(element);
-    li.innerHTML = li.innerHTML + element;*/
-}());
+    li.innerHTML = li.innerHTML + element;
+}());*/
