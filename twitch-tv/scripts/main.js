@@ -121,9 +121,10 @@ function addElm(name, data, tag) {
   const userPromise = users.map(user => getJSON(`${API_URL}/users/${user}`));
   const streamPromise = users.map(stream => getJSON(`${API_URL}/streams/${stream}`));
   const promises = userPromise.concat(streamPromise);
+  const newUsers = [];
   // Promise calls
   Promise.all(promises).then((data) => {
-    //index 0-9 user promises, index 10-19 stream promises
+    // index 0-9 user promises, index 10-19 stream promises
     // NOTE: arr.slice(start, end): end is up to but NOT included
     const userData = data.slice(0, 10);
     const streamData = data.slice(10, 20);
@@ -134,27 +135,45 @@ function addElm(name, data, tag) {
         if (!isUserValid(elm).account_status) {
           const userStatusMsg = '';
           addElm(userStatusMsg, elm.message,'p');
-          // Remove uneeded getStreamData calls on invalid users
-          const removeInvalidUser = streamData.splice(index, 1);
-        } /*else {
-            if (!getStreamData(streamData(index).network_status, users[index]) {
+        } else {
+          newUsers.push(elm.name);
+        }
+    });
+    //console.log(streamData);
+    //streamData.forEach((elm, index, arr) => {
+      //console.log(getStreamData(elm, users[index]));
+      /*if (!getStreamData(streamData[index].network_status, users[index])) {
+          const msg = '';
+          const streamName = '';
+          addElm(streamName, users[index], 'h3');
+          addElm(msg, 'OFFLINE', 'p');
+      } else {
+        const streamStatusMsg = '';
+        const streamName = '';
+        const viewersNum = 0;
+        console.log(streamData[index].elm.logo_url);
+        addLogo(streamData.elm.logo_url, streamData.elm.name, streamData.elm.stream_status);
+        addLink(streamData.elm);
+        addElm(streamName, streamData.elm.name, 'h3');
+        addElm(viewersNum, streamData.elm.viewers, 'p');
+      }*/
+    //});
+            //console.log( getStreamData(streamData[index], users[index]));
+            /*if (!getStreamData(streamData[index].network_status, users[index])) {
                 const msg = '';
                 const streamName = '';
-                console.log(elm.name);
                 addElm(streamName, users[index], 'h3');
                 addElm(msg, 'OFFLINE', 'p');
-            } else {
+            }*/ /*else {
               const streamStatusMsg = '';
               const streamName = '';
               const viewersNum = 0;
-              addLogo(elm.logo_url, elm.name, elm.stream_status);
-              addLink(elm);
-              addElm(streamName, elm.name, 'h3');
-              addElm(viewersNum, elm.viewers, 'p');
-            }
-        }*/
-      });
-    });
+              console.log(streamData[index].elm.logo_url);
+              addLogo(streamData.elm.logo_url, streamData.elm.name, streamData.elm.stream_status);
+              addLink(streamData.elm);
+              addElm(streamName, streamData.elm.name, 'h3');
+              addElm(viewersNum, streamData.elm.viewers, 'p');
+            }*/
   }).catch((err) => {
     console.error(err);
   });
