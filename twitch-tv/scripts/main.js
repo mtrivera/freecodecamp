@@ -124,16 +124,49 @@ function addElm(name, data, tag) {
   // Promise calls
   Promise.all(promises).then((data) => {
     //index 0-9 user promises, index 10-19 stream promises
+    // NOTE: arr.slice(start, end): end is up to but NOT included
     const userData = data.slice(0, 10);
     const streamData = data.slice(10, 20);
-
+    /*console.log(
+    Object.assign(getStreamData(streamData[2], users[2]), isUserValid(userData[2]))
+  );*/
+    userData.forEach((elm, index, arr) => {
+        if (!isUserValid(elm).account_status) {
+          const userStatusMsg = '';
+          addElm(userStatusMsg, elm.message,'p');
+          // Remove uneeded getStreamData calls on invalid users
+          const removeInvalidUser = streamData.splice(index, 1);
+        } /*else {
+            if (!getStreamData(streamData(index).network_status, users[index]) {
+                const msg = '';
+                const streamName = '';
+                console.log(elm.name);
+                addElm(streamName, users[index], 'h3');
+                addElm(msg, 'OFFLINE', 'p');
+            } else {
+              const streamStatusMsg = '';
+              const streamName = '';
+              const viewersNum = 0;
+              addLogo(elm.logo_url, elm.name, elm.stream_status);
+              addLink(elm);
+              addElm(streamName, elm.name, 'h3');
+              addElm(viewersNum, elm.viewers, 'p');
+            }
+        }*/
+      });
+    });
+  }).catch((err) => {
+    console.error(err);
+  });
+}());
+    /*var kappa = isUserValid(userData[0]);
+    var kapppa = getStreamData(streamData[0], users[0]);
+    var test = Object.assign(kapppa, kappa);
+    console.log(test);*/
     //TODO: Filter out invalid users, with arr.filter() or copy properties over
     //to streamData
     //});//end streamerData forEach
-  }).catch((err) => {
-  console.error(err);
-});
-}());
+
   /*  userData.forEach((elm, index, arr) => {
       if (!isUserValid(elm).account_status) {
         const userStatusMsg = '';
@@ -173,7 +206,6 @@ function addElm(name, data, tag) {
               addElm(viewersNum, elm.viewers, 'p');
           }*/
     /*
-  // TODO: Ask why spread operator does not work
     if (!userData.account_status) {
       const userStatusMsg = '';
       addElm(userStatusMsg, userData.errorMsg,'p');
