@@ -36,7 +36,7 @@ function getJSON(url) {
   return get(url).then(JSON.parse);
 }
 
-// use with findUser
+// Checks if user is valid
 function isUserValid(data) {
   const NOT_FOUND = 404;
   const UNPROCESSABLE = 422;
@@ -57,7 +57,7 @@ function isUserValid(data) {
   return streamer;
 }
 
-// to see if channel is online
+// Check if a channel is online
 function getStreamData(data, stream) {
   var streamer = {};
   if (data.stream === null) {
@@ -82,7 +82,7 @@ function getStreamData(data, stream) {
   }
   return streamer;
 }
-// create link from stream status output
+// Create link from stream status output
 function addLink(linkData) {
   const link = document.createElement('a');
   link.text = linkData.stream_status;
@@ -91,7 +91,7 @@ function addLink(linkData) {
   document.body.appendChild(link);
 }
 
-// to display logo in list
+// To display logo in list
 function addLogo(url, stream, status) {
   var logoImage = new Image(96, 96);
   logoImage.src = url;
@@ -100,6 +100,7 @@ function addLogo(url, stream, status) {
   document.body.appendChild(logoImage);
 }
 
+// Add an element to the DOM
 function addElm(name, data, tag) {
   var name = document.createElement(tag);
   var text = document.createTextNode(data);
@@ -111,8 +112,9 @@ function addElm(name, data, tag) {
 (function main() {
   const API_URL = 'https://wind-bow.gomix.me/twitch-api';
 
-  var ul = document.createElement('ul');
-  ul.setAttribute('class', 'streamerList');
+  //Is this needed?
+  /***var ul = document.createElement('ul');
+  *ul.setAttribute('class', 'streamerList');*/
 
   var users = ['BeyondTheSummit', 'zai','baduser404', 'freecodecamp',
   'moonducktv', 'brunofin', 'dotacapitalist', 'ESL_DOTA2', 'RobotCaleb',
@@ -121,141 +123,35 @@ function addElm(name, data, tag) {
   const userPromise = users.map(user => getJSON(`${API_URL}/users/${user}`));
   const streamPromise = users.map(stream => getJSON(`${API_URL}/streams/${stream}`));
   const promises = userPromise.concat(streamPromise);
-  const newUsers = [];
-  // Promise calls
+  // Promise call
   Promise.all(promises).then((data) => {
     // index 0-9 user promises, index 10-19 stream promises
     // NOTE: arr.slice(start, end): end is up to but NOT included
-    const userData = data.slice(0, 10);
-    const streamData = data.slice(10, 20);
-    /*console.log(
-    Object.assign(getStreamData(streamData[2], users[2]), isUserValid(userData[2]))
-  );*/
+    const userData = data.slice(0, users.length);
+    const streamData = data.slice(users.length, users.length * 2);
+
     userData.forEach((elm, index, arr) => {
-        if (!isUserValid(elm).account_status) {
-          const userStatusMsg = '';
-          addElm(userStatusMsg, elm.message,'p');
-        } else {
-          newUsers.push(elm.name);
-        }
-    });
-    //console.log(streamData);
-    //streamData.forEach((elm, index, arr) => {
-      //console.log(getStreamData(elm, users[index]));
-      /*if (!getStreamData(streamData[index].network_status, users[index])) {
-          const msg = '';
-          const streamName = '';
-          addElm(streamName, users[index], 'h3');
-          addElm(msg, 'OFFLINE', 'p');
-      } else {
+      if (!isUserValid(elm).account_status) {
+        const userStatusMsg = '';
+        addElm(userStatusMsg, elm.message,'p');
+      } else if (streamData[index]['stream'] != null){
         const streamStatusMsg = '';
         const streamName = '';
         const viewersNum = 0;
-        console.log(streamData[index].elm.logo_url);
+        //TODO: The calls below, use the console.log below as a guide:
+        //console.log( getStreamData(streamData[index], users[index]).network_status );
         addLogo(streamData.elm.logo_url, streamData.elm.name, streamData.elm.stream_status);
         addLink(streamData.elm);
         addElm(streamName, streamData.elm.name, 'h3');
         addElm(viewersNum, streamData.elm.viewers, 'p');
-      }*/
-    //});
-            //console.log( getStreamData(streamData[index], users[index]));
-            /*if (!getStreamData(streamData[index].network_status, users[index])) {
-                const msg = '';
-                const streamName = '';
-                addElm(streamName, users[index], 'h3');
-                addElm(msg, 'OFFLINE', 'p');
-            }*/ /*else {
-              const streamStatusMsg = '';
-              const streamName = '';
-              const viewersNum = 0;
-              console.log(streamData[index].elm.logo_url);
-              addLogo(streamData.elm.logo_url, streamData.elm.name, streamData.elm.stream_status);
-              addLink(streamData.elm);
-              addElm(streamName, streamData.elm.name, 'h3');
-              addElm(viewersNum, streamData.elm.viewers, 'p');
-            }*/
+      } else {
+        const msg = '';
+        const streamName = '';
+        addElm(streamName, users[index], 'h3');
+        addElm(msg, 'OFFLINE', 'p');
+      }
+    });
   }).catch((err) => {
     console.error(err);
   });
 }());
-    /*var kappa = isUserValid(userData[0]);
-    var kapppa = getStreamData(streamData[0], users[0]);
-    var test = Object.assign(kapppa, kappa);
-    console.log(test);*/
-    //TODO: Filter out invalid users, with arr.filter() or copy properties over
-    //to streamData
-    //});//end streamerData forEach
-
-  /*  userData.forEach((elm, index, arr) => {
-      if (!isUserValid(elm).account_status) {
-        const userStatusMsg = '';
-        addElm(userStatusMsg, elm.message,'p');
-      } else {
-        const streamerData = data.slice(10, 20);
-        streamerData.forEach((elm, index, arr) => {
-          if (!getStreamData(elm).network_status) {
-              const msg = '';
-              const streamName = '';
-              console.log(elm.name);
-              addElm(streamName, users[index], 'h3');
-              addElm(msg, 'OFFLINE', 'p');
-          }
-      });
-    }
-    */
-
-
-        /*
-        const streamerData = data.slice(10, 20);
-        streamerData.forEach((elm, index, arr) => {
-          if (!getStreamData(elm).network_status) {
-
-              const msg = '';
-              const streamName = '';
-              console.log(elm.name);
-              addElm(streamName, users[index], 'h3');
-              addElm(msg, 'OFFLINE', 'p');
-          } else {
-              const streamStatusMsg = '';
-              const streamName = '';
-              const viewersNum = 0;
-              addLogo(elm.logo_url, elm.name, elm.stream_status);
-              addLink(elm);
-              addElm(streamName, elm.name, 'h3');
-              addElm(viewersNum, elm.viewers, 'p');
-          }*/
-    /*
-    if (!userData.account_status) {
-      const userStatusMsg = '';
-      addElm(userStatusMsg, userData.errorMsg,'p');
-    } else {
-      const streamerData = isStreamOnline(data[1], testUser);
-      if (!streamerData.network_status) {
-        const msg = '';
-        const streamName = '';
-        addElm(streamName, streamerData.name, 'h3');
-        addElm(msg, 'OFFLINE', 'p');
-      } else {
-        const streamStatusMsg = '';
-        const streamName = '';
-        const viewersNum = 0;
-        addLogo(streamerData.logo_url, streamerData.name, streamerData.stream_status);
-        addLink(streamerData);
-        addElm(streamName, streamerData.name, 'h3');
-        addElm(viewersNum, streamerData.viewers, 'p');
-      }
-    }
-  }).catch((error) => {
-    console.log(error);
-  });
-}());*/
-  /***
-  document.getElementById('contentList').appendChild('ul');
-
-    console.log(streamers);
-    var li = document.createElement('li');
-    li.setAttribute('class', 'streamer');
-    ul.appendChild('li');
-    t = document.createTextNode(element);
-    li.innerHTML = li.innerHTML + element;
-}());*/
