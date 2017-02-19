@@ -1,10 +1,13 @@
-/*promise get implementation
-polyfills for ie8+
-https://github.com/taylorhakes/promise-polyfill
-https://github.com/stefanpenner/es6-promise //based on standard
-https://developers.google.com/web/fundamentals/getting-started/primers/promises
-https://bevacqua.github.io/promisees/#
-*/
+/**
+ * Promise get implementation
+ * Polyfills for ie8+
+ * https://github.com/taylorhakes/promise-polyfill
+ * https://github.com/stefanpenner/es6-promise //based on standard
+ * https://developers.google.com/web/fundamentals/getting-started/primers/promises
+ * https://bevacqua.github.io/promisees/#
+ */
+'use strict';   // Use strict mode
+
 function get(url) {
   // Return a new promise
   return new Promise(function(resolve, reject) {
@@ -76,8 +79,8 @@ function getStreamData(data, stream) {
     const stream_url =  data.stream.channel.url;
     const network_status = true;
 
-    streamer = { name, game, viewers, mature, logo_url,
-      stream_status, stream_url, network_status
+    streamer = { name, game, viewers, mature, logo_url
+      ,stream_status, stream_url, network_status
     };
   }
   return streamer;
@@ -93,7 +96,7 @@ function addLink(linkData) {
 
 // To display logo in list
 function addLogo(url, stream, status) {
-  var logoImage = new Image(96, 96);
+  const logoImage = new Image(96, 96);
   logoImage.src = url;
   logoImage.setAttribute('class', 'img-circle');
   logoImage.alt = `${stream} ${status}`;
@@ -102,23 +105,17 @@ function addLogo(url, stream, status) {
 
 // Add an element to the DOM
 function addElm(name, data, tag) {
-  var name = document.createElement(tag);
-  var text = document.createTextNode(data);
-  name.appendChild(text);
-  document.body.appendChild(name);
+  const elmName = document.createElement(tag);
+  const elmText = document.createTextNode(data);
+  elmName.appendChild(elmText);
+  document.body.appendChild(elmName);
 }
 
 // Main Program
 (function main() {
   const API_URL = 'https://wind-bow.gomix.me/twitch-api';
-
-  //Is this needed?
-  /***var ul = document.createElement('ul');
-  *ul.setAttribute('class', 'streamerList');*/
-
-  var users = ['BeyondTheSummit', 'zai','baduser404', 'freecodecamp',
-  'moonducktv', 'brunofin', 'dotacapitalist', 'ESL_DOTA2', 'RobotCaleb',
-  'noobs2ninjas'];
+  const users = ['BeyondTheSummit', 'zai','baduser404', 'freecodecamp', 'moonducktv'
+  ,'brunofin', 'dotacapitalist', 'ESL_DOTA2', 'RobotCaleb', 'noobs2ninjas'];
 
   const userPromise = users.map(user => getJSON(`${API_URL}/users/${user}`));
   const streamPromise = users.map(stream => getJSON(`${API_URL}/streams/${stream}`));
@@ -127,28 +124,29 @@ function addElm(name, data, tag) {
   Promise.all(promises).then((data) => {
     // index 0-9 user promises, index 10-19 stream promises
     // NOTE: arr.slice(start, end): end is up to but NOT included
-    const userData = data.slice(0, users.length);
-    const streamData = data.slice(users.length, users.length * 2);
+    const userData = data.slice(0, userPromise.length);
+    const streamData = data.slice(streamPromise.length, streamPromise.length * 2);
 
     userData.forEach((elm, index, arr) => {
       if (!isUserValid(elm).account_status) {
         const userStatusMsg = '';
         addElm(userStatusMsg, elm.message,'p');
-      } else if (streamData[index]['stream'] != null){
-        const streamStatusMsg = '';
-        const streamName = '';
-        const viewersNum = 0;
-        //TODO: The calls below, use the console.log below as a guide:
-        //console.log( getStreamData(streamData[index], users[index]).network_status );
-        addLogo(streamData.elm.logo_url, streamData.elm.name, streamData.elm.stream_status);
-        addLink(streamData.elm);
-        addElm(streamName, streamData.elm.name, 'h3');
-        addElm(viewersNum, streamData.elm.viewers, 'p');
-      } else {
+      } else if (!getStreamData(streamData[index], users[index]).network_status) {
         const msg = '';
         const streamName = '';
         addElm(streamName, users[index], 'h3');
         addElm(msg, 'OFFLINE', 'p');
+      } else {
+        const streamStatusMsg = '';
+        const streamName = '';
+        const viewersNum = 0;
+        addLogo(getStreamData(streamData[index], users[index]).logo_url
+          ,getStreamData(streamData[index], users[index]).name
+          ,getStreamData(streamData[index], users[index]).stream_status
+        );
+        addLink(getStreamData(streamData[index], users[index]));
+        addElm(streamName, getStreamData(streamData[index], users[index]).name, 'h3');
+        addElm(viewersNum, getStreamData(streamData[index], users[index]).viewers, 'p');
       }
     });
   }).catch((err) => {
