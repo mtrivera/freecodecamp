@@ -1,36 +1,39 @@
 <!doctype html>
 <html>
-<meta charset = "utf-8" />
+<meta charset="utf-8" />
 <head>
 <title>Calculator</title>
-<link rel ="stylesheet" href = "styles/main.css" />
-<script src = "scripts/app.js"></script>
+<link rel="stylesheet" href="styles/main.css" />
+<script src="scripts/app.js"></script>
 </head>
 <body>
-  <div id = "calculator">
-    <output name = "result"></output>
-    <input type = "button" id = "sevenDigit" value = "7">
-    <input type = "button" id = "eightDigit" value = "8">
-    <input type = "button" id = "nineDigit" value = "9">
-    <input type = "button" id = "perecentage" value = "%">
-    <input type = "button" id = "squareRoot" value = "√">
+  <form id="calculator">
+    <input type="text" id="history">
     <br>
-    <input type = "button" id = "fourDigit" value = "4">
-    <input type = "button" id = "fiveDigit" value = "5">
-    <input type = "button" id = "sixDigit" value = "6">
-    <input type = "button" id = "multiplication" value = "X">
-    <input type = "button" id = "division" value = "/">
+    <input type="text" id="result">
     <br>
-    <input type = "button" id = "oneDigit" value = "1">
-    <input type = "button" id = "twoDigit" value = "2">
-    <input type = "button" id = "threeDigit" value = "3">
-    <input type = "button" id = "addition" value = "+">
-    <input type = "button" id = "subtraction" value = "-">
+    <input type="button" id="sevenDigit" value="7">
+    <input type="button" id="eightDigit" value="8">
+    <input type="button" id="nineDigit" value="9">
+    <input type="button" id="perecentage" value="%">
+    <input type="button" id="allClear" value="AC">
     <br>
-    <input type = "button" id = "zeroDigit" value = "0">
-    <input type = "button" id = "decimalPoint" value = ".">
-    <input type = "button" id = "plusMinus" value = "±">
-    <input type = "button" id = "sum" value = "=">
-  </div>
+    <input type="button" id="fourDigit" value="4">
+    <input type="button" id="fiveDigit" value="5">
+    <input type="button" id="sixDigit" value="6">
+    <input type="button" id="multiplication" value="x">
+    <input type="button" id="division" value="/">
+    <br>
+    <input type="button" id="oneDigit" value="1">
+    <input type="button" id="twoDigit" value="2">
+    <input type="button" id="threeDigit" value="3">
+    <input type="button" id="addition" value="+">
+    <input type="button" id="subtraction" value="-">
+    <br>
+    <input type="button" id="zeroDigit" value="0">
+    <input type="button" id="decimalPoint" value=".">
+    <input type="button" id="plusMinus" value="±">
+    <input type="button" id="sum" value="=">
+  </form>
 </body>
 </html>
