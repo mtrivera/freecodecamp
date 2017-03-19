@@ -113,7 +113,7 @@ function addElm(name, data, tag) {
 
 // Main Program
 (function main() {
-  const API_URL = 'https://wind-bow.gomix.me/twitch-api';
+  const API_URL = 'https://wind-bow.glitch.me/twitch-api';
   const users = ['BeyondTheSummit', 'zai','baduser404', 'freecodecamp', 'moonducktv'
   ,'brunofin', 'dotacapitalist', 'ESL_DOTA2', 'RobotCaleb', 'noobs2ninjas'];
 
