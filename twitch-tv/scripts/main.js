@@ -124,8 +124,11 @@ function addElm(name, data, tag) {
   Promise.all(promises).then((data) => {
     // index 0-9 user promises, index 10-19 stream promises
     // NOTE: arr.slice(start, end): end is up to but NOT included
-    const userData = data.slice(0, userPromise.length);
-    const streamData = data.slice(streamPromise.length, streamPromise.length * 2);
+    const userPromiseLength = userPromise.length;
+    const streamPromiseLength = streamPromise.length;
+
+    const userData = data.slice(userPromiseLength - userPromiseLength, userPromiseLength);
+    const streamData = data.slice(streamPromiseLength, streamPromiseLength + streamPromiseLength);
 
     userData.forEach((elm, index, arr) => {
       if (!isUserValid(elm).account_status) {
