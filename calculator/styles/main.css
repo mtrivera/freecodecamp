@@ -1,13 +1,10 @@
 output {
-  display:block;
+  display: block;
   height: 2.0em;
   width: 200px;
   border:1px solid #000;
-  background-color: #FCC100;
 }
 
-#history {
-  height: 1.0em;
-  background-color: #FCC100;
-  border-bottom: 0;
+#result {
+  width: 50px;
 }
