@@ -1,8 +1,14 @@
 'use strict';
 var session = document.getElementById('session');
-var minutes = 11;
+var minutes = 25;
 var seconds = 0;
 var zeroSet = '00';
+var clock = document.getElementById('clock');
+clock.addEventListener('click', function (e) {
+    if (e.target && e.target.nodeName === 'BUTTON') {
+        console.log('ID: ' + e.target.id);
+    }
+});
 var interval = setInterval(function () {
     stopClock(minutes);
     if (seconds < 0) {
@@ -37,7 +43,7 @@ function stopClock(minutes) {
         clearInterval(interval);
     }
 }
-// TODO: If the minute is < 10, the zero is not appended correctly for minutes/seconds
+// TODO: If the minute is < 10, the zero is not appended correctly for seconds
 function appendZero(minutes, seconds) {
     if (minutes < 10) {
         // Append leading zero to minutes < 10

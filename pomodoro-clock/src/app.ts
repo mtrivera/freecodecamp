@@ -4,6 +4,13 @@ let session:any = document.getElementById('session');
 let minutes:number = 25;
 let seconds:number = 0;
 let zeroSet:string = '00';
+let clock:any = document.getElementById('clock');
+
+clock.addEventListener('click', function(e) {
+  if (e.target && e.target.nodeName === 'BUTTON') {
+    console.log('ID: ' + e.target.id);
+  }
+});
 
 let interval = setInterval(function() {
   stopClock(minutes);
