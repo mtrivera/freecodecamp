@@ -5,9 +5,9 @@
         "target": "es6",
         "noImplicitAny": false,
         "sourceMap": false,
-        "outDir": "./build/app.js"
+        "outDir": "./build/"
     },
     "include": [
-        "srcs/**/*"
+        "src/**/*"
     ]
 }
