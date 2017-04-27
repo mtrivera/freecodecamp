@@ -1,20 +1,37 @@
 'use strict';
-var session = document.getElementById('session');
-var minutes = 25;
-var seconds = 0;
-var zeroSet = '00';
-var clock = document.getElementById('clock');
+let running = false;
+let start = document.getElementById('startBtn');
+let session = document.getElementById('session');
+let clock = document.getElementById('clock');
+let minutes = 25;
+let seconds = 0;
+let zeroSet = '00';
+let interval;
 clock.addEventListener('click', function (e) {
     if (e.target && e.target.nodeName === 'BUTTON') {
-        console.log('ID: ' + e.target.id);
+        switch (e.target.id) {
+            case 'startBtn':
+                if (start.textContent === 'RESUME') {
+                    start.textContent = 'START';
+                }
+                running = true;
+                interval = setInterval(countdown, 1000);
+                break;
+            case 'pauseBtn':
+                if (running) {
+                    clearInterval(interval);
+                }
+                start.textContent = 'RESUME';
+                break;
+        }
     }
 });
-var interval = setInterval(function () {
+function countdown() {
     stopClock(minutes);
     if (seconds < 0) {
         setClock(minutes);
     }
-    session.textContent = minutes + ":" + seconds;
+    session.textContent = `${minutes}:${seconds}`;
     appendZero(minutes, seconds);
     /*
       appendMinuteZero(minutes);
@@ -30,12 +47,12 @@ var interval = setInterval(function () {
     if (minutes < 0) {
         zeroClock(minutes, seconds);
     }
-}, 1000);
+}
 function zeroClock(minutes, seconds) {
-    return zeroSet + ":" + zeroSet;
+    return `${zeroSet}:${zeroSet}`;
 }
 function setClock(minutes) {
-    return minutes + ":" + zeroSet;
+    return `${minutes}:${zeroSet}`;
 }
 function stopClock(minutes) {
     // Session is over, stop timer
@@ -47,14 +64,14 @@ function stopClock(minutes) {
 function appendZero(minutes, seconds) {
     if (minutes < 10) {
         // Append leading zero to minutes < 10
-        session.textContent = "0" + minutes + ":" + seconds;
+        session.textContent = `0${minutes}:${seconds}`;
     }
     else if (seconds < 10) {
         // Append leading zero to minutes < 10
-        session.textContent = minutes + ":0" + seconds;
+        session.textContent = `${minutes}:0${seconds}`;
     }
     else if (seconds < 10 && minutes < 10) {
-        session.textContent = "0" + minutes + ":0" + seconds;
+        session.textContent = `0${minutes}:0${seconds}`;
     }
 }
 /*

@@ -1,18 +1,35 @@
 'use strict';
 
+let running:boolean = false;
+let start:any = document.getElementById('startBtn');
 let session:any = document.getElementById('session');
+let clock:any = document.getElementById('clock');
 let minutes:number = 25;
 let seconds:number = 0;
 let zeroSet:string = '00';
-let clock:any = document.getElementById('clock');
+let interval:any;
 
 clock.addEventListener('click', function(e) {
   if (e.target && e.target.nodeName === 'BUTTON') {
-    console.log('ID: ' + e.target.id);
+    switch (e.target.id) {
+      case 'startBtn':
+        if (start.textContent === 'RESUME') {
+          start.textContent = 'START';
+        }
+        running = true;
+        interval = setInterval(countdown, 1000);
+        break;
+      case 'pauseBtn':
+        if (running) {
+          clearInterval(interval);
+        }
+        start.textContent = 'RESUME';
+        break;
+    }
   }
 });
 
-let interval = setInterval(function() {
+function countdown() {
   stopClock(minutes);
 
   if (seconds < 0) {
@@ -35,7 +52,7 @@ let interval = setInterval(function() {
   if (minutes < 0) {
     zeroClock(minutes, seconds);
   }
-}, 1000);
+}
 
 function zeroClock(minutes: number, seconds: number) {
   return `${zeroSet}:${zeroSet}`;
