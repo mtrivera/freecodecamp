@@ -2,13 +2,15 @@
 // TODO: Remove global variables
 let running = false;
 let start = document.getElementById('startBtn');
+let pause = document.getElementById('pauseBtn');
 let session = document.getElementById('session');
 let clock = document.getElementById('clock');
-let minutes = 25;
+let minutes = 3;
 let seconds = 0;
 let zeroSet = '00';
 let interval;
-clock.addEventListener('click', function (e) {
+clock.addEventListener('click', btnLogic);
+function btnLogic(e) {
     if (e.target && e.target.nodeName === 'BUTTON') {
         switch (e.target.id) {
             case 'startBtn':
@@ -17,12 +19,20 @@ clock.addEventListener('click', function (e) {
                 }
                 running = true;
                 interval = setInterval(countdown, 1000);
+                // While running, startBtn should be disabled
+                // & pauseBtn enabled
+                start.disabled = true;
+                pause.disabled = false;
                 break;
             case 'pauseBtn':
                 if (running) {
                     clearInterval(interval);
                 }
+                // While paused, pauseBtn should be disabled
+                // & startBtn enabled
                 start.textContent = 'RESUME';
+                start.disabled = false;
+                pause.disabled = true;
                 break;
             case 'moreTimeBtn':
                 minutes += 1;
@@ -34,12 +44,11 @@ clock.addEventListener('click', function (e) {
                 break;
         }
     }
-});
+}
 function countdown() {
-    stopClock(minutes);
-    if (seconds < 0) {
-        setClock(minutes);
-    }
+    /*if (seconds < 0) {
+      setClock(minutes);
+    }*/
     session.textContent = `${minutes}:${seconds}`;
     appendZero(minutes, seconds);
     /*
@@ -53,20 +62,25 @@ function countdown() {
         seconds = 59;
         minutes -= 1;
     }
-    if (minutes < 0) {
-        zeroClock(minutes, seconds);
-    }
+    /*if (minutes < 0) {
+      zeroClock(minutes, seconds);
+    }*/
+    // If minutes is < 0, stop clock
+    stopClock(minutes);
 }
+// Remove this
 function zeroClock(minutes, seconds) {
     return `${zeroSet}:${zeroSet}`;
 }
-function setClock(minutes) {
-    return `${minutes}:${zeroSet}`;
-}
+/*
+function setClock(minutes: number) {
+  return `${minutes}:${zeroSet}`;
+}*/
 function stopClock(minutes) {
     // Session is over, stop timer
     if (minutes < 0) {
         clearInterval(interval);
+        session.textContent = `${zeroSet}:${zeroSet}`;
     }
 }
 // TODO: If the minute is < 10, the zero is not appended correctly for seconds
