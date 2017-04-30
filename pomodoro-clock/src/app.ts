@@ -1,5 +1,6 @@
 'use strict';
 
+// TODO: Remove global variables
 let running:boolean = false;
 let start:any = document.getElementById('startBtn');
 let session:any = document.getElementById('session');
@@ -24,6 +25,14 @@ clock.addEventListener('click', function(e) {
           clearInterval(interval);
         }
         start.textContent = 'RESUME';
+        break;
+      case 'moreTimeBtn':
+        minutes += 1;
+        break;
+      case 'lessTimeBtn':
+        if (minutes > 0) {
+          minutes -= 1;
+        }
         break;
     }
   }
