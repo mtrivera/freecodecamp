@@ -6,7 +6,7 @@ let pause = document.getElementById('pauseBtn');
 let timer = document.getElementById('timer');
 let timerTxt = document.getElementById('timer').textContent;
 let pomodoro = document.getElementById('pomodoro');
-let minutes = 1;
+let minutes = 25;
 let seconds = 0;
 let zeroSet = '00';
 let interval;
@@ -35,6 +35,14 @@ function btnLogic(e) {
                 start.disabled = false;
                 pause.disabled = true;
                 break;
+            case 'resetBtn':
+                minutes = 25;
+                seconds = 0;
+                timer.textContent = `${minutes}:0${seconds}`;
+                start.disabled = false;
+                pause.disabled = false;
+                start.textContent = 'START';
+                break;
             case 'moreTimeBtn':
                 minutes += 1;
                 break;
@@ -47,16 +55,7 @@ function btnLogic(e) {
     }
 }
 function countdown() {
-    /*if (seconds < 0) {
-      setClock(minutes);
-    }*/
-    // TODO: This should be the else clause in appendZero
-    //timer.textContent = `${minutes}:${seconds}`;
     displayTimer(minutes, seconds);
-    /*
-      appendMinuteZero(minutes);
-      appendSecondZero(seconds);
-    */
     // Timer logic
     if (seconds > 0) {
         seconds -= 1;
@@ -65,24 +64,9 @@ function countdown() {
         seconds = 59;
         minutes -= 1;
     }
-    // Less than 10 minutes and seconds works here
-    //appendZero(minutes, seconds);
-    //appendZero(minutes, seconds);
-    /*if (minutes < 0) {
-      zeroClock(minutes, seconds);
-    }*/
     // If minutes is < 0, stop clock
     stopTimer(minutes, seconds);
 }
-/* Remove this
-function zeroClock(minutes: number, seconds: number) {
-  return `${zeroSet}:${zeroSet}`;
-}
-*/
-/*
-function setClock(minutes: number) {
-  return `${minutes}:${zeroSet}`;
-}*/
 function stopTimer(minutes, seconds) {
     // timer is over, stop timer
     if (minutes < 0) {
@@ -104,30 +88,3 @@ function displayTimer(minutes, seconds) {
         timer.textContent = `${minutes}:${seconds}`;
     }
 }
-/*if (minutes < 10) {
-  // Append leading zero to minutes < 10
-  session.textContent =  `0${minutes}:${seconds}`;
-} else if (seconds < 10) {
-  // Append leading zero to minutes < 10
-  session.textContent =  `${minutes}:0${seconds}`;
-} else if (minutes < 10 && seconds < 10) {
-  session.textContent =  `0${minutes}:0${seconds}`;
-} else {
-  session.textContent = `${minutes}:${seconds}`;
-}
-}*/
-/*
-function appendMinuteZero(minutes: number) {
-  if (minutes < 10) {
-    // Append leading zero to minutes < 10
-    session.textContent = `0${minutes}`;
-  }
-}
-
-function appendSecondZero(seconds: number) {
-  if (seconds < 10) {
-    // Append leading zero to minutes < 10
-    session.textContent = `0${seconds}`;
-  }
-}
-*/
