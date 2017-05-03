@@ -4,14 +4,15 @@
 let running:boolean = false;
 let start:any = document.getElementById('startBtn');
 let pause:any = document.getElementById('pauseBtn');
-let session:any = document.getElementById('session');
-let clock:any = document.getElementById('clock');
-let minutes:number = 3;
+let timer:any = document.getElementById('timer');
+let timerTxt:string = document.getElementById('timer').textContent;
+let pomodoro:any = document.getElementById('pomodoro');
+let minutes:number = 1;
 let seconds:number = 0;
 let zeroSet:string = '00';
 let interval:any;
 
-clock.addEventListener('click', btnLogic);
+pomodoro.addEventListener('click', btnLogic);
 
 function btnLogic(e: any) {
   if (e.target && e.target.nodeName === 'BUTTON') {
@@ -53,67 +54,84 @@ function countdown() {
   /*if (seconds < 0) {
     setClock(minutes);
   }*/
-
-  session.textContent = `${minutes}:${seconds}`;
-  appendZero(minutes, seconds);
+  // TODO: This should be the else clause in appendZero
+  //timer.textContent = `${minutes}:${seconds}`;
+  displayTimer(minutes, seconds);
 /*
   appendMinuteZero(minutes);
   appendSecondZero(seconds);
 */
+  // Timer logic
   if (seconds > 0 ) {
     seconds -= 1;
   } else {
     seconds = 59;
     minutes -= 1;
   }
-
+  // Less than 10 minutes and seconds works here
+  //appendZero(minutes, seconds);
+  //appendZero(minutes, seconds);
   /*if (minutes < 0) {
     zeroClock(minutes, seconds);
   }*/
 
   // If minutes is < 0, stop clock
-  stopClock(minutes);
+  stopTimer(minutes, seconds);
 }
-// Remove this
+
+/* Remove this
 function zeroClock(minutes: number, seconds: number) {
   return `${zeroSet}:${zeroSet}`;
 }
+*/
 /*
 function setClock(minutes: number) {
   return `${minutes}:${zeroSet}`;
 }*/
 
-function stopClock(minutes: number) {
-  // Session is over, stop timer
+function stopTimer(minutes: number, seconds: number) {
+  // timer is over, stop timer
   if (minutes < 0) {
     clearInterval(interval);
-    session.textContent = `${zeroSet}:${zeroSet}`;
+    timer.textContent = `${zeroSet}:${zeroSet}`;
   }
 }
-// TODO: If the minute is < 10, the zero is not appended correctly for seconds
-function appendZero(minutes: number, seconds: number) {
-  if (minutes < 10 ) {
+
+function displayTimer(minutes: number, seconds: number) {
+  if (minutes < 10 && seconds < 10) {
+    timer.textContent =  `0${minutes}:0${seconds}`;
+  } else if (minutes < 10 && seconds >= 10) {
+    timer.textContent =  `0${minutes}:${seconds}`;
+  } else if(minutes >= 10 && seconds < 10) {
+    timer.textContent =  `${minutes}:0${seconds}`;
+  } else {
+    timer.textContent = `${minutes}:${seconds}`;
+  }
+}
+  /*if (minutes < 10) {
     // Append leading zero to minutes < 10
     session.textContent =  `0${minutes}:${seconds}`;
   } else if (seconds < 10) {
     // Append leading zero to minutes < 10
     session.textContent =  `${minutes}:0${seconds}`;
-  } else if (seconds < 10 && minutes < 10) {
+  } else if (minutes < 10 && seconds < 10) {
     session.textContent =  `0${minutes}:0${seconds}`;
+  } else {
+    session.textContent = `${minutes}:${seconds}`;
   }
-}
+}*/
 /*
 function appendMinuteZero(minutes: number) {
   if (minutes < 10) {
     // Append leading zero to minutes < 10
-    session.textContent = `0${minutes}:${seconds}`;
+    session.textContent = `0${minutes}`;
   }
 }
 
 function appendSecondZero(seconds: number) {
   if (seconds < 10) {
     // Append leading zero to minutes < 10
-    session.textContent = `${minutes}:0${seconds}`;
+    session.textContent = `0${seconds}`;
   }
 }
 */
