@@ -1,3 +1,7 @@
+.marker {
+ font-size: 7.0em;
+}
+
 #board {
   display: grid;
   grid-template-columns: 100px 100px 100px;
