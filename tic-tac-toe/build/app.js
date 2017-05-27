@@ -1,16 +1,53 @@
-let origBoard = ['O', 1, 'X', 'X', 4, 'X', 6, 'O', 'O'];
+//let origBoard: any[] = ['O', 1, 'X', 'X', 4, 'X', 6, 'O', 'O'];   //best move index 4
+let gameBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 let human = {
-    marker: 'O',
+    marker: undefined,
+    turn: undefined,
     winsTotal: undefined
 };
 let ai = {
-    marker: 'X',
+    marker: undefined,
+    turn: undefined,
     winsTotal: undefined
 };
-/* TEST
-let bestSpot = minimax(origBoard, ai.marker);
+let setup = document.getElementById('setup');
+// Set markers for players and hide choice from user
+setup.addEventListener('click', function (e) {
+    if (e.target.id == 'X') {
+        human.marker = 'X';
+        ai.marker = 'O';
+    }
+    else {
+        human.marker = 'O';
+        ai.marker = 'X';
+    }
+    toggleVisibility(setup);
+});
+/*
+TODO: Look into getElementsByTagName() or getElementsByClassName()
+let game:any = document.getElementById('board');
+game.addEventListener('click', function(e) {
+  switch (e.target.id) {
+  }
+});
+*/
+/*// TEST
+let bestSpot = minimax(gameBoard, ai.marker);
 console.log("index: " + bestSpot.index);  // 4
 */
+// TODO: Build this out
+function markBoard(board, turn) {
+    let index = undefined;
+}
+// Hide/show element
+function toggleVisibility(elm) {
+    if (elm.style.display == 'none') {
+        elm.style.display = 'visible';
+    }
+    else {
+        elm.style.display = 'none';
+    }
+}
 function minimax(newBoard, player) {
     let availableSpots = emptyIndices(newBoard);
     //check for terminal state
