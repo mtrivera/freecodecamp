@@ -22,16 +22,17 @@ setup.addEventListener('click', function (e) {
     else {
         human.marker = 'O';
         ai.marker = 'X';
-        human.turn = false;
-        ai.turn = true;
+        // Run this since X always goes first
+        aiFirstMove(gameboard, ai.marker, spots);
+        human.turn = true;
+        ai.turn = false;
     }
     toggleVisibility(setup);
 });
 let game = document.getElementById('board');
 let spots = game.getElementsByTagName('div');
 // When user clicks on board
-//TODO: If computer is X, it should go first, create a function for that
-let play = game.addEventListener('click', function (e, turn) {
+let play = game.addEventListener('click', function (e) {
     if (human.turn) {
         let index = getSquareIndex(e.target.className);
         humanMarkBoard(gameboard, human.marker, spots, index);
@@ -44,7 +45,15 @@ let play = game.addEventListener('click', function (e, turn) {
         ai.turn = false;
     }
 });
-//Mark the board as AI
+// Mark the board first at a random position as AI
+function aiFirstMove(board, player, place) {
+    const min = 0;
+    const max = 9;
+    let randIndex = Math.floor(Math.random() * (max - min)) + min;
+    board[randIndex] = player; // Mark the board once found
+    place[randIndex].textContent = player;
+}
+// Mark the board as AI
 function aiMarkBoard(board, player, place) {
     let bestSpot = minimax(board, player); // Find best index for AI..
     board[bestSpot.index] = player; // Mark the board once found
@@ -58,7 +67,7 @@ function humanMarkBoard(board, player, place, index) {
 // Get the index of the square the user clicks on the gameboard
 function getSquareIndex(squareName) {
     let index = undefined;
-    let squares = ['square0', 'square1', 'square2', 'square3',
+    const squares = ['square0', 'square1', 'square2', 'square3',
         'square4', 'square5', 'square6', 'square7', 'square8'];
     index = squares.indexOf(squareName);
     return index;
@@ -73,19 +82,19 @@ function isSquareEmpty(board: any[]) {
   }
 }*/
 //TODO: Should be called once a winningCombo is found
-/*
-function gameOver(board: any[], player: string) {
-  if (winningCombo(gameboard, ai.marker)) {
-    console.log('AI Wins');
-    ai.winsTotal += 1;
-  } else if (winningCombo(gameboard, human.marker)) {
-    console.log('Human Wins');
-    human.winsTotal += 1;
-  } else {
-    console.log('It\'s a Tie');
-  }
+function gameOver(board, aiPlayer, humanPlayer) {
+    if (winningCombo(gameboard, aiPlayer)) {
+        console.log('AI Wins');
+        ai.winsTotal += 1;
+    }
+    else if (winningCombo(gameboard, humanPlayer)) {
+        console.log('Human Wins');
+        human.winsTotal += 1;
+    }
+    else {
+        console.log('It\'s a Tie');
+    }
 }
-*/
 // Hide/show element
 function toggleVisibility(elm) {
     if (elm.style.display == 'none') {

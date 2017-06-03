@@ -36,8 +36,10 @@ setup.addEventListener('click', function(e: any) {
   } else {
     human.marker = 'O';
     ai.marker = 'X';
-    human.turn = false;
-    ai.turn = true;
+    // Run this since X always goes first
+    aiFirstMove(gameboard, ai.marker, spots);
+    human.turn = true;
+    ai.turn = false;
   }
   toggleVisibility(setup);
 });
@@ -45,8 +47,7 @@ let game: any = document.getElementById('board');
 let spots: any = game.getElementsByTagName('div');
 
 // When user clicks on board
-//TODO: If computer is X, it should go first, create a function for that
-let play = game.addEventListener('click', function (e: any, turn: PlayerConfig) {
+let play = game.addEventListener('click', function (e: any) {
     if (human.turn) {
       let index: number = getSquareIndex(e.target.className);
       humanMarkBoard(gameboard, human.marker, spots, index);
@@ -60,8 +61,16 @@ let play = game.addEventListener('click', function (e: any, turn: PlayerConfig) 
       ai.turn = false;
     }
 });
+// Mark the board first at a random position as AI
+function aiFirstMove(board: any[], player: string, place: any[]) {
+    const min: number = 0;
+    const max: number = 9;
+    let randIndex: number = Math.floor(Math.random() * (max - min)) + min;
+    board[randIndex] = player;            // Mark the board once found
+    place[randIndex].textContent = player;
+}
 
-//Mark the board as AI
+// Mark the board as AI
 function aiMarkBoard(board: any[], player: string, place: any[]) {
     let bestSpot:any = minimax(board, player);   // Find best index for AI..
     board[bestSpot.index] = player;            // Mark the board once found
@@ -77,7 +86,7 @@ function humanMarkBoard(board: any[], player: string, place: any[], index: numbe
 // Get the index of the square the user clicks on the gameboard
 function getSquareIndex(squareName: string) {
   let index: number = undefined;
-  let squares: string[] = ['square0', 'square1', 'square2', 'square3',
+  const squares: string[] = ['square0', 'square1', 'square2', 'square3',
 'square4', 'square5', 'square6', 'square7', 'square8'];
 
   index = squares.indexOf(squareName);
@@ -94,19 +103,19 @@ function isSquareEmpty(board: any[]) {
   }
 }*/
 //TODO: Should be called once a winningCombo is found
-/*
-function gameOver(board: any[], player: string) {
-  if (winningCombo(gameboard, ai.marker)) {
+
+function gameOver(board: any[], aiPlayer: string, humanPlayer: string) {
+  if (winningCombo(gameboard, aiPlayer)) {
     console.log('AI Wins');
     ai.winsTotal += 1;
-  } else if (winningCombo(gameboard, human.marker)) {
+  } else if (winningCombo(gameboard, humanPlayer)) {
     console.log('Human Wins');
     human.winsTotal += 1;
   } else {
     console.log('It\'s a Tie');
   }
 }
-*/
+
 // Hide/show element
 function toggleVisibility(elm: any) {
   if (elm.style.display == 'none') {
