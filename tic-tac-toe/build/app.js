@@ -32,18 +32,26 @@ setup.addEventListener('click', function (e) {
 let game = document.getElementById('board');
 let spots = game.getElementsByTagName('div');
 // When user clicks on board
+//TODO: When gameOver, disable click events on the gameboard
 let play = game.addEventListener('click', function (e) {
     if (human.turn) {
         let index = getSquareIndex(e.target.className);
-        humanMarkBoard(gameboard, human.marker, spots, index);
-        human.turn = false;
-        ai.turn = true;
+        if (isSquareEmpty(gameboard, index)) {
+            humanMarkBoard(gameboard, human.marker, spots, index);
+            human.turn = false;
+            ai.turn = true;
+        }
+        else {
+            alert('Invalid Move');
+        }
     }
     if (ai.turn) {
         aiMarkBoard(gameboard, ai.marker, spots);
         human.turn = true;
         ai.turn = false;
     }
+    // Check to see if game is over
+    gameOver(gameboard, ai.marker, human.marker);
 });
 // Mark the board first at a random position as AI
 function aiFirstMove(board, player, place) {
@@ -72,26 +80,28 @@ function getSquareIndex(squareName) {
     index = squares.indexOf(squareName);
     return index;
 }
-/*
-//TODO: Build this out, player should not be able to change spot
-function isSquareEmpty(board: any[]) {
-  if (board[0].textContent == '') {
-    console.log('Square is empty!');
-  } else {
-    console.log('Square is NOT empty');
-  }
-}*/
+// Check to see if spot on gameboard is empty
+function isSquareEmpty(board, index) {
+    let emptySquare = undefined;
+    if (typeof (board[index]) == 'number') {
+        emptySquare = true;
+    }
+    else {
+        emptySquare = false;
+    }
+    return emptySquare;
+}
 //TODO: Should be called once a winningCombo is found
 function gameOver(board, aiPlayer, humanPlayer) {
-    if (winningCombo(gameboard, aiPlayer)) {
+    if (winningCombo(board, aiPlayer)) {
         console.log('AI Wins');
         ai.winsTotal += 1;
     }
-    else if (winningCombo(gameboard, humanPlayer)) {
+    else if (winningCombo(board, humanPlayer)) {
         console.log('Human Wins');
         human.winsTotal += 1;
     }
-    else {
+    else if (board.length === 0) {
         console.log('It\'s a Tie');
     }
 }
