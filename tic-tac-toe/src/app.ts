@@ -8,7 +8,9 @@ interface MoveConfig {
 interface PlayerConfig {
   marker: string,
   turn: boolean,
-  winsTotal: number
+  win?: number,
+  loss?: number,
+  tie?: number
 }
 
 let gameboard: any[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
@@ -16,17 +18,18 @@ let gameboard: any[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 let human:PlayerConfig = {
   marker: undefined,
   turn: undefined,
-  winsTotal: undefined
+  win: undefined,
+  loss: undefined,
+  tie: undefined
 };
 
 let ai:PlayerConfig = {
   marker: undefined,
   turn: undefined,
-  winsTotal: undefined
 };
 let setup: any = document.getElementById('setup');
 // Set markers for players and hide choice from user
-setup.addEventListener('click', function(e: any) {
+let pickSide: any = setup.addEventListener('click', function(e: any) {
   if (e.target.id == 'X') {
     human.marker = 'X';
     ai.marker = 'O';
@@ -44,10 +47,15 @@ setup.addEventListener('click', function(e: any) {
 });
 let game: any = document.getElementById('board');
 let spots: any = game.getElementsByTagName('div');
-
+let terminal: boolean = false;
 // When user clicks on board
 //TODO: When gameOver, disable click events on the gameboard
 let play = game.addEventListener('click', function (e: any) {
+  // Prevents user from clicking on board once game over
+  if (terminal) {
+    return;
+  }
+
   if (human.turn) {
     let index: number = getSquareIndex(e.target.className);
     if (isSquareEmpty(gameboard, index)) {
@@ -63,8 +71,8 @@ let play = game.addEventListener('click', function (e: any) {
     human.turn = true;
     ai.turn = false;
   }
-  // Check to see if game is over
-  gameOver(gameboard, ai.marker, human.marker);
+  // Check to see if game is over; if so, set terminal to true
+  terminal = gameOver(gameboard, ai.marker, human.marker);
 });
 // Mark the board first at a random position as AI
 function aiFirstMove(board: any[], player: string, place: any[]) {
@@ -109,17 +117,22 @@ function isSquareEmpty(board: any[], index: number) {
   return emptySquare;
 }
 
-//TODO: Should be called once a winningCombo is found
 function gameOver(board: any[], aiPlayer: string, humanPlayer: string) {
+  let terminal: boolean = undefined;
   if (winningCombo(board, aiPlayer)) {
     console.log('AI Wins');
-    ai.winsTotal += 1;
+    terminal = true;
+    human.loss += 1;
   } else if (winningCombo(board, humanPlayer)) {
     console.log('Human Wins');
-    human.winsTotal += 1;
+    terminal = true;
+    human.win += 1;
   } else if (board.length === 0) {
     console.log('It\'s a Tie');
+    terminal = true;
+    human.tie += 1;
   }
+  return terminal;
 }
 
 // Hide/show element
@@ -129,6 +142,29 @@ function toggleVisibility(elm: any) {
   } else {
     elm.style.display = 'none';
   }
+}
+//TODO: Build this out tomorrow
+function playAgain() {
+
+}
+
+// Reset HTML gameboard
+function resetGameboard(place: any[]) {
+  // Create an array from HTMLCollection array-like object
+  let arr = Array.from(place);
+  arr.forEach(function(elm, index, arr) {
+    arr[index].textContent = '';
+  });
+}
+// Reset the gameboard array to default
+function resetArr() {
+  let arr: any[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  return arr;
+}
+// Reset player properties
+function resetPlayerProperties(ai: any, human: any) {
+  ai = undefined;
+  human = undefined;
 }
 
 function minimax(newBoard: any[], player: string) {

@@ -3,16 +3,17 @@ let gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 let human = {
     marker: undefined,
     turn: undefined,
-    winsTotal: undefined
+    win: undefined,
+    loss: undefined,
+    tie: undefined
 };
 let ai = {
     marker: undefined,
     turn: undefined,
-    winsTotal: undefined
 };
 let setup = document.getElementById('setup');
 // Set markers for players and hide choice from user
-setup.addEventListener('click', function (e) {
+let pickSide = setup.addEventListener('click', function (e) {
     if (e.target.id == 'X') {
         human.marker = 'X';
         ai.marker = 'O';
@@ -31,9 +32,14 @@ setup.addEventListener('click', function (e) {
 });
 let game = document.getElementById('board');
 let spots = game.getElementsByTagName('div');
+let terminal = false;
 // When user clicks on board
 //TODO: When gameOver, disable click events on the gameboard
 let play = game.addEventListener('click', function (e) {
+    // Prevents user from clicking on board once game over
+    if (terminal) {
+        return;
+    }
     if (human.turn) {
         let index = getSquareIndex(e.target.className);
         if (isSquareEmpty(gameboard, index)) {
@@ -50,8 +56,8 @@ let play = game.addEventListener('click', function (e) {
         human.turn = true;
         ai.turn = false;
     }
-    // Check to see if game is over
-    gameOver(gameboard, ai.marker, human.marker);
+    // Check to see if game is over; if so, set terminal to true
+    terminal = gameOver(gameboard, ai.marker, human.marker);
 });
 // Mark the board first at a random position as AI
 function aiFirstMove(board, player, place) {
@@ -91,19 +97,24 @@ function isSquareEmpty(board, index) {
     }
     return emptySquare;
 }
-//TODO: Should be called once a winningCombo is found
 function gameOver(board, aiPlayer, humanPlayer) {
+    let terminal = undefined;
     if (winningCombo(board, aiPlayer)) {
         console.log('AI Wins');
-        ai.winsTotal += 1;
+        terminal = true;
+        human.loss += 1;
     }
     else if (winningCombo(board, humanPlayer)) {
         console.log('Human Wins');
-        human.winsTotal += 1;
+        terminal = true;
+        human.win += 1;
     }
     else if (board.length === 0) {
         console.log('It\'s a Tie');
+        terminal = true;
+        human.tie += 1;
     }
+    return terminal;
 }
 // Hide/show element
 function toggleVisibility(elm) {
@@ -113,6 +124,27 @@ function toggleVisibility(elm) {
     else {
         elm.style.display = 'none';
     }
+}
+//TODO: Build this out tomorrow
+function playAgain() {
+}
+// Reset HTML gameboard
+function resetGameboard(place) {
+    // Create an array from HTMLCollection array-like object
+    let arr = Array.from(place);
+    arr.forEach(function (elm, index, arr) {
+        arr[index].textContent = '';
+    });
+}
+// Reset the gameboard array to default
+function resetArr() {
+    let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    return arr;
+}
+// Reset player properties
+function resetPlayerProperties(ai, human) {
+    ai = undefined;
+    human = undefined;
 }
 function minimax(newBoard, player) {
     let availableSpots = emptyIndices(newBoard);
