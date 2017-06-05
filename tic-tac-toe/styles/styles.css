@@ -2,6 +2,10 @@
  font-size: 7.0em;
 }
 
+.hide {
+  display: none;
+}
+
 #board {
   display: grid;
   grid-template-columns: 100px 100px 100px;

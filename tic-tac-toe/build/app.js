@@ -3,17 +3,19 @@ let gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 let human = {
     marker: undefined,
     turn: undefined,
-    win: undefined,
-    loss: undefined,
-    tie: undefined
+    win: 0,
+    loss: 0,
+    tie: 0
 };
 let ai = {
     marker: undefined,
     turn: undefined,
 };
-let setup = document.getElementById('setup');
+let setup = document.querySelector('#setup');
+let msg = document.getElementById('message');
+let record = document.getElementById('record');
 // Set markers for players and hide choice from user
-let pickSide = setup.addEventListener('click', function (e) {
+setup.addEventListener('click', function (e) {
     if (e.target.id == 'X') {
         human.marker = 'X';
         ai.marker = 'O';
@@ -28,16 +30,19 @@ let pickSide = setup.addEventListener('click', function (e) {
         human.turn = true;
         ai.turn = false;
     }
-    toggleVisibility(setup);
+    setup.classList.add('hide');
 });
 let game = document.getElementById('board');
 let spots = game.getElementsByTagName('div');
 let terminal = false;
 // When user clicks on board
-//TODO: When gameOver, disable click events on the gameboard
 let play = game.addEventListener('click', function (e) {
     // Prevents user from clicking on board once game over
     if (terminal) {
+        gameboard = resetArr();
+        playAgain(spots, ai, human);
+        setup.classList.remove('hide');
+        terminal = false;
         return;
     }
     if (human.turn) {
@@ -58,7 +63,12 @@ let play = game.addEventListener('click', function (e) {
     }
     // Check to see if game is over; if so, set terminal to true
     terminal = gameOver(gameboard, ai.marker, human.marker);
+    record.textContent = displayRecord(human);
 });
+// Display win-loss-record for human player
+function displayRecord(human) {
+    return `${human.win}-${human.loss}-${human.tie}`;
+}
 // Mark the board first at a random position as AI
 function aiFirstMove(board, player, place) {
     const min = 0;
@@ -69,9 +79,14 @@ function aiFirstMove(board, player, place) {
 }
 // Mark the board as AI
 function aiMarkBoard(board, player, place) {
-    let bestSpot = minimax(board, player); // Find best index for AI..
-    board[bestSpot.index] = player; // Mark the board once found
-    place[bestSpot.index].textContent = player;
+    if (emptyIndices(board).length === 0) {
+        return 0;
+    }
+    else {
+        let bestSpot = minimax(board, player); // Find best index for AI..
+        board[bestSpot.index] = player; // Mark the board once found
+        place[bestSpot.index].textContent = player;
+    }
 }
 // Mark the board as the human player
 function humanMarkBoard(board, player, place, index) {
@@ -97,36 +112,29 @@ function isSquareEmpty(board, index) {
     }
     return emptySquare;
 }
+// Game is over when a terminal state is true
 function gameOver(board, aiPlayer, humanPlayer) {
+    console.log(emptyIndices(board).length);
     let terminal = undefined;
     if (winningCombo(board, aiPlayer)) {
-        console.log('AI Wins');
         terminal = true;
         human.loss += 1;
     }
     else if (winningCombo(board, humanPlayer)) {
-        console.log('Human Wins');
         terminal = true;
         human.win += 1;
+        //TODO: Tie requires extra click to reset game
     }
-    else if (board.length === 0) {
-        console.log('It\'s a Tie');
+    else if (emptyIndices(board).length === 0) {
         terminal = true;
         human.tie += 1;
     }
     return terminal;
 }
-// Hide/show element
-function toggleVisibility(elm) {
-    if (elm.style.display == 'none') {
-        elm.style.display = 'visible';
-    }
-    else {
-        elm.style.display = 'none';
-    }
-}
-//TODO: Build this out tomorrow
-function playAgain() {
+// Reset the HTML gameboard and players properties
+function playAgain(place, ai, human) {
+    resetGameboard(place);
+    resetPlayerProperties(ai, human);
 }
 // Reset HTML gameboard
 function resetGameboard(place) {
@@ -143,9 +151,12 @@ function resetArr() {
 }
 // Reset player properties
 function resetPlayerProperties(ai, human) {
-    ai = undefined;
-    human = undefined;
+    ai.marker = undefined;
+    ai.turn = undefined;
+    human.marker = undefined;
+    human.turn = undefined;
 }
+// Determine best move for AI using minimax algorithm
 function minimax(newBoard, player) {
     let availableSpots = emptyIndices(newBoard);
     // Check for terminal state
