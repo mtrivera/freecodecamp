@@ -52,15 +52,6 @@ let spots: any = game.getElementsByTagName('div');
 let terminal: boolean = false;
 // When user clicks on board
 let play = game.addEventListener('click', function (e: any) {
-  // Prevents user from clicking on board once game over
-  if (terminal) {
-    gameboard = resetArr();
-    playAgain(spots, ai, human);
-    setup.classList.remove('hide');
-    terminal = false;
-    return;
-  }
-
   if (human.turn) {
     let index: number = getSquareIndex(e.target.className);
     if (isSquareEmpty(gameboard, index)) {
@@ -72,13 +63,21 @@ let play = game.addEventListener('click', function (e: any) {
     }
   }
   if (ai.turn) {
-    aiMarkBoard(gameboard, ai.marker, spots);
+    aiMarkBoard(gameboard, ai, human, spots);
     human.turn = true;
     ai.turn = false;
   }
   // Check to see if game is over; if so, set terminal to true
-  terminal = gameOver(gameboard, ai.marker, human.marker);
+  terminal = gameOver(gameboard, ai, human);
   record.textContent = displayRecord(human);
+  // Resets game if terminal state found
+  if (terminal) {
+    gameboard = resetArr();
+    playAgain(spots, ai, human);
+    setup.classList.remove('hide');
+    terminal = false;
+    return;
+  }
 });
 // Display win-loss-record for human player
 function displayRecord(human: PlayerConfig) {
@@ -93,13 +92,13 @@ function aiFirstMove(board: any[], player: string, place: any[]) {
     place[randIndex].textContent = player;
 }
 // Mark the board as AI
-function aiMarkBoard(board: any[], player: string, place: any[]) {
+function aiMarkBoard(board: any[], ai: PlayerConfig, human: PlayerConfig, place: any[]) {
   if (emptyIndices(board).length === 0) {
-    return 0;
+    return;
   } else {
-    let bestSpot:any = minimax(board, player);   // Find best index for AI..
-    board[bestSpot.index] = player;            // Mark the board once found
-    place[bestSpot.index].textContent = player;
+    let bestSpot:any = minimax(board, ai.marker);   // Find best index for AI..
+    board[bestSpot.index] = ai.marker;            // Mark the board once found
+    place[bestSpot.index].textContent = ai.marker;
   }
 }
 // Mark the board as the human player
@@ -128,13 +127,12 @@ function isSquareEmpty(board: any[], index: number) {
   return emptySquare;
 }
 // Game is over when a terminal state is true
-function gameOver(board: any[], aiPlayer: string, humanPlayer: string) {
-  console.log(emptyIndices(board).length);
+function gameOver(board: any[], ai: PlayerConfig, human:PlayerConfig) {
   let terminal: boolean = undefined;
-  if (winningCombo(board, aiPlayer)) {
+  if (winningCombo(board, ai.marker)) {
     terminal = true;
     human.loss += 1;
-  } else if (winningCombo(board, humanPlayer)) {
+  } else if (winningCombo(board, human.marker)) {
     terminal = true;
     human.win += 1;
   //TODO: Tie requires extra click to reset game
