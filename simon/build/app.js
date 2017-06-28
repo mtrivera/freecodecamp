@@ -4,23 +4,44 @@ simon.addEventListener('click', playSimon, false);
 // Main simon gameplay
 function playSimon(e) {
     const WIN = 20;
+    let pattern = [];
+    let patternObj = {};
+    let color = undefined;
     let controls = {
         power: undefined,
         strict: undefined,
         start: undefined
     };
     isPower(controls);
-    let pattern = [];
-    let patternObj = {};
+    color = getRandomColor(getRandomInt());
+}
+function playColor(color) {
+}
+// Play the sound of the passed URL
+function playSound(url) {
+    const audio = new Audio(url);
+    audio.play;
 }
 // Get the URL of the soundfile for the matching color
 function getSoundURL(soundIndex) {
     return `https://s3.amazonaws.com/freecodecamp/simonSound${soundIndex}.mp3`;
 }
+// Get a random color string
+function getRandomColor(index) {
+    var Color;
+    (function (Color) {
+        Color[Color["green"] = 0] = "green";
+        Color[Color["red"] = 1] = "red";
+        Color[Color["yellow"] = 2] = "yellow";
+        Color[Color["blue"] = 3] = "blue";
+    })(Color || (Color = {}));
+    ;
+    return Color[index];
+}
 // Get a random integer between 1 and 4
 function getRandomInt() {
-    const min = Math.ceil(1);
-    const max = Math.floor(5);
+    const min = Math.ceil(0);
+    const max = Math.floor(4);
     return Math.floor(Math.random() * (max - min)) + min;
 }
 // Check if the power switch is on; if not, alert user to turn game on
@@ -50,4 +71,8 @@ function promptUser() {
 // Message to user about playing the game
 function alertUser() {
     alert(`Please turn power ON and click START to play`);
+}
+// Create new array without mutating
+function createArr(arr) {
+    return arr.slice(0);
 }
