@@ -3,19 +3,18 @@ let simon = document.getElementById('simon');
 simon.addEventListener('click', playSimon, false);
 // Main simon gameplay
 function playSimon(e) {
+    console.log('Kappa');
     const WIN = 20;
     let pattern = [];
     let patternObj = {};
     let color = undefined;
     let controls = {
-        power: undefined,
-        strict: undefined,
-        start: undefined
+        power: false,
+        strict: false,
+        start: false
     };
     isPower(controls);
     color = getRandomColor(getRandomInt());
-}
-function playColor(color) {
 }
 // Play the sound of the passed URL
 function playSound(url) {

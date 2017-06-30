@@ -15,27 +15,26 @@ interface ControlsConfig {
 }
 
 let simon = document.getElementById('simon');
-simon.addEventListener('click', playSimon, false);
+(simon as any).addEventListener('click', playSimon, false);
 
 // Main simon gameplay
 function playSimon(e: any) {
+  console.log('Kappa');
   const WIN = 20;
   let pattern = [];
   let patternObj:PatternConfig = {};
   let color = undefined;
   let controls:ControlsConfig = {
-    power: undefined,
-    strict: undefined,
-    start: undefined
+    power: false,
+    strict: false,
+    start: false
   };
   isPower(controls);
   color = getRandomColor(getRandomInt());
 }
-function playColor(color: string) {
 
-}
 // Play the sound of the passed URL
-function playSound(url: string) {
+function playSound(url: string): void {
   const audio = new Audio(url);
   audio.play;
 }
@@ -78,7 +77,7 @@ function promptUser() {
   return timer;
 }
 // Message to user about playing the game
-function alertUser() {
+function alertUser(): void {
   alert(`Please turn power ON and click START to play`);
 }
 // Create new array without mutating
