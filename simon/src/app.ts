@@ -19,10 +19,10 @@ let simon = document.getElementById('simon');
 
 // Main simon gameplay
 function playSimon(e: any) {
-  console.log('Kappa');
   const WIN = 20;
   let pattern = [];
-  let patternObj:PatternConfig = {};
+  let gamePattern:PatternConfig = {};
+  let playerPattern:PatternConfig = {};
   let color = undefined;
   let controls:ControlsConfig = {
     power: false,
@@ -84,3 +84,10 @@ function alertUser(): void {
 function createArr(arr: string[]) {
   return arr.slice(0);
 }
+// Display text for three buttons: start, reset, and strict
+(function displayButtons(): void {
+  const ctrlBtn = document.getElementsByClassName('ctrlBtn');
+  ctrlBtn[0].textContent = 'start';
+  ctrlBtn[1].textContent = 'reset';
+  ctrlBtn[2].textContent = 'strict';
+}());
