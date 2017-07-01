@@ -9,11 +9,10 @@ function playSimon(e) {
     let playerPattern = {};
     let color = undefined;
     let controls = {
-        power: false,
-        strict: false,
-        start: false
+        start: false,
+        strict: false
     };
-    isPower(controls);
+    isStart(controls);
     color = getRandomColor(getRandomInt());
 }
 // Play the sound of the passed URL
@@ -42,15 +41,6 @@ function getRandomInt() {
     const min = Math.ceil(0);
     const max = Math.floor(4);
     return Math.floor(Math.random() * (max - min)) + min;
-}
-// Check if the power switch is on; if not, alert user to turn game on
-function isPower(control) {
-    if (control.power) {
-        return true;
-    }
-    else {
-        return false;
-    }
 }
 // Check if the start button has been pressed; if so, start the game
 function isStart(control) {
