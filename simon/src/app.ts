@@ -1,11 +1,11 @@
 'use strict';
 
 interface PatternConfig {
-  one?: string[], two?: string[], three?: string[], four?: string[], five?: string[],
-  six?: string[], seven?: string[], eight?: string[], nine?: string[], ten?: string[],
-  eleven?: string[], twelve?: string[], thirteen?: string[], fourteen?: string[],
-  fifteen?: string[], sixteen?: string[], seventeen?: string[], eighteen?: string[],
-  nineteen?: string[], twenty?: string[]
+  [propName: string]: PatternArray
+}
+// Indexable Type
+interface PatternArray {
+  [index: number]: string;
 }
 
 interface ControlsConfig {
@@ -19,7 +19,7 @@ let simon = document.getElementById('simon');
 // Main simon gameplay
 function playSimon(e: any) {
   const WIN = 20;
-  let pattern = [];
+  let pattern:PatternArray = [];
   let gamePattern:PatternConfig = {};
   let playerPattern:PatternConfig = {};
   let color = undefined;
