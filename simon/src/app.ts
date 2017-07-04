@@ -1,7 +1,16 @@
 'use strict';
 
+interface StandardColorConfig {
+  readonly green: string;
+  readonly red: string;
+  readonly yellow: string;
+  readonly blue: string;
+}
+
+interface BlinkColorConfig extends StandardColorConfig {}
+
 interface PatternConfig {
-  [propName: string]: PatternArray
+  [propName: string]: PatternArray;
 }
 // Indexable Type
 interface PatternArray {
@@ -9,8 +18,8 @@ interface PatternArray {
 }
 
 interface ControlsConfig {
-  start: boolean,
-  strict: boolean
+  start: boolean;
+  strict: boolean;
 }
 
 let simon = document.getElementById('simon');
@@ -45,7 +54,26 @@ function getRandomColor(index: number) {
   enum Color { green, red, yellow, blue };
   return Color[index];
 }
-
+// Get the standard color for the selected color
+function standardColor(color: string) {
+  const standard:StandardColorConfig = {
+    'green': '#00924A',
+    'red': '#9F201A',
+    'yellow': '#CFA20D',
+    'blue': '#054894'
+  }
+  return standard[color];
+}
+// Get the color to highlight the selected color
+function blinkColor(color: string) {
+  const blink:BlinkColorConfig = {
+    'green': '#649d81',
+    'red': '#9c7371',
+    'yellow': '#d5c797',
+    'blue': '#6a819a'
+  }
+  return blink[color];
+}
 // Get a random integer between 1 and 4
 function getRandomInt() {
   const min = Math.ceil(0);

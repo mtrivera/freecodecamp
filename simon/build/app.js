@@ -36,6 +36,26 @@ function getRandomColor(index) {
     ;
     return Color[index];
 }
+// Get the standard color for the selected color
+function standardColor(color) {
+    const standard = {
+        'green': '#00924A',
+        'red': '#9F201A',
+        'yellow': '#CFA20D',
+        'blue': '#054894'
+    };
+    return standard[color];
+}
+// Get the color to highlight the selected color
+function blinkColor(color) {
+    const blink = {
+        'green': '#649d81',
+        'red': '#9c7371',
+        'yellow': '#d5c797',
+        'blue': '#6a819a'
+    };
+    return blink[color];
+}
 // Get a random integer between 1 and 4
 function getRandomInt() {
     const min = Math.ceil(0);
