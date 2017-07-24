@@ -32,27 +32,78 @@ function playSimon(e: any) {
   let gamePattern:PatternConfig = {};
   let playerPattern:PatternConfig = {};
   let color = undefined;
-  let controls:ControlsConfig = {
+  let count = 0;
+
+  /*let controls:ControlsConfig = {
     start: false,
     strict: false
-  };
-  isStart(controls);
-  color = getRandomColor(getRandomInt());
+  };*/
+  //color = getRandomColor(getRandomInt());
+  color = 'green';
+  if (color == 'green') {
+    changeColor(e, blinkColor('green'));
+    playSound(e, getSoundURL(1), 'green', count);
+  } else if (color == 'red') {
+    changeColor(e, blinkColor('red'));
+    playSound(e, getSoundURL(2), 'red', count);
+  } else if (color == 'yellow') {
+    changeColor(e, blinkColor('yellow'));
+    playSound(e, getSoundURL(3), 'yellow', count);
+  } else if (color == 'blue') {
+    changeColor(e, blinkColor('blue'));
+    playSound(e, getSoundURL(4), 'blue', count);
+  }
+}
+
+function getDifficulty(count: number) {
+  enum Difficulty { normal = 1000, moderate = 800, hard = 600 }
+  let speed = 0;
+  if (count < 9) {
+    speed = Difficulty.normal;
+  } else if (count > 10 && count < 14) {
+    speed = Difficulty.moderate;
+  } else {
+    speed = Difficulty.hard;
+  }
+  return speed;
+}
+//https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/WebAudio_playbackRate_explained
+function difficultySpeed(count: number) {
+  enum Speed { normal = 1.0, moderate = 1.2, hard = 1.4 };
+
+  if (count < 9) {
+    return Speed['normal'];
+  } else if (count > 9 && count < 14) {
+    return Speed['moderate'];
+  } else {
+    return Speed['hard'];
+  }
 }
 
 // Play the sound of the passed URL
-function playSound(url: string): void {
+function playSound(e: any, url: string, color: string, count: number): void {
   const audio = new Audio(url);
-  audio.play;
+  audio.playbackRate = difficultySpeed(count);
+  audio.play();
 }
+/*
+function isSound(e: any, audio: any, color: string) {
+  if (audio.ended) {
+    changeColor(e, standardColor(color));
+  }
+}*/
 // Get the URL of the soundfile for the matching color
 function getSoundURL(soundIndex: number) {
   return `https://s3.amazonaws.com/freecodecamp/simonSound${soundIndex}.mp3`;
 }
 // Get a random color string
 function getRandomColor(index: number) {
-  enum Color { green, red, yellow, blue };
+  enum Color { green = 1, red, yellow, blue };
   return Color[index];
+}
+// Change color of the box
+function changeColor(e: any, color: string): void {
+  e.target.style.backgroundColor = color;
 }
 // Get the standard color for the selected color
 function standardColor(color: string) {
@@ -76,13 +127,13 @@ function blinkColor(color: string) {
 }
 // Get a random integer between 1 and 4
 function getRandomInt() {
-  const min = Math.ceil(0);
-  const max = Math.floor(4);
+  const min = Math.ceil(1);
+  const max = Math.floor(5);
   return Math.floor(Math.random() * (max - min)) + min;
 }
 // Check if the start button has been pressed; if so, start the game
-function isStart(control: ControlsConfig) {
-  if (control.start) {
+function isStart(start: boolean) {
+  if (start) {
     return true;
   } else {
     return false;
@@ -103,9 +154,11 @@ function createArr(arr: string[]) {
   return arr.slice(0);
 }
 // Display text for three buttons: start, reset, and strict
+/*
 (function displayButtons(): void {
   const ctrlBtn = document.getElementsByClassName('ctrlBtn');
   ctrlBtn[0].textContent = 'start';
   ctrlBtn[1].textContent = 'reset';
   ctrlBtn[2].textContent = 'strict';
 }());
+*/
