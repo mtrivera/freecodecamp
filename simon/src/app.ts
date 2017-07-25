@@ -10,7 +10,7 @@ interface StandardColorConfig {
 interface BlinkColorConfig extends StandardColorConfig {}
 
 interface PatternConfig {
-  [propName: string]: PatternArray;
+  [propName: number]: PatternArray;
 }
 // Indexable Type
 interface PatternArray {
@@ -33,7 +33,6 @@ function playSimon(e: any) {
   let playerPattern:PatternConfig = {};
   let color = undefined;
   let count = 0;
-
   /*let controls:ControlsConfig = {
     start: false,
     strict: false
@@ -53,6 +52,16 @@ function playSimon(e: any) {
     changeColor(e, blinkColor('blue'));
     playSound(e, getSoundURL(4), 'blue', count);
   }
+}
+// This will create a random pattern that the player must play back correctly
+function generatePattern() {
+  let pattern: PatternConfig = {};
+  let colors: string[] = [];
+  for (let count = 1; count <= 20; count += 1) {
+      pattern[count.toString()] = colors.push(getRandomColor(getRandomInt()));
+      pattern[count.toString()] = createArr(colors);
+  }
+  return pattern;
 }
 
 function getDifficulty(count: number) {

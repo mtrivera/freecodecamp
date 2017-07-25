@@ -32,6 +32,16 @@ function playSimon(e) {
         playSound(e, getSoundURL(4), 'blue', count);
     }
 }
+// This will create a random pattern that the player must play back correctly
+function generatePattern() {
+    let pattern = {};
+    let colors = [];
+    for (let count = 1; count <= 20; count += 1) {
+        pattern[count.toString()] = colors.push(getRandomColor(getRandomInt()));
+        pattern[count.toString()] = createArr(colors);
+    }
+    return pattern;
+}
 function getDifficulty(count) {
     var Difficulty;
     (function (Difficulty) {
