@@ -14,31 +14,31 @@ function playSimon(e) {
       strict: false
     };*/
     //color = getRandomColor(getRandomInt());
-    color = 'green';
-    if (color == 'green') {
+    if (e.target.id == 'green') {
         changeColor(e, blinkColor('green'));
         playSound(e, getSoundURL(1), 'green', count);
     }
-    else if (color == 'red') {
+    else if (e.target.id == 'red') {
         changeColor(e, blinkColor('red'));
         playSound(e, getSoundURL(2), 'red', count);
     }
-    else if (color == 'yellow') {
+    else if (e.target.id == 'yellow') {
         changeColor(e, blinkColor('yellow'));
         playSound(e, getSoundURL(3), 'yellow', count);
     }
-    else if (color == 'blue') {
+    else if (e.target.id == 'blue') {
         changeColor(e, blinkColor('blue'));
         playSound(e, getSoundURL(4), 'blue', count);
     }
 }
 // This will create a random pattern that the player must play back correctly
 function generatePattern() {
+    const RADIX = 10;
     let pattern = {};
     let colors = [];
     for (let count = 1; count <= 20; count += 1) {
-        pattern[count.toString()] = colors.push(getRandomColor(getRandomInt()));
-        pattern[count.toString()] = createArr(colors);
+        pattern[count.toString(RADIX)] = colors.push(getRandomColor(getRandomInt()));
+        pattern[count.toString(RADIX)] = createArr(colors);
     }
     return pattern;
 }
@@ -82,16 +82,15 @@ function difficultySpeed(count) {
 }
 // Play the sound of the passed URL
 function playSound(e, url, color, count) {
-    const audio = new Audio(url);
+    const audio = document.createElement('audio');
+    audio.src = url;
     audio.playbackRate = difficultySpeed(count);
+    // When sound ends, will change to default color
+    audio.onended = function () {
+        changeColor(e, standardColor(color));
+    };
     audio.play();
 }
-/*
-function isSound(e: any, audio: any, color: string) {
-  if (audio.ended) {
-    changeColor(e, standardColor(color));
-  }
-}*/
 // Get the URL of the soundfile for the matching color
 function getSoundURL(soundIndex) {
     return `https://s3.amazonaws.com/freecodecamp/simonSound${soundIndex}.mp3`;
@@ -109,6 +108,7 @@ function getRandomColor(index) {
     return Color[index];
 }
 // Change color of the box
+// TODO: Creates inline style on colora, edit so it doesn't do this
 function changeColor(e, color) {
     e.target.style.backgroundColor = color;
 }
