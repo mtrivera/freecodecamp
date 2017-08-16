@@ -23,7 +23,13 @@ interface ControlsConfig {
 }
 
 let simon = document.getElementById('simon');
+let start = document.getElementById('start');
 (simon as any).addEventListener('click', playSimon, false);
+(start as any).addEventListener('click', startGame, false);
+
+// If the user plays start, play the pattern
+function startGame(e: any) {
+}
 
 // Main simon gameplay
 function playSimon(e: any) {
@@ -38,6 +44,10 @@ function playSimon(e: any) {
     strict: false
   };*/
   //color = getRandomColor(getRandomInt());
+  /*const cheese = ["yellow", "green", "green", "yellow", "green", "green", "red", "blue", "blue",
+   "yellow", "blue", "red", "blue", "green", "yellow", "green", "yellow", "red", "red", "yellow"];
+   playbackPattern(cheese, count, e);*/
+  /*
   if (e.target.id == 'green') {
     changeColor(e, blinkColor('green'));
     playSound(e, getSoundURL(1), 'green', count);
@@ -50,8 +60,9 @@ function playSimon(e: any) {
   } else if (e.target.id == 'blue') {
     changeColor(e, blinkColor('blue'));
     playSound(e, getSoundURL(4), 'blue', count);
-  }
+  }*/
 }
+
 // This will create a random pattern that the player must play back correctly
 function generatePattern() {
   const RADIX = 10;
@@ -63,7 +74,28 @@ function generatePattern() {
   }
   return pattern;
 }
+// Play the the color and corresponding sound
+function playColor(color: string, count: number): void {
+  const colorElm = document.getElementById(color);
+  (colorElm as HTMLElement).style.backgroundColor = blinkColor(color);
+  playSound(getSoundURL(getColorIndex(color)), color, count);
+}
+// TODO: Only plays one element in the array correctly
+function playPattern(arr: string[], count: number): void {
+  arr.forEach(function(elm) {
+    playColor(elm, count);
+  });
+}
 
+/*
+function playbackPattern(arr: string[], count: number, e: any) {
+  arr.forEach(function(elm) {
+    const color = document.getElementById(elm);
+    color.style.backgroundColor = blinkColor(elm);
+    //playSound(getSoundURL(getRandomColor[elm]), elm, count, e);
+  });
+}*/
+/*
 function getDifficulty(count: number) {
   enum Difficulty { normal = 1000, moderate = 800, hard = 600 }
   let speed = 0;
@@ -75,7 +107,7 @@ function getDifficulty(count: number) {
     speed = Difficulty.hard;
   }
   return speed;
-}
+}*/
 //https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/WebAudio_playbackRate_explained
 function difficultySpeed(count: number) {
   enum Speed { normal = 1.0, moderate = 1.2, hard = 1.4 };
@@ -90,16 +122,28 @@ function difficultySpeed(count: number) {
 }
 
 // Play the sound of the passed URL
-function playSound(e: any, url: string, color: string, count: number): void {
+function playSound(url: string, color: string, count: number): void {
   const audio = document.createElement('audio');
   audio.src = url;
   audio.playbackRate = difficultySpeed(count);
   // When sound ends, will change to default color
   audio.onended = function() {
-    changeColor(e, standardColor(color));
+    changeColor(color);
   }
   audio.play();
 }
+/*
+function playSound(url: string, color: string, count: number, e: any): void {
+  const audio = document.createElement('audio');
+  audio.src = url;
+  audio.playbackRate = difficultySpeed(count);
+  // When sound ends, will change to default color
+  audio.onended = function() {
+    changeColor(standardColor(color), e);
+  }
+  audio.play();
+}
+*/
 // Get the URL of the soundfile for the matching color
 function getSoundURL(soundIndex: number) {
   return `https://s3.amazonaws.com/freecodecamp/simonSound${soundIndex}.mp3`;
@@ -109,10 +153,20 @@ function getRandomColor(index: number) {
   enum Color { green = 1, red, yellow, blue };
   return Color[index];
 }
+// Get a color index. for the getSoundURL function
+function getColorIndex(color: string) {
+  enum Color { green = 1, red, yellow, blue };
+  return Color[color];
+}
 // Change color of the box
 // TODO: Creates inline style on colora, edit so it doesn't do this
-function changeColor(e: any, color: string): void {
-  e.target.style.backgroundColor = color;
+function changeColor(color: string): void {
+    const colorElm = document.getElementById(color);
+    if ((colorElm as HTMLElement).style.backgroundColor === standardColor(color)) {
+      (colorElm as HTMLElement).style.backgroundColor = blinkColor(color);
+    } else {
+      (colorElm as HTMLElement).style.backgroundColor = standardColor(color);
+    }
 }
 // Get the standard color for the selected color
 function standardColor(color: string) {
@@ -161,6 +215,16 @@ function alertUser(): void {
 // Create new array without mutating
 function createArr(arr: string[]) {
   return arr.slice(0);
+}
+// Compare string equality, 1 means they are equal
+function strcmp(str1: string, str2: string) {
+  if (str1 < str2) {
+    return -1;
+  } else if (str1 > str2) {
+    return 0;
+  } else {
+    return 1;
+  }
 }
 // Display text for three buttons: start, reset, and strict
 /*
