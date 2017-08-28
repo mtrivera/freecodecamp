@@ -25,20 +25,31 @@ interface ControlsConfig {
 let simon = document.getElementById('simon');
 let start = document.getElementById('start');
 (simon as any).addEventListener('click', playSimon, false);
-(start as any).addEventListener('click', startGame, false);
+//(start as any).addEventListener('click', startGame, false);
 
 // If the user plays start, play the pattern
-function startGame(e: any) {
-}
+/*function startGame(e: any) {
+  console.log(generatePattern());
+}*/
 
 // Main simon gameplay
 function playSimon(e: any) {
   const WIN = 20;
-  let pattern:PatternArray = [];
+  //let pattern:PatternArray = [];
   let gamePattern:PatternConfig = {};
-  let playerPattern:PatternConfig = {};
+  //let playerPattern:PatternConfig = {};
   let color = undefined;
   let count = 0;
+
+  if (e.target.id == 'start') {
+    gamePattern = generatePattern();
+    toggleBtn(start);
+  }
+
+  if (count == WIN) {
+    alert(`Congratulations\nYou Win!`);
+    return;
+  }
   /*let controls:ControlsConfig = {
     start: false,
     strict: false
@@ -62,29 +73,29 @@ function playSimon(e: any) {
     playSound(e, getSoundURL(4), 'blue', count);
   }*/
 }
-
 // This will create a random pattern that the player must play back correctly
 function generatePattern() {
   const RADIX = 10;
   let pattern: PatternConfig = {};
   let colors: string[] = [];
   for (let count = 1; count <= 20; count += 1) {
-      pattern[count.toString(RADIX)] = colors.push(getRandomColor(getRandomInt()));
-      pattern[count.toString(RADIX)] = createArr(colors);
+    //pattern[count.toString(RADIX)] = getRandomColor(getRandomInt());
+    pattern[count.toString(RADIX)] = colors.push(getRandomColor(getRandomInt()));
+    pattern[count.toString(RADIX)] = createArr(colors);
   }
   return pattern;
 }
 // Play the the color and corresponding sound
-function playColor(color: string, count: number): void {
+function playColor(color: string, count: number): void  {
   const colorElm = document.getElementById(color);
   (colorElm as HTMLElement).style.backgroundColor = blinkColor(color);
   playSound(getSoundURL(getColorIndex(color)), color, count);
 }
 // TODO: Only plays one element in the array correctly
 function playPattern(arr: string[], count: number): void {
-  arr.forEach(function(elm) {
-    playColor(elm, count);
-  });
+  /*arr.forEach(function(elm) {
+    changeColor(elm);
+  });*/
 }
 
 /*
@@ -226,6 +237,26 @@ function strcmp(str1: string, str2: string) {
     return 1;
   }
 }
+// Disables/enables a button element
+function toggleBtn(btnElm: any): void {
+  if (btnElm.disabled) {
+    btnElm.disabled = false;
+  } else {
+    btnElm.disabled = true;
+  }
+}
+// Recursive function to play array of sounds
+// NOTE: -1 value ensures playNext handles passed array at 0 index
+function playNext(sounds: string[], index = -1) {  
+  if (index === sounds.length - 1) {  
+    return; 
+  } else {  
+    setTimeout(function() {  
+        console.log(`play ${index} ${sounds[index]} at ${new Date().toLocaleString()}`);  
+    }, 3000 * (index + 1) );  
+    playNext(sounds, ++index);  
+  }  
+} 
 // Display text for three buttons: start, reset, and strict
 /*
 (function displayButtons(): void {

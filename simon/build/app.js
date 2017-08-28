@@ -2,18 +2,27 @@
 var simon = document.getElementById('simon');
 var start = document.getElementById('start');
 simon.addEventListener('click', playSimon, false);
-start.addEventListener('click', startGame, false);
+//(start as any).addEventListener('click', startGame, false);
 // If the user plays start, play the pattern
-function startGame(e) {
-}
+/*function startGame(e: any) {
+  console.log(generatePattern());
+}*/
 // Main simon gameplay
 function playSimon(e) {
     var WIN = 20;
-    var pattern = [];
+    //let pattern:PatternArray = [];
     var gamePattern = {};
-    var playerPattern = {};
+    //let playerPattern:PatternConfig = {};
     var color = undefined;
     var count = 0;
+    if (e.target.id == 'start') {
+        gamePattern = generatePattern();
+        toggleBtn(start);
+    }
+    if (count == WIN) {
+        alert("Congratulations\nYou Win!");
+        return;
+    }
     /*let controls:ControlsConfig = {
       start: false,
       strict: false
@@ -43,6 +52,7 @@ function generatePattern() {
     var pattern = {};
     var colors = [];
     for (var count = 1; count <= 20; count += 1) {
+        //pattern[count.toString(RADIX)] = getRandomColor(getRandomInt());
         pattern[count.toString(RADIX)] = colors.push(getRandomColor(getRandomInt()));
         pattern[count.toString(RADIX)] = createArr(colors);
     }
@@ -56,9 +66,9 @@ function playColor(color, count) {
 }
 // TODO: Only plays one element in the array correctly
 function playPattern(arr, count) {
-    arr.forEach(function (elm) {
-        playColor(elm, count);
-    });
+    /*arr.forEach(function(elm) {
+      changeColor(elm);
+    });*/
 }
 /*
 function playbackPattern(arr: string[], count: number, e: any) {
@@ -221,5 +231,28 @@ function strcmp(str1, str2) {
     }
     else {
         return 1;
+    }
+}
+// Disables/enables a button element
+function toggleBtn(btnElm) {
+    if (btnElm.disabled) {
+        btnElm.disabled = false;
+    }
+    else {
+        btnElm.disabled = true;
+    }
+}
+// Recursive function to play array of sounds
+// NOTE: -1 value ensures playNext handles passed array at 0 index
+function playNext(sounds, index) {
+    if (index === void 0) { index = -1; }
+    if (index === sounds.length - 1) {
+        return;
+    }
+    else {
+        setTimeout(function () {
+            console.log("play " + index + " " + sounds[index] + " at " + new Date().toLocaleString());
+        }, 3000 * (index + 1));
+        playNext(sounds, ++index);
     }
 }
