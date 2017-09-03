@@ -85,6 +85,18 @@ function generatePattern() {
   }
   return pattern;
 }
+
+// Use for verifying color array, use with every method
+/*
+const user = ['red', 'green', 'blue']; 
+const game = ['red', 'green', 'blue']; 
+
+user.every(isValidPattern);
+
+function isValidPattern(element: string, index: number, array: string[]) {  
+  return element == game[index]; 
+} 
+*/
 // Play the the color and corresponding sound
 function playColor(color: string, count: number): void  {
   const colorElm = document.getElementById(color);
@@ -97,6 +109,38 @@ function playPattern(arr: string[], count: number): void {
     changeColor(elm);
   });*/
 }
+/*
+function validUserInput(userArr: string[], gameArr: string[], strict: boolean) { 
+  gameArr.forEach(function(elm, index) {
+    if (strcmp(userArr[index], gameArr[index]) == 1) {
+      console.log('Match Found!');
+    } else {
+      if (strict) {
+        //toggleBtn(start);
+        console.log('Strict Mode Enabled');
+        console.log('Game Reset');
+        return;
+      }
+      console.log('Error! Try Again');
+      playNext(gameArr);
+    }
+  });
+}
+*/
+  /*
+  if (strcmp(userArr[counter.toString()][0], gameArr[counter.toString()][0] == 1)) { 
+    console.log(`User: ${userArr[counter]} Test: ${gameArr[counter]}`); 
+    console.log('Match Found!'); 
+    counter += 1; 
+  } else { 
+    if (strict) { 
+      gamePattern = generatePattern(); 
+      toggleBtn(start); 
+    } 
+    console.log('Error!'); 
+    playNext(gameArr[counter.toString()]); 
+  } 
+  */
 
 /*
 function playbackPattern(arr: string[], count: number, e: any) {
@@ -136,7 +180,7 @@ function difficultySpeed(count: number) {
 function playSound(url: string, color: string, count: number): void {
   const audio = document.createElement('audio');
   audio.src = url;
-  audio.playbackRate = difficultySpeed(count);
+  //audio.playbackRate = difficultySpeed(count);
   // When sound ends, will change to default color
   audio.onended = function() {
     changeColor(color);
@@ -257,6 +301,13 @@ function playNext(sounds: string[], index = -1) {
     playNext(sounds, ++index);  
   }  
 } 
+// Toggle color buttons 
+function toggleColors() {
+  const colors = ['red', 'green', 'yellow', 'blue'];
+  colors.forEach(function(elm) {
+    toggleBtn(document.getElementById(elm));
+  });
+}
 // Display text for three buttons: start, reset, and strict
 /*
 (function displayButtons(): void {
