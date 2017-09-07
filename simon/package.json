@@ -1,0 +1,29 @@
+{
+  "name": "simon",
+  "version": "0.0.1",
+  "description": "The simon game for the freeCodeCamp front-end curriculm",
+  "main": "app.js",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "babel src -d build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtrivera/freecodecamp.git"
+  },
+  "keywords": [
+    "simon",
+    "fccc",
+    "front-end"
+  ],
+  "author": "Miguel T Rivera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mtrivera/freecodecamp/issues"
+  },
+  "homepage": "https://github.com/mtrivera/freecodecamp#readme"
+}
