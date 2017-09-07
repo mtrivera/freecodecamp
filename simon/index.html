@@ -5,23 +5,27 @@
 <link rel='stylesheet' href='styles/styles.css' />
 </head>
 <body>
-  <div id="simon">
+  <header>
     <h1>Simon Game</h1>
-    <h3>Created by Miguel T Rivera</h3>
+    <p>Created by Miguel T Rivera</p>
+  </header>
+  <main>
     <div id="colors">
-      <button type="button" id="green"></button>
-      <button type="button" id="red" ></button>
-      <button type="button" id="yellow"></button>
-      <button type="button" id="blue"></button>
+      <button type="button" class="green"></button>
+      <button type="button" class="red" ></button>
+      <button type="button" class="yellow"></button>
+      <button type="button" class="blue"></button>
+    </div>
+    <div id="game-info">
+      Count<span class="score strict-status"></span>
+      <span class="strict-status uppercase-txt"></span>
     </div>
     <div id="controls">
-      <span id="score"></span>
-      <button type="button" class="ctrlBtn" id="start">start</button>
-      <button type="button" class="ctrlBtn" id="reset">reset</button>
-      <button type="button" class="ctrlBtn" id="strict">strict</button>
-      <span id="strictStatus" class="ctrlBtn">strict mode disabled</span>
+      <button type="button" class="start uppercase-txt">start</button>
+      <button type="button" class="reset uppercase-txt">reset</button>
+      <button type="button" class="strict uppercase-txt">strict</button>
     </div>
-  </div>
+  </main>
 <script src='build/app.js'></script>
 </body>
 </html>
