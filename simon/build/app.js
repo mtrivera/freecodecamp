@@ -1,5 +1,65 @@
 'use strict';
 
+var simon = {
+  colors: ['green', 'red', 'yellow', 'blue'],
+  speed: { normal: 2000, moderate: 1667, hard: 1333 },
+  sequence: [],
+  step: 0,
+  strictMode: false,
+  win: 20,
+  nextSequence: function nextSequence() {
+    var nextColor = simon.colors[Math.floor(Math.random() * simon.colors.length)];
+    simon.sequence.push(nextColor);
+    console.log('The sequence ' + simon.sequence);
+  },
+  playSequence: function (_playSequence) {
+    function playSequence(_x) {
+      return _playSequence.apply(this, arguments);
+    }
+
+    playSequence.toString = function () {
+      return _playSequence.toString();
+    };
+
+    return playSequence;
+  }(function (sequence) {
+    var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -1;
+
+    if (index === sequence.length - 1) {
+      return;
+    } else {
+      setTimeout(function () {
+        console.log('play ' + index + ' ' + sequence[index] + ' at ' + new Date().toLocaleString());
+      }, 2000 * (index + 1));
+      playSequence(sequence, ++index);
+    }
+  }),
+  sendColor: function sendColor(color) {
+    if (!simon.sequence.length) {
+      // Start game  
+      simon.nextSequence();
+    } else {
+      if (color === simon.sequence[simon.step]) {
+        // Go to next step
+        if (simon.step == simon.sequence.length - 1) {
+          console.log('sequence complete');
+          simon.step = 0;
+          simon.nextSequence();
+        } else {
+          simon.step += 1;
+        }
+      } else {
+        // Lose condition
+        // TODO: Add if/else for strict mode
+        alert('WRONG!');
+        simon.sequence = [];
+        simon.step = 0;
+      }
+    }
+    console.log('NEW COLOR ' + color);
+  }
+};
+
 var colorStyles = {
   green: { standard: '#00924a', blink: '#649d81' },
   red: { standard: '#9f201a', blink: '#9c7371' },
@@ -22,10 +82,7 @@ var resetBtn = document.querySelector('.reset');
 var strictBtn = document.querySelector('.strict');
 var scoreMsg = document.getElementsByTagName('span')[0];
 var strictMsg = document.getElementsByTagName('span')[1];
-var userPattern = [];
-var playerTurn = false;
 //let testPattern = generatePattern();
-
 
 // TODO: Put these two into part of an init function
 scoreMsg.textContent = '--';
@@ -35,17 +92,21 @@ strictMsg.textContent = 'strict mode disabled'.toUpperCase();
 colorsDiv.addEventListener('click', function (e) {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == greenBtn) {
-      console.log('Green button pressed');
+      //console.log('Green button pressed');
+      simon.sendColor(simon.colors[0]);
       //userPattern.push(e.target.className);
     }
-    if (e.target == blueBtn) {
-      console.log('Blue button pressed');
-    }
     if (e.target == redBtn) {
-      console.log('Red button pressed');
+      //console.log('Red button pressed');
+      simon.sendColor(simon.colors[1]);
     }
     if (e.target == yellowBtn) {
-      console.log('Yellow button pressed');
+      //console.log('Yellow button pressed');
+      simon.sendColor(simon.colors[2]);
+    }
+    if (e.target == blueBtn) {
+      //console.log('Blue button pressed');
+      simon.sendColor(simon.colors[3]);
     }
   }
 });
@@ -64,10 +125,11 @@ controlsDiv.addEventListener('click', function (e) {
     }
   }
 });
+/*
 // Get a random integer between 0 and 3
 function getRandomInt() {
-  var min = 0;
-  var max = 4;
+  const min = 0;
+  const max = 4;
   return Math.floor(Math.random() * (max - min)) + min;
 }
 // Compare string equality, 1 means equality
@@ -80,27 +142,28 @@ function strcmp(str1, str2) {
     return 1;
   }
 }
+*/
 // Recursive function to play array of colors
 // NOTE: -1 value ensures playPattern handles passed array at 0 index
-function playPattern(colors) {
-  var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -1;
-
-  if (index === colors.length - 1) {
-    return;
-  } else {
-    setTimeout(function () {
-      console.log('play ' + index + ' ' + colors[index] + ' at ' + new Date().toLocaleString());
-    }, 2000 * (index + 1));
-    playPattern(colors, ++index);
-  }
-}
+/*
+function playPattern(colors, index = -1) {
+  if (index === colors.length - 1) {  
+    return; 
+  } else {  
+    setTimeout(function() {  
+        console.log(`play ${index} ${colors[index]} at ${new Date().toLocaleString()}`);  
+    }, 2000 * (index + 1) );  
+    playPattern(colors, ++index);  
+  }  
+}*/
+/*
 //console.log(colorsArr[getRandomInt()]);
 // This will create a random pattern that the player must play back correctly
 function generatePattern() {
-  var RADIX = 10;
-  var pattern = {};
-  var colors = [];
-  for (var count = 1; count <= 20; count += 1) {
+  const RADIX = 10;
+  let pattern = {};
+  let colors = [];
+  for (let count = 1; count <= 20; count += 1) {
     //pattern[count.toString(RADIX)] = getRandomColor(getRandomInt());
     pattern[count.toString(RADIX)] = colors.push(colorsArr[getRandomInt()]);
     pattern[count.toString(RADIX)] = createArr(colors);
@@ -111,6 +174,50 @@ function generatePattern() {
 function createArr(arr) {
   return arr.slice(0);
 }
+*/
+// Disables/enables a button element
+function toggleBtn(btn) {
+  if (btn.disabled) {
+    btn.disabled = false;
+  } else {
+    btn.disabled = true;
+  }
+}
+/*
+function validateUserInput(userArr, gameArr) { 
+  let count = 0;
+  while (count < gameArr.length) {
+    if (strcmp(userArr[count], gameArr[count]) == 1) {
+      console.log('Match Found!');
+      count += 1;
+    } else {
+      if (strict) {
+        //toggleBtn(start);
+        console.log('Strict Mode Enabled');
+        console.log('Game Reset');
+        return;
+      }
+      console.log('Error! Try Again');
+      return;
+    }
+  }
+  console.log('Patterns Match\nPlay next pattern');
+}
+*/
+/*
+if (strcmp(userArr[counter.toString()][0], gameArr[counter.toString()][0] == 1)) { 
+  console.log(`User: ${userArr[counter]} Test: ${gameArr[counter]}`); 
+  console.log('Match Found!'); 
+  counter += 1; 
+} else { 
+  if (strict) { 
+    gamePattern = generatePattern(); 
+    toggleBtn(start); 
+  } 
+  console.log('Error!'); 
+  playNext(gameArr[counter.toString()]); 
+} 
+*/
 /* 
 startBtn.addEventListener('click', () => {
   console.log('Start button pressed\nGame On!');

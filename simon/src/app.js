@@ -1,5 +1,53 @@
 'use strict';
 
+const simon = {
+  colors: ['green', 'red', 'yellow', 'blue'],
+  speed: {normal: 2000, moderate: 1667, hard: 1333},
+  sequence: [],
+  step: 0,
+  strictMode: false,
+  win: 20,
+  nextSequence: () => {
+    const nextColor = simon.colors[Math.floor(Math.random() * simon.colors.length)];
+    simon.sequence.push(nextColor);
+    console.log(`The sequence ${simon.sequence}`);
+  },
+  playSequence: (sequence, index = -1) => {
+    if (index === sequence.length - 1) {  
+      return; 
+    } else {  
+      setTimeout(function() {  
+          console.log(`play ${index} ${sequence[index]} at ${new Date().toLocaleString()}`);  
+      }, 2000 * (index + 1) );  
+      playSequence(sequence, ++index);  
+    }  
+  },
+  sendColor: (color) => {
+    if (!simon.sequence.length) {
+      // Start game  
+      simon.nextSequence();
+    } else {
+      if (color === simon.sequence[simon.step]) {
+        // Go to next step
+        if (simon.step == simon.sequence.length - 1) {
+          console.log('sequence complete');
+          simon.step = 0;
+          simon.nextSequence();
+        } else {
+          simon.step += 1;
+        }
+      } else {
+        // Lose condition
+        // TODO: Add if/else for strict mode
+          alert('WRONG!');
+          simon.sequence = [];
+          simon.step = 0;
+      }
+    }
+    console.log(`NEW COLOR ${color}`);
+  }
+};
+
 const colorStyles = {
   green: {standard: '#00924a', blink: '#649d81'},
   red: {standard: '#9f201a', blink: '#9c7371'},
@@ -22,10 +70,7 @@ const resetBtn = document.querySelector('.reset');
 const strictBtn = document.querySelector('.strict');
 const scoreMsg = document.getElementsByTagName('span')[0];
 const strictMsg = document.getElementsByTagName('span')[1];
-let userPattern = [];
-let playerTurn = false;
 //let testPattern = generatePattern();
-
 
 // TODO: Put these two into part of an init function
 scoreMsg.textContent = '--';
@@ -35,17 +80,21 @@ strictMsg.textContent = 'strict mode disabled'.toUpperCase();
 colorsDiv.addEventListener('click', (e) => {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == greenBtn) {
-      console.log('Green button pressed');
+      //console.log('Green button pressed');
+      simon.sendColor(simon.colors[0]);
       //userPattern.push(e.target.className);
     }
-    if (e.target == blueBtn) {
-      console.log('Blue button pressed');
-    }
     if (e.target == redBtn) {
-      console.log('Red button pressed');
+      //console.log('Red button pressed');
+      simon.sendColor(simon.colors[1]);
     }
     if (e.target == yellowBtn) {
-      console.log('Yellow button pressed');
+      //console.log('Yellow button pressed');
+      simon.sendColor(simon.colors[2]);
+    }
+    if (e.target == blueBtn) {
+      //console.log('Blue button pressed');
+      simon.sendColor(simon.colors[3]);
     }
   }
 });
@@ -64,6 +113,7 @@ controlsDiv.addEventListener('click', (e) => {
     }
   }
 });
+/*
 // Get a random integer between 0 and 3
 function getRandomInt() {
   const min = 0;
@@ -80,8 +130,10 @@ function strcmp(str1, str2) {
     return 1;
   }
 }
+*/
 // Recursive function to play array of colors
 // NOTE: -1 value ensures playPattern handles passed array at 0 index
+/*
 function playPattern(colors, index = -1) {
   if (index === colors.length - 1) {  
     return; 
@@ -91,7 +143,8 @@ function playPattern(colors, index = -1) {
     }, 2000 * (index + 1) );  
     playPattern(colors, ++index);  
   }  
-}
+}*/
+/*
 //console.log(colorsArr[getRandomInt()]);
 // This will create a random pattern that the player must play back correctly
 function generatePattern() {
@@ -109,6 +162,50 @@ function generatePattern() {
 function createArr(arr) {
   return arr.slice(0);
 }
+*/
+// Disables/enables a button element
+function toggleBtn(btn) {
+  if (btn.disabled) {
+    btn.disabled = false;
+  } else {
+    btn.disabled = true;
+  }
+}
+/*
+function validateUserInput(userArr, gameArr) { 
+  let count = 0;
+  while (count < gameArr.length) {
+    if (strcmp(userArr[count], gameArr[count]) == 1) {
+      console.log('Match Found!');
+      count += 1;
+    } else {
+      if (strict) {
+        //toggleBtn(start);
+        console.log('Strict Mode Enabled');
+        console.log('Game Reset');
+        return;
+      }
+      console.log('Error! Try Again');
+      return;
+    }
+  }
+  console.log('Patterns Match\nPlay next pattern');
+}
+*/
+  /*
+  if (strcmp(userArr[counter.toString()][0], gameArr[counter.toString()][0] == 1)) { 
+    console.log(`User: ${userArr[counter]} Test: ${gameArr[counter]}`); 
+    console.log('Match Found!'); 
+    counter += 1; 
+  } else { 
+    if (strict) { 
+      gamePattern = generatePattern(); 
+      toggleBtn(start); 
+    } 
+    console.log('Error!'); 
+    playNext(gameArr[counter.toString()]); 
+  } 
+  */
 /* 
 startBtn.addEventListener('click', () => {
   console.log('Start button pressed\nGame On!');
