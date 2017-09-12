@@ -2,11 +2,33 @@
 
 var simon = {
   colors: ['green', 'red', 'yellow', 'blue'],
-  speed: { normal: 2000, moderate: 1667, hard: 1333 },
+  correct: 0,
+  speed: {
+    normal: 2000,
+    moderate: 1667,
+    hard: 1333
+  },
   sequence: [],
+  sounds: {
+    green: 'https://s3.amazonaws.com/freecodecamp/simonSound1.mp3',
+    red: 'https://s3.amazonaws.com/freecodecamp/simonSound2.mp3',
+    yellow: 'https://s3.amazonaws.com/freecodecamp/simonSound3.mp3',
+    blue: 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3'
+  },
   step: 0,
   strictMode: false,
-  win: 20,
+  startGame: false,
+  WIN: 20,
+  changeColor: function changeColor(colorBtn) {
+    if (typeof color == 'string') {
+      colorBtn = document.querySelector('.' + color);
+    }
+    if (colorBtn.style.backgroundColor === colorStyles[colorBtn.className].standard) {
+      colorBtn.style.backgroundColor = colorStyles[colorBtn.className].blink;
+    } else {
+      colorBtn.style.backgroundColor = colorStyles[colorBtn.className].standard;
+    }
+  },
   nextSequence: function nextSequence() {
     var nextColor = simon.colors[Math.floor(Math.random() * simon.colors.length)];
     simon.sequence.push(nextColor);
@@ -34,6 +56,17 @@ var simon = {
       playSequence(sequence, ++index);
     }
   }),
+  playSound: function playSound(color) {
+    var audio = document.createElement('audio');
+    //audio.src = url;
+    audio.src = simon.sounds[color];
+    // When sound ends, will change to default color
+    audio.onended = function () {
+      simon.changeColor(color);
+      console.log('Change color after sound');
+    };
+    audio.play();
+  },
   sendColor: function sendColor(color) {
     if (!simon.sequence.length) {
       // Start game  
@@ -48,6 +81,8 @@ var simon = {
         } else {
           simon.step += 1;
         }
+        ++simon.correct;
+        console.log(simon.correct);
       } else {
         // Lose condition
         // TODO: Add if/else for strict mode
@@ -61,13 +96,14 @@ var simon = {
 };
 
 var colorStyles = {
+  //green: {standard: 'rgb(0, 146, 74)', blink: 'rgb(100, 157, 129)'},
   green: { standard: '#00924a', blink: '#649d81' },
   red: { standard: '#9f201a', blink: '#9c7371' },
   yellow: { standard: '#cfa20d', blink: '#d5c797' },
   blue: { standard: '#054894', blink: '#6a819a' }
 };
-var colorsArr = ['green', 'red', 'yellow', 'blue'];
-var gamePattern = ['red', 'green', 'blue'];
+//const colorsArr = ['green', 'red', 'yellow', 'blue'];
+//const gamePattern = ['red', 'green', 'blue'];
 var colorsDiv = document.getElementById('colors');
 var controlsDiv = document.getElementById('controls');
 // [button.green, button.red, button.yellow, button.blue] 
@@ -93,20 +129,23 @@ colorsDiv.addEventListener('click', function (e) {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == greenBtn) {
       //console.log('Green button pressed');
-      simon.sendColor(simon.colors[0]);
-      //userPattern.push(e.target.className);
+      simon.sendColor(greenBtn.className);
+      simon.playSound(greenBtn.className);
     }
     if (e.target == redBtn) {
       //console.log('Red button pressed');
-      simon.sendColor(simon.colors[1]);
+      simon.sendColor(redBtn.className);
+      simon.playSound(redBtn.className);
     }
     if (e.target == yellowBtn) {
       //console.log('Yellow button pressed');
-      simon.sendColor(simon.colors[2]);
+      simon.sendColor(yellowBtn.className);
+      simon.playSound(yellowBtn.className);
     }
     if (e.target == blueBtn) {
       //console.log('Blue button pressed');
-      simon.sendColor(simon.colors[3]);
+      simon.sendColor(blueBtn.className);
+      simon.playSound(blueBtn.className);
     }
   }
 });
@@ -158,7 +197,7 @@ function playPattern(colors, index = -1) {
 }*/
 /*
 //console.log(colorsArr[getRandomInt()]);
-// This will create a random pattern that the player must play back correctly
+// simon will create a random pattern that the player must play back correctly
 function generatePattern() {
   const RADIX = 10;
   let pattern = {};

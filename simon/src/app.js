@@ -2,11 +2,33 @@
 
 const simon = {
   colors: ['green', 'red', 'yellow', 'blue'],
-  speed: {normal: 2000, moderate: 1667, hard: 1333},
+  speed: {
+    normal: 2000, 
+    moderate: 1667, 
+    hard: 1333
+  },
   sequence: [],
+  sounds: {
+    green: 'https://s3.amazonaws.com/freecodecamp/simonSound1.mp3',
+    red: 'https://s3.amazonaws.com/freecodecamp/simonSound2.mp3',
+    yellow: 'https://s3.amazonaws.com/freecodecamp/simonSound3.mp3',
+    blue: 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3'
+  },
   step: 0,
   strictMode: false,
-  win: 20,
+  startGame: false,
+  WIN: 20,
+  // TOFIX: Does not change color properly
+  changeColor: (colorBtn) => {
+    if (typeof(color) == 'string') {
+      colorBtn = document.querySelector(`.${color}`);
+    }
+   if (colorBtn.style.backgroundColor === colorStyles[colorBtn.className].standard) {
+     colorBtn.style.backgroundColor = colorStyles[colorBtn.className].blink;
+   } else {
+     colorBtn.style.backgroundColor = colorStyles[colorBtn.className].standard;
+   }
+  },
   nextSequence: () => {
     const nextColor = simon.colors[Math.floor(Math.random() * simon.colors.length)];
     simon.sequence.push(nextColor);
@@ -16,11 +38,22 @@ const simon = {
     if (index === sequence.length - 1) {  
       return; 
     } else {  
-      setTimeout(function() {  
+      setTimeout(() => {  
           console.log(`play ${index} ${sequence[index]} at ${new Date().toLocaleString()}`);  
       }, 2000 * (index + 1) );  
       playSequence(sequence, ++index);  
     }  
+  },
+  playSound: (color) => {
+    const audio = document.createElement('audio');
+    //audio.src = url;
+    audio.src = simon.sounds[color];
+    // When sound ends, will change to default color
+    audio.onended = function() {
+      //simon.changeColor(color);
+      console.log('Change color after sound');
+    }
+    audio.play();
   },
   sendColor: (color) => {
     if (!simon.sequence.length) {
@@ -54,8 +87,8 @@ const colorStyles = {
   yellow: {standard: '#cfa20d', blink: '#d5c797'},
   blue: {standard: '#054894', blink: '#6a819a'},
 };
-const colorsArr = ['green', 'red', 'yellow', 'blue'];
-const gamePattern = ['red', 'green', 'blue'];
+//const colorsArr = ['green', 'red', 'yellow', 'blue'];
+//const gamePattern = ['red', 'green', 'blue'];
 const colorsDiv = document.getElementById('colors');
 const controlsDiv = document.getElementById('controls');
 // [button.green, button.red, button.yellow, button.blue] 
@@ -81,20 +114,23 @@ colorsDiv.addEventListener('click', (e) => {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == greenBtn) {
       //console.log('Green button pressed');
-      simon.sendColor(simon.colors[0]);
-      //userPattern.push(e.target.className);
+      simon.sendColor(greenBtn.className);
+      simon.playSound(greenBtn.className);
     }
     if (e.target == redBtn) {
       //console.log('Red button pressed');
-      simon.sendColor(simon.colors[1]);
+      simon.sendColor(redBtn.className);
+      simon.playSound(redBtn.className);
     }
     if (e.target == yellowBtn) {
       //console.log('Yellow button pressed');
-      simon.sendColor(simon.colors[2]);
+      simon.sendColor(yellowBtn.className);
+      simon.playSound(yellowBtn.className);
     }
     if (e.target == blueBtn) {
       //console.log('Blue button pressed');
-      simon.sendColor(simon.colors[3]);
+      simon.sendColor(blueBtn.className);
+      simon.playSound(blueBtn.className);
     }
   }
 });
@@ -146,7 +182,7 @@ function playPattern(colors, index = -1) {
 }*/
 /*
 //console.log(colorsArr[getRandomInt()]);
-// This will create a random pattern that the player must play back correctly
+// simon will create a random pattern that the player must play back correctly
 function generatePattern() {
   const RADIX = 10;
   let pattern = {};
