@@ -2,7 +2,6 @@
 
 var simon = {
   colors: ['green', 'red', 'yellow', 'blue'],
-  correct: 0,
   speed: {
     normal: 2000,
     moderate: 1667,
@@ -19,15 +18,32 @@ var simon = {
   strictMode: false,
   startGame: false,
   WIN: 20,
+  // TOFIX: Does not change color properly
   changeColor: function changeColor(colorBtn) {
-    if (typeof color == 'string') {
-      colorBtn = document.querySelector('.' + color);
-    }
-    if (colorBtn.style.backgroundColor === colorStyles[colorBtn.className].standard) {
-      colorBtn.style.backgroundColor = colorStyles[colorBtn.className].blink;
+    if (simon.isBlinkClass(colorBtn.className)) {
+      colorBtn.className = colorBtn.className.slice('blink-'.length);
     } else {
-      colorBtn.style.backgroundColor = colorStyles[colorBtn.className].standard;
+      colorBtn.className = 'blink-' + colorBtn.className;
     }
+    /*
+     if (colorBtn.className === `blink-${colorBtn.className}`) {
+      colorBtn.setAttribute('class', colorBtn.className);
+    } else {
+      colorBtn.setAttribute('class', `blink-${colorBtn.className}`);
+    }
+    },*/
+    /*
+     if (colorBtn.className == `blink-`)
+     if (colorBtn.style.backgroundColor === colorStyles[colorBtn.className].standard) {
+       colorBtn.style.backgroundColor = colorStyles[colorBtn.className].blink;
+     } else if (colorBtn.className == `blink-${color}`) {
+       } else {
+       colorBtn.style.backgroundColor = colorStyles[colorBtn.className].standard;
+     }*/
+  },
+  isBlinkClass: function isBlinkClass(color_class) {
+    return (/blink/.test(color_class)
+    );
   },
   nextSequence: function nextSequence() {
     var nextColor = simon.colors[Math.floor(Math.random() * simon.colors.length)];
@@ -56,13 +72,13 @@ var simon = {
       playSequence(sequence, ++index);
     }
   }),
-  playSound: function playSound(color) {
+  playSound: function playSound(color, colorBtn) {
     var audio = document.createElement('audio');
     //audio.src = url;
     audio.src = simon.sounds[color];
     // When sound ends, will change to default color
     audio.onended = function () {
-      simon.changeColor(color);
+      simon.changeColor(colorBtn);
       console.log('Change color after sound');
     };
     audio.play();
@@ -81,8 +97,6 @@ var simon = {
         } else {
           simon.step += 1;
         }
-        ++simon.correct;
-        console.log(simon.correct);
       } else {
         // Lose condition
         // TODO: Add if/else for strict mode
@@ -96,7 +110,6 @@ var simon = {
 };
 
 var colorStyles = {
-  //green: {standard: 'rgb(0, 146, 74)', blink: 'rgb(100, 157, 129)'},
   green: { standard: '#00924a', blink: '#649d81' },
   red: { standard: '#9f201a', blink: '#9c7371' },
   yellow: { standard: '#cfa20d', blink: '#d5c797' },
@@ -126,27 +139,31 @@ strictMsg.textContent = 'strict mode disabled'.toUpperCase();
 
 // Listen for colors being clicked
 colorsDiv.addEventListener('click', function (e) {
-  if (e.target.tagName == 'BUTTON') {
-    if (e.target == greenBtn) {
-      //console.log('Green button pressed');
-      simon.sendColor(greenBtn.className);
-      simon.playSound(greenBtn.className);
+  if (simon.startGame) {
+    if (e.target.tagName == 'BUTTON') {
+      if (e.target == greenBtn) {
+        //console.log('Green button pressed');
+        simon.sendColor(greenBtn.className);
+        simon.playSound(greenBtn.className, greenBtn);
+      }
+      if (e.target == redBtn) {
+        //console.log('Red button pressed');
+        simon.sendColor(redBtn.className);
+        simon.playSound(redBtn.className, redBtn);
+      }
+      if (e.target == yellowBtn) {
+        //console.log('Yellow button pressed');
+        simon.sendColor(yellowBtn.className);
+        simon.playSound(yellowBtn.className, yellowBtn);
+      }
+      if (e.target == blueBtn) {
+        //console.log('Blue button pressed');
+        simon.sendColor(blueBtn.className);
+        simon.playSound(blueBtn.className, blueBtn);
+      }
     }
-    if (e.target == redBtn) {
-      //console.log('Red button pressed');
-      simon.sendColor(redBtn.className);
-      simon.playSound(redBtn.className);
-    }
-    if (e.target == yellowBtn) {
-      //console.log('Yellow button pressed');
-      simon.sendColor(yellowBtn.className);
-      simon.playSound(yellowBtn.className);
-    }
-    if (e.target == blueBtn) {
-      //console.log('Blue button pressed');
-      simon.sendColor(blueBtn.className);
-      simon.playSound(blueBtn.className);
-    }
+  } else {
+    console.log('Start has not been pressed');
   }
 });
 
@@ -154,6 +171,7 @@ colorsDiv.addEventListener('click', function (e) {
 controlsDiv.addEventListener('click', function (e) {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == startBtn) {
+      simon.startGame = true;
       console.log('Start button pressed\nGame On!');
     }
     if (e.target == resetBtn) {
