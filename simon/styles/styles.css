@@ -32,17 +32,15 @@
 .blue {
   background-color: #054894;
 }
-/*
-.green-blink {
-  background-color: rgba(#00924A, .25);
+.blink-green {
+  background-color: #649d81;
 }
-.red-blink {
-  background-color: rgba(#9F201A, .25);
+.blink-red {
+  background-color: #9c7371;
 }
-.yellow-blink {
-  background-color: rgba(#CFA20D, .25);
+.blink-yellow {
+  background-color: #d5c797;
 }
-.blue-blink {
-  background-color: rgba(#054894, .25);
+.blink-blue {
+  background-color: #6a819a;
 }
-*/
