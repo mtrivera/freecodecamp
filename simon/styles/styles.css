@@ -20,16 +20,16 @@
   padding: 5px;
   border: 1px solid #999;
 }
-.green {
+.standard-green {
   background-color: #00924a;
 }
-.red {
+.standard-red {
   background-color: #9f201a;
 }
-.yellow {
+.standard-yellow {
   background-color: #cfa20d;
 }
-.blue {
+.standard-blue {
   background-color: #054894;
 }
 .blink-green {
