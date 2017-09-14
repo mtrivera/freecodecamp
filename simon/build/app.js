@@ -21,10 +21,25 @@ var simon = {
   // TOFIX: Does not change color properly
   changeColor: function changeColor(colorBtn) {
     if (simon.isBlinkClass(colorBtn.className)) {
+      colorBtn.className = 'standard-' + colorBtn.id;
+      //console.log(`Change to ${color}`);
+    } else {
+      colorBtn.className = 'blink-' + colorBtn.id;
+      //console.log(`Change to ${color}`);
+    }
+    /*const color = colorBtn.className;
+    if (simon.isBlinkClass(color)) {
+      colorBtn.className = color.slice('blink-'.length);
+      console.log(`Change to ${colorBtn.className}`);
+    } else {
+      colorBtn.className = `blink-${color}`;
+      console.log(`Change to blink-${color}`)
+    }*/
+    /*if (simon.isBlinkClass(colorBtn.className)) {
       colorBtn.className = colorBtn.className.slice('blink-'.length);
     } else {
-      colorBtn.className = 'blink-' + colorBtn.className;
-    }
+      colorBtn.className = `blink-${colorBtn.className}`;
+    }*/
     /*
      if (colorBtn.className === `blink-${colorBtn.className}`) {
       colorBtn.setAttribute('class', colorBtn.className);
@@ -32,14 +47,21 @@ var simon = {
       colorBtn.setAttribute('class', `blink-${colorBtn.className}`);
     }
     },*/
-    /*
-     if (colorBtn.className == `blink-`)
-     if (colorBtn.style.backgroundColor === colorStyles[colorBtn.className].standard) {
-       colorBtn.style.backgroundColor = colorStyles[colorBtn.className].blink;
-     } else if (colorBtn.className == `blink-${color}`) {
-       } else {
-       colorBtn.style.backgroundColor = colorStyles[colorBtn.className].standard;
+    /*if (colorBtn.style.backgroundColor === colorStyles[colorBtn.id].standard) {
+       colorBtn.style.backgroundColor = colorStyles[colorBtn.id].blink;
+     } else {
+       colorBtn.style.backgroundColor = colorStyles[colorBtn.id].standard;
      }*/
+  },
+  init: function init() {
+    // Set default colors for the buttons
+    greenBtn.className = 'standard-' + greenBtn.id;
+    redBtn.className = 'standard-' + redBtn.id;
+    yellowBtn.className = 'standard-' + yellowBtn.id;
+    blueBtn.className = 'standard-' + blueBtn.id;
+    // Set default values for the message boxes
+    scoreMsg.textContent = '--';
+    strictMsg.textContent = 'strict mode off'.toUpperCase();
   },
   isBlinkClass: function isBlinkClass(color_class) {
     return (/blink/.test(color_class)
@@ -50,32 +72,35 @@ var simon = {
     simon.sequence.push(nextColor);
     console.log('The sequence ' + simon.sequence);
   },
-  playSequence: function (_playSequence) {
-    function playSequence(_x) {
-      return _playSequence.apply(this, arguments);
-    }
-
-    playSequence.toString = function () {
-      return _playSequence.toString();
-    };
-
-    return playSequence;
-  }(function (sequence) {
+  playSequence: function playSequence(sequence) {
     var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -1;
 
     if (index === sequence.length - 1) {
       return;
     } else {
       setTimeout(function () {
+        if (sequence[index] == greenBtn.id) {
+          simon.changeColor(greenBtn);
+          simon.playSound(greenBtn);
+        } else if (sequence[index] == redBtn.id) {
+          simon.changeColor(redBtn);
+          simon.playSound(redBtn);
+        } else if (sequence[index] == yellowBtn.id) {
+          simon.changeColor(yellowBtn);
+          simon.playSound(yellowBtn);
+        } else if (sequence[index] == blueBtn.id) {
+          simon.changeColor(blueBtn);
+          simon.playSound(blueBtn);
+        }
         console.log('play ' + index + ' ' + sequence[index] + ' at ' + new Date().toLocaleString());
-      }, 2000 * (index + 1));
-      playSequence(sequence, ++index);
+      }, 1000 * (index + 1));
+      simon.playSequence(sequence, ++index);
     }
-  }),
-  playSound: function playSound(color, colorBtn) {
+  },
+  playSound: function playSound(colorBtn) {
     var audio = document.createElement('audio');
     //audio.src = url;
-    audio.src = simon.sounds[color];
+    audio.src = simon.sounds[colorBtn.id];
     // When sound ends, will change to default color
     audio.onended = function () {
       simon.changeColor(colorBtn);
@@ -108,13 +133,12 @@ var simon = {
     console.log('NEW COLOR ' + color);
   }
 };
-
-var colorStyles = {
-  green: { standard: '#00924a', blink: '#649d81' },
-  red: { standard: '#9f201a', blink: '#9c7371' },
-  yellow: { standard: '#cfa20d', blink: '#d5c797' },
-  blue: { standard: '#054894', blink: '#6a819a' }
-};
+/*const colorStyles = {
+  green: {standard: '#00924a', blink: '#649d81'},
+  red: {standard: '#9f201a', blink: '#9c7371'},
+  yellow: {standard: '#cfa20d', blink: '#d5c797'},
+  blue: {standard: '#054894', blink: '#6a819a'},
+};*/
 //const colorsArr = ['green', 'red', 'yellow', 'blue'];
 //const gamePattern = ['red', 'green', 'blue'];
 var colorsDiv = document.getElementById('colors');
@@ -122,10 +146,14 @@ var controlsDiv = document.getElementById('controls');
 // [button.green, button.red, button.yellow, button.blue] 
 var colorsList = colorsDiv.children;
 var controlsList = controlsDiv.children;
-var greenBtn = document.querySelector('.green');
-var blueBtn = document.querySelector('.blue');
-var redBtn = document.querySelector('.red');
-var yellowBtn = document.querySelector('.yellow');
+var greenBtn = document.getElementById('green');
+var blueBtn = document.getElementById('blue');
+var redBtn = document.getElementById('red');
+var yellowBtn = document.getElementById('yellow');
+/*const greenBtn = document.querySelector('.green');
+const blueBtn = document.querySelector('.blue');
+const redBtn = document.querySelector('.red');
+const yellowBtn = document.querySelector('.yellow');*/
 var startBtn = document.querySelector('.start');
 var resetBtn = document.querySelector('.reset');
 var strictBtn = document.querySelector('.strict');
@@ -133,37 +161,36 @@ var scoreMsg = document.getElementsByTagName('span')[0];
 var strictMsg = document.getElementsByTagName('span')[1];
 //let testPattern = generatePattern();
 
-// TODO: Put these two into part of an init function
-scoreMsg.textContent = '--';
-strictMsg.textContent = 'strict mode disabled'.toUpperCase();
+simon.init();
 
 // Listen for colors being clicked
 colorsDiv.addEventListener('click', function (e) {
-  if (simon.startGame) {
-    if (e.target.tagName == 'BUTTON') {
-      if (e.target == greenBtn) {
-        //console.log('Green button pressed');
-        simon.sendColor(greenBtn.className);
-        simon.playSound(greenBtn.className, greenBtn);
-      }
-      if (e.target == redBtn) {
-        //console.log('Red button pressed');
-        simon.sendColor(redBtn.className);
-        simon.playSound(redBtn.className, redBtn);
-      }
-      if (e.target == yellowBtn) {
-        //console.log('Yellow button pressed');
-        simon.sendColor(yellowBtn.className);
-        simon.playSound(yellowBtn.className, yellowBtn);
-      }
-      if (e.target == blueBtn) {
-        //console.log('Blue button pressed');
-        simon.sendColor(blueBtn.className);
-        simon.playSound(blueBtn.className, blueBtn);
-      }
+  if (e.target.tagName == 'BUTTON') {
+    if (e.target == greenBtn) {
+      console.log('Green button pressed');
+      //simon.sendColor(greenBtn.id);
+      simon.changeColor(greenBtn);
+      simon.playSound(greenBtn);
+      //simon.changeColor(greenBtn);
     }
-  } else {
-    console.log('Start has not been pressed');
+    if (e.target == redBtn) {
+      console.log('Red button pressed');
+      //simon.sendColor(redBtn.id);
+      simon.changeColor(redBtn);
+      simon.playSound(redBtn);
+    }
+    if (e.target == yellowBtn) {
+      console.log('Yellow button pressed');
+      //simon.sendColor(yellowBtn.id);
+      simon.changeColor(yellowBtn);
+      simon.playSound(yellowBtn);
+    }
+    if (e.target == blueBtn) {
+      console.log('Blue button pressed');
+      //simon.sendColor(blueBtn.id);
+      simon.changeColor(blueBtn);
+      simon.playSound(blueBtn);
+    }
   }
 });
 
@@ -171,7 +198,6 @@ colorsDiv.addEventListener('click', function (e) {
 controlsDiv.addEventListener('click', function (e) {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == startBtn) {
-      simon.startGame = true;
       console.log('Start button pressed\nGame On!');
     }
     if (e.target == resetBtn) {
