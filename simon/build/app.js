@@ -14,44 +14,19 @@ var simon = {
     yellow: 'https://s3.amazonaws.com/freecodecamp/simonSound3.mp3',
     blue: 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3'
   },
+  score: 0,
   step: 0,
   strictMode: false,
   startGame: false,
   WIN: 20,
-  // TOFIX: Does not change color properly
   changeColor: function changeColor(colorBtn) {
     if (simon.isBlinkClass(colorBtn.className)) {
       colorBtn.className = 'standard-' + colorBtn.id;
-      //console.log(`Change to ${color}`);
+      console.log('Change to ' + colorBtn.className);
     } else {
       colorBtn.className = 'blink-' + colorBtn.id;
-      //console.log(`Change to ${color}`);
+      console.log('Change to ' + colorBtn.className);
     }
-    /*const color = colorBtn.className;
-    if (simon.isBlinkClass(color)) {
-      colorBtn.className = color.slice('blink-'.length);
-      console.log(`Change to ${colorBtn.className}`);
-    } else {
-      colorBtn.className = `blink-${color}`;
-      console.log(`Change to blink-${color}`)
-    }*/
-    /*if (simon.isBlinkClass(colorBtn.className)) {
-      colorBtn.className = colorBtn.className.slice('blink-'.length);
-    } else {
-      colorBtn.className = `blink-${colorBtn.className}`;
-    }*/
-    /*
-     if (colorBtn.className === `blink-${colorBtn.className}`) {
-      colorBtn.setAttribute('class', colorBtn.className);
-    } else {
-      colorBtn.setAttribute('class', `blink-${colorBtn.className}`);
-    }
-    },*/
-    /*if (colorBtn.style.backgroundColor === colorStyles[colorBtn.id].standard) {
-       colorBtn.style.backgroundColor = colorStyles[colorBtn.id].blink;
-     } else {
-       colorBtn.style.backgroundColor = colorStyles[colorBtn.id].standard;
-     }*/
   },
   init: function init() {
     // Set default colors for the buttons
@@ -68,8 +43,9 @@ var simon = {
     );
   },
   nextSequence: function nextSequence() {
-    var nextColor = simon.colors[Math.floor(Math.random() * simon.colors.length)];
+    var nextColor = simon.colors[simon.rand()];
     simon.sequence.push(nextColor);
+    simon.playSequence(simon.sequence);
     console.log('The sequence ' + simon.sequence);
   },
   playSequence: function playSequence(sequence) {
@@ -93,7 +69,7 @@ var simon = {
           simon.playSound(blueBtn);
         }
         console.log('play ' + index + ' ' + sequence[index] + ' at ' + new Date().toLocaleString());
-      }, 1000 * (index + 1));
+      }, 2000 * (index + 1));
       simon.playSequence(sequence, ++index);
     }
   },
@@ -103,10 +79,20 @@ var simon = {
     audio.src = simon.sounds[colorBtn.id];
     // When sound ends, will change to default color
     audio.onended = function () {
-      simon.changeColor(colorBtn);
+      setTimeout(simon.changeColor(colorBtn), 2000);
       console.log('Change color after sound');
     };
     audio.play();
+  },
+  rand: function rand() {
+    return Math.floor(Math.random() * simon.colors.length);
+  },
+  renderScore: function renderScore(score) {
+    if (score < 10) {
+      scoreMsg.textContent = '0' + score;
+    } else {
+      scoreMsg.textContent = score;
+    }
   },
   sendColor: function sendColor(color) {
     if (!simon.sequence.length) {
@@ -118,6 +104,8 @@ var simon = {
         if (simon.step == simon.sequence.length - 1) {
           console.log('sequence complete');
           simon.step = 0;
+          ++simon.score;
+          simon.renderScore(simon.score);
           simon.nextSequence();
         } else {
           simon.step += 1;
@@ -130,7 +118,7 @@ var simon = {
         simon.step = 0;
       }
     }
-    console.log('NEW COLOR ' + color);
+    //console.log(`NEW COLOR ${color}`);
   }
 };
 /*const colorStyles = {
@@ -168,26 +156,25 @@ colorsDiv.addEventListener('click', function (e) {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == greenBtn) {
       console.log('Green button pressed');
-      //simon.sendColor(greenBtn.id);
+      simon.sendColor(greenBtn.id);
       simon.changeColor(greenBtn);
       simon.playSound(greenBtn);
-      //simon.changeColor(greenBtn);
     }
     if (e.target == redBtn) {
       console.log('Red button pressed');
-      //simon.sendColor(redBtn.id);
+      simon.sendColor(redBtn.id);
       simon.changeColor(redBtn);
       simon.playSound(redBtn);
     }
     if (e.target == yellowBtn) {
       console.log('Yellow button pressed');
-      //simon.sendColor(yellowBtn.id);
+      simon.sendColor(yellowBtn.id);
       simon.changeColor(yellowBtn);
       simon.playSound(yellowBtn);
     }
     if (e.target == blueBtn) {
       console.log('Blue button pressed');
-      //simon.sendColor(blueBtn.id);
+      simon.sendColor(blueBtn.id);
       simon.changeColor(blueBtn);
       simon.playSound(blueBtn);
     }
@@ -198,7 +185,8 @@ colorsDiv.addEventListener('click', function (e) {
 controlsDiv.addEventListener('click', function (e) {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == startBtn) {
-      console.log('Start button pressed\nGame On!');
+      simon.sendColor(simon.colors[simon.rand()]);
+      //console.log('Start button pressed\nGame On!');
     }
     if (e.target == resetBtn) {
       console.log('Reset button pressed\nReset the game!');

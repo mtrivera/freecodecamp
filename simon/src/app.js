@@ -22,10 +22,10 @@ const simon = {
   changeColor: (colorBtn) => {
     if (simon.isBlinkClass(colorBtn.className)) {
      colorBtn.className = `standard-${colorBtn.id}`;
-     console.log(`Change to ${color}`);
+     console.log(`Change to ${colorBtn.className}`);
     } else {
      colorBtn.className = `blink-${colorBtn.id}`;
-     console.log(`Change to ${color}`);
+     console.log(`Change to ${colorBtn.className}`);
     }
   },
   init: () => {
@@ -42,8 +42,11 @@ const simon = {
     return /blink/.test(color_class);
   },
   nextSequence: () => {
-    const nextColor = simon.colors[Math.floor(Math.random() * simon.colors.length)];
+    const nextColor = simon.colors[simon.rand()];
     simon.sequence.push(nextColor);
+    // TODO: After a sequence is complete, the zero-index element plays immediately
+    // But there should be a delay
+    //simon.playSequence(simon.sequence);
     console.log(`The sequence ${simon.sequence}`);
   },
   playSequence: (sequence, index = -1) => {
@@ -80,6 +83,16 @@ const simon = {
     }
     audio.play();
   },
+  rand: () => {
+    return Math.floor(Math.random() * simon.colors.length);
+  },
+  renderScore: (score)=> {
+    if (score < 10) {
+      scoreMsg.textContent = `0${score}`;
+    } else {
+      scoreMsg.textContent = score;
+    }
+  },
   sendColor: (color) => {
     if (!simon.sequence.length) {
       // Start game  
@@ -90,6 +103,8 @@ const simon = {
         if (simon.step == simon.sequence.length - 1) {
           console.log('sequence complete');
           simon.step = 0;
+          ++simon.score;
+          simon.renderScore(simon.score);
           simon.nextSequence();
         } else {
           simon.step += 1;
@@ -102,7 +117,7 @@ const simon = {
           simon.step = 0;
       }
     }
-    console.log(`NEW COLOR ${color}`);
+    //console.log(`NEW COLOR ${color}`);
   }
 };
 /*const colorStyles = {
@@ -140,26 +155,25 @@ colorsDiv.addEventListener('click', (e) => {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == greenBtn) {
       console.log('Green button pressed');
-      //simon.sendColor(greenBtn.id);
+      simon.sendColor(greenBtn.id);
       simon.changeColor(greenBtn);
       simon.playSound(greenBtn);
-      //simon.changeColor(greenBtn);
     }
     if (e.target == redBtn) {
       console.log('Red button pressed');
-      //simon.sendColor(redBtn.id);
+      simon.sendColor(redBtn.id);
       simon.changeColor(redBtn);
       simon.playSound(redBtn);
     }
     if (e.target == yellowBtn) {
       console.log('Yellow button pressed');
-      //simon.sendColor(yellowBtn.id);
+      simon.sendColor(yellowBtn.id);
       simon.changeColor(yellowBtn);
       simon.playSound(yellowBtn);
     }
     if (e.target == blueBtn) {
       console.log('Blue button pressed');
-      //simon.sendColor(blueBtn.id);
+      simon.sendColor(blueBtn.id);
       simon.changeColor(blueBtn);
       simon.playSound(blueBtn);
     }
@@ -170,7 +184,8 @@ colorsDiv.addEventListener('click', (e) => {
 controlsDiv.addEventListener('click', (e) => {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == startBtn) {
-      console.log('Start button pressed\nGame On!');
+      simon.sendColor(simon.colors[simon.rand()]);
+      //console.log('Start button pressed\nGame On!');
     }
     if (e.target == resetBtn) {
       console.log('Reset button pressed\nReset the game!');
