@@ -29,6 +29,9 @@ const simon = {
     }
   },
   init: () => {
+    simon.score = 0;
+    simon.sequence = [];
+    simon.step = 0;
     // Set default colors for the buttons
     greenBtn.className = `standard-${greenBtn.id}`;
     redBtn.className = `standard-${redBtn.id}`;
@@ -46,13 +49,15 @@ const simon = {
     simon.sequence.push(nextColor);
     // TODO: After a sequence is complete, the zero-index element plays immediately
     // But there should be a delay
-    //simon.playSequence(simon.sequence);
+    simon.playSequence(simon.sequence);
     console.log(`The sequence ${simon.sequence}`);
   },
   playSequence: (sequence, index = -1) => {
     if (index === sequence.length - 1) {  
       return; 
     } else {  
+      // This solved the playback issue
+      simon.playSequence(sequence, ++index);
       setTimeout(() => {  
         if (sequence[index] == greenBtn.id) {
          simon.changeColor(greenBtn);
@@ -68,8 +73,8 @@ const simon = {
           simon.playSound(blueBtn);
         }
           console.log(`play ${index} ${sequence[index]} at ${new Date().toLocaleString()}`);  
-      }, 2000 * (index + 1) );  
-      simon.playSequence(sequence, ++index);  
+      }, simon.getSpeed(simon.score) * (index + 1) );  
+      //simon.playSequence(sequence, ++index);  
     }  
   },
   playSound: (colorBtn) => {
@@ -111,10 +116,15 @@ const simon = {
         }
       } else {
         // Lose condition
-        // TODO: Add if/else for strict mode
+        if (simon.strictMode) {
           alert('WRONG!');
-          simon.sequence = [];
-          simon.step = 0;
+          simon.init();
+          simon.sendColor(simon.colors[simon.rand()]);
+        } else { 
+          // TODO: Incorrect element is still highlighted after user is incorrect
+          // Call changeColor on last element in simon.sequence
+          simon.playSequence(simon.sequence);
+        }
       }
     }
     //console.log(`NEW COLOR ${color}`);
@@ -185,12 +195,16 @@ controlsDiv.addEventListener('click', (e) => {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == startBtn) {
       simon.sendColor(simon.colors[simon.rand()]);
+      //simon.playSequence(simon.sequence);
       //console.log('Start button pressed\nGame On!');
     }
     if (e.target == resetBtn) {
+      simon.init();
       console.log('Reset button pressed\nReset the game!');
     }
     if (e.target == strictBtn) {
+      simon.strictMode = true;
+      strictMsg.textContent = 'strict mode on'.toUpperCase();
       console.log('Strict button pressed\nStrict mode enabled');
     }
   }

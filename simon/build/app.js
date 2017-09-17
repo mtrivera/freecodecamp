@@ -29,6 +29,9 @@ var simon = {
     }
   },
   init: function init() {
+    simon.score = 0;
+    simon.sequence = [];
+    simon.step = 0;
     // Set default colors for the buttons
     greenBtn.className = 'standard-' + greenBtn.id;
     redBtn.className = 'standard-' + redBtn.id;
@@ -45,6 +48,8 @@ var simon = {
   nextSequence: function nextSequence() {
     var nextColor = simon.colors[simon.rand()];
     simon.sequence.push(nextColor);
+    // TODO: After a sequence is complete, the zero-index element plays immediately
+    // But there should be a delay
     simon.playSequence(simon.sequence);
     console.log('The sequence ' + simon.sequence);
   },
@@ -54,6 +59,8 @@ var simon = {
     if (index === sequence.length - 1) {
       return;
     } else {
+      // This solved the playback issue
+      simon.playSequence(sequence, ++index);
       setTimeout(function () {
         if (sequence[index] == greenBtn.id) {
           simon.changeColor(greenBtn);
@@ -69,8 +76,8 @@ var simon = {
           simon.playSound(blueBtn);
         }
         console.log('play ' + index + ' ' + sequence[index] + ' at ' + new Date().toLocaleString());
-      }, 2000 * (index + 1));
-      simon.playSequence(sequence, ++index);
+      }, simon.getSpeed(simon.score) * (index + 1));
+      //simon.playSequence(sequence, ++index);  
     }
   },
   playSound: function playSound(colorBtn) {
@@ -79,7 +86,7 @@ var simon = {
     audio.src = simon.sounds[colorBtn.id];
     // When sound ends, will change to default color
     audio.onended = function () {
-      setTimeout(simon.changeColor(colorBtn), 2000);
+      simon.changeColor(colorBtn);
       console.log('Change color after sound');
     };
     audio.play();
@@ -112,10 +119,15 @@ var simon = {
         }
       } else {
         // Lose condition
-        // TODO: Add if/else for strict mode
-        alert('WRONG!');
-        simon.sequence = [];
-        simon.step = 0;
+        if (simon.strictMode) {
+          alert('WRONG!');
+          simon.init();
+          simon.sendColor(simon.colors[simon.rand()]);
+        } else {
+          // TODO: Incorrect element is still highlighted after user is incorrect
+          // Call changeColor on last element in simon.sequence
+          simon.playSequence(simon.sequence);
+        }
       }
     }
     //console.log(`NEW COLOR ${color}`);
@@ -186,12 +198,16 @@ controlsDiv.addEventListener('click', function (e) {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == startBtn) {
       simon.sendColor(simon.colors[simon.rand()]);
+      //simon.playSequence(simon.sequence);
       //console.log('Start button pressed\nGame On!');
     }
     if (e.target == resetBtn) {
+      simon.init();
       console.log('Reset button pressed\nReset the game!');
     }
     if (e.target == strictBtn) {
+      simon.strictMode = true;
+      strictMsg.textContent = 'strict mode on'.toUpperCase();
       console.log('Strict button pressed\nStrict mode enabled');
     }
   }
