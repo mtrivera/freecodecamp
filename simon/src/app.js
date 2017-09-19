@@ -12,7 +12,8 @@ const simon = {
     green: 'https://s3.amazonaws.com/freecodecamp/simonSound1.mp3',
     red: 'https://s3.amazonaws.com/freecodecamp/simonSound2.mp3',
     yellow: 'https://s3.amazonaws.com/freecodecamp/simonSound3.mp3',
-    blue: 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3'
+    blue: 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3',
+    error: 'https://raw.githubusercontent.com/mtrivera/freecodecamp/master/simon/8-bit-error.mp3'
   },
   score: 0,
   step: 0,
@@ -28,6 +29,15 @@ const simon = {
      console.log(`Change to ${colorBtn.className}`);
     }
   },
+  getSpeed: (score) => { 
+    if (score > 15) { 
+      return simon.speed.hard; 
+    } else if (score > 8 && score < 14) { 
+      return simon.speed.moderate; 
+    } else { 
+      return simon.speed.normal; 
+    } 
+  }, 
   init: () => {
     simon.score = 0;
     simon.sequence = [];
@@ -117,12 +127,11 @@ const simon = {
       } else {
         // Lose condition
         if (simon.strictMode) {
-          alert('WRONG!');
           simon.init();
           simon.sendColor(simon.colors[simon.rand()]);
         } else { 
-          // TODO: Incorrect element is still highlighted after user is incorrect
-          // Call changeColor on last element in simon.sequence
+          // Clears step for traversing sequence
+          simon.step = 0;
           simon.playSequence(simon.sequence);
         }
       }

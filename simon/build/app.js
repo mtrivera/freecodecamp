@@ -12,7 +12,8 @@ var simon = {
     green: 'https://s3.amazonaws.com/freecodecamp/simonSound1.mp3',
     red: 'https://s3.amazonaws.com/freecodecamp/simonSound2.mp3',
     yellow: 'https://s3.amazonaws.com/freecodecamp/simonSound3.mp3',
-    blue: 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3'
+    blue: 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3',
+    error: 'https://raw.githubusercontent.com/mtrivera/freecodecamp/master/simon/8-bit-error.mp3'
   },
   score: 0,
   step: 0,
@@ -28,6 +29,15 @@ var simon = {
       console.log('Change to ' + colorBtn.className);
     }
   },
+  getSpeed: function getSpeed(score) {
+    if (score > 15) {
+      return simon.speed.hard;
+    } else if (score > 8 && score < 14) {
+      return simon.speed.moderate;
+    } else {
+      return simon.speed.normal;
+    }
+  },
   init: function init() {
     simon.score = 0;
     simon.sequence = [];
@@ -38,6 +48,7 @@ var simon = {
     yellowBtn.className = 'standard-' + yellowBtn.id;
     blueBtn.className = 'standard-' + blueBtn.id;
     // Set default values for the message boxes
+    gameFeedback.textContent = 'Welcome to Simon\nGame feedback will show here!\nGood luck!';
     scoreMsg.textContent = '--';
     strictMsg.textContent = 'strict mode off'.toUpperCase();
   },
@@ -120,12 +131,13 @@ var simon = {
       } else {
         // Lose condition
         if (simon.strictMode) {
-          alert('WRONG!');
+          gameFeedback.textContent = 'Incorrect!\nGame will reset due to strict mode';
           simon.init();
           simon.sendColor(simon.colors[simon.rand()]);
         } else {
-          // TODO: Incorrect element is still highlighted after user is incorrect
-          // Call changeColor on last element in simon.sequence
+          gameFeedback.textContent = 'Incorrect!\nSequence will be repeated';
+          // Clears step for traversing sequence
+          simon.step = 0;
           simon.playSequence(simon.sequence);
         }
       }
@@ -157,8 +169,10 @@ const yellowBtn = document.querySelector('.yellow');*/
 var startBtn = document.querySelector('.start');
 var resetBtn = document.querySelector('.reset');
 var strictBtn = document.querySelector('.strict');
-var scoreMsg = document.getElementsByTagName('span')[0];
-var strictMsg = document.getElementsByTagName('span')[1];
+var gameFeedback = document.getElementsByTagName('span')[0];
+var scoreMsg = document.getElementsByTagName('span')[1];
+var strictMsg = document.getElementsByTagName('span')[2];
+
 //let testPattern = generatePattern();
 
 simon.init();
