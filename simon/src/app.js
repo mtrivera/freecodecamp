@@ -29,6 +29,12 @@ const simon = {
      console.log(`Change to ${colorBtn.className}`);
     }
   },
+  gameOver: (score) => {
+    if (score == simon.WIN) {
+      alert('You Win!');
+      simon.init();
+    }
+  },
   getSpeed: (score) => { 
     if (score > 15) { 
       return simon.speed.hard; 
@@ -87,6 +93,8 @@ const simon = {
       //simon.playSequence(sequence, ++index);  
     }  
   },
+  // TODO: Figure out how to call the error sound
+  // Maybe refactor function to take in string instead of btn element
   playSound: (colorBtn) => {
     const audio = document.createElement('audio');
     //audio.src = url;
@@ -108,6 +116,15 @@ const simon = {
       scoreMsg.textContent = score;
     }
   },
+  renderStrictMsg: (strict) => {
+    if (simon.strictMode) {
+      strictMsg.textContent = 'strict mode on'.toUpperCase();
+      console.log('strict mode on');
+    } else {
+      strictMsg.textContent = 'strict mode off'.toUpperCase();
+      console.log('strict mode off');
+    }
+  },
   sendColor: (color) => {
     if (!simon.sequence.length) {
       // Start game  
@@ -120,6 +137,7 @@ const simon = {
           simon.step = 0;
           ++simon.score;
           simon.renderScore(simon.score);
+          simon.gameOver(simon.score);
           simon.nextSequence();
         } else {
           simon.step += 1;
@@ -127,8 +145,9 @@ const simon = {
       } else {
         // Lose condition
         if (simon.strictMode) {
+          toggleBtn(startBtn);
           simon.init();
-          simon.sendColor(simon.colors[simon.rand()]);
+          setTimeout(simon.sendColor(simon.colors[simon.rand()]), 3000);
         } else { 
           // Clears step for traversing sequence
           simon.step = 0;
@@ -212,9 +231,9 @@ controlsDiv.addEventListener('click', (e) => {
       console.log('Reset button pressed\nReset the game!');
     }
     if (e.target == strictBtn) {
-      simon.strictMode = true;
-      strictMsg.textContent = 'strict mode on'.toUpperCase();
-      console.log('Strict button pressed\nStrict mode enabled');
+      simon.strictMode = !simon.strictMode;
+      simon.renderStrictMsg(simon.strictMode);
+      console.log('Strict button pressed');
     }
   }
 });

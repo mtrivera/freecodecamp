@@ -29,6 +29,12 @@ var simon = {
       console.log('Change to ' + colorBtn.className);
     }
   },
+  gameOver: function gameOver(score) {
+    if (score == simon.WIN) {
+      alert('You Win!');
+      simon.init();
+    }
+  },
   getSpeed: function getSpeed(score) {
     if (score > 15) {
       return simon.speed.hard;
@@ -48,7 +54,6 @@ var simon = {
     yellowBtn.className = 'standard-' + yellowBtn.id;
     blueBtn.className = 'standard-' + blueBtn.id;
     // Set default values for the message boxes
-    gameFeedback.textContent = 'Welcome to Simon\nGame feedback will show here!\nGood luck!';
     scoreMsg.textContent = '--';
     strictMsg.textContent = 'strict mode off'.toUpperCase();
   },
@@ -91,6 +96,8 @@ var simon = {
       //simon.playSequence(sequence, ++index);  
     }
   },
+  // TODO: Figure out how to call the error sound
+  // Maybe refactor function to take in string instead of btn element
   playSound: function playSound(colorBtn) {
     var audio = document.createElement('audio');
     //audio.src = url;
@@ -112,6 +119,15 @@ var simon = {
       scoreMsg.textContent = score;
     }
   },
+  renderStrictMsg: function renderStrictMsg(strict) {
+    if (simon.strictMode) {
+      strictMsg.textContent = 'strict mode on'.toUpperCase();
+      console.log('strict mode on');
+    } else {
+      strictMsg.textContent = 'strict mode off'.toUpperCase();
+      console.log('strict mode off');
+    }
+  },
   sendColor: function sendColor(color) {
     if (!simon.sequence.length) {
       // Start game  
@@ -124,6 +140,7 @@ var simon = {
           simon.step = 0;
           ++simon.score;
           simon.renderScore(simon.score);
+          simon.gameOver(simon.score);
           simon.nextSequence();
         } else {
           simon.step += 1;
@@ -131,11 +148,10 @@ var simon = {
       } else {
         // Lose condition
         if (simon.strictMode) {
-          gameFeedback.textContent = 'Incorrect!\nGame will reset due to strict mode';
+          toggleBtn(startBtn);
           simon.init();
-          simon.sendColor(simon.colors[simon.rand()]);
+          setTimeout(simon.sendColor(simon.colors[simon.rand()]), 3000);
         } else {
-          gameFeedback.textContent = 'Incorrect!\nSequence will be repeated';
           // Clears step for traversing sequence
           simon.step = 0;
           simon.playSequence(simon.sequence);
@@ -169,10 +185,8 @@ const yellowBtn = document.querySelector('.yellow');*/
 var startBtn = document.querySelector('.start');
 var resetBtn = document.querySelector('.reset');
 var strictBtn = document.querySelector('.strict');
-var gameFeedback = document.getElementsByTagName('span')[0];
-var scoreMsg = document.getElementsByTagName('span')[1];
-var strictMsg = document.getElementsByTagName('span')[2];
-
+var scoreMsg = document.getElementsByTagName('span')[0];
+var strictMsg = document.getElementsByTagName('span')[1];
 //let testPattern = generatePattern();
 
 simon.init();
@@ -220,9 +234,9 @@ controlsDiv.addEventListener('click', function (e) {
       console.log('Reset button pressed\nReset the game!');
     }
     if (e.target == strictBtn) {
-      simon.strictMode = true;
-      strictMsg.textContent = 'strict mode on'.toUpperCase();
-      console.log('Strict button pressed\nStrict mode enabled');
+      simon.strictMode = !simon.strictMode;
+      simon.renderStrictMsg(simon.strictMode);
+      console.log('Strict button pressed');
     }
   }
 });
