@@ -96,8 +96,11 @@ var simon = {
       //simon.playSequence(sequence, ++index);  
     }
   },
-  // TODO: Figure out how to call the error sound
-  // Maybe refactor function to take in string instead of btn element
+  playErrorSound: function playErrorSound(errorURL) {
+    var audio = document.createElement('audio');
+    audio.src = errorURL;
+    audio.play();
+  },
   playSound: function playSound(colorBtn) {
     var audio = document.createElement('audio');
     //audio.src = url;
@@ -146,6 +149,7 @@ var simon = {
           simon.step += 1;
         }
       } else {
+        simon.playErrorSound(simon.sounds.error);
         // Lose condition
         if (simon.strictMode) {
           toggleBtn(startBtn);
