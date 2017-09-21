@@ -13,7 +13,7 @@ const simon = {
     red: 'https://s3.amazonaws.com/freecodecamp/simonSound2.mp3',
     yellow: 'https://s3.amazonaws.com/freecodecamp/simonSound3.mp3',
     blue: 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3',
-    error: 'https://raw.githubusercontent.com/mtrivera/freecodecamp/master/simon/8-bit-error.mp3'
+    error: 'https://cdn.rawgit.com/mtrivera/freecodecamp/master/simon/8-bit-error.mp3'
   },
   score: 0,
   step: 0,
@@ -23,15 +23,16 @@ const simon = {
   changeColor: (colorBtn) => {
     if (simon.isBlinkClass(colorBtn.className)) {
      colorBtn.className = `standard-${colorBtn.id}`;
-     console.log(`Change to ${colorBtn.className}`);
+     //console.log(`Change to ${colorBtn.className}`);
     } else {
      colorBtn.className = `blink-${colorBtn.id}`;
-     console.log(`Change to ${colorBtn.className}`);
+     //console.log(`Change to ${colorBtn.className}`);
     }
   },
   gameOver: (score) => {
     if (score == simon.WIN) {
       alert('You Win!');
+      toggleBtn(startBtn);
       simon.init();
     }
   },
@@ -63,10 +64,8 @@ const simon = {
   nextSequence: () => {
     const nextColor = simon.colors[simon.rand()];
     simon.sequence.push(nextColor);
-    // TODO: After a sequence is complete, the zero-index element plays immediately
-    // But there should be a delay
     simon.playSequence(simon.sequence);
-    console.log(`The sequence ${simon.sequence}`);
+    //console.log(`The sequence ${simon.sequence}`);
   },
   playSequence: (sequence, index = -1) => {
     if (index === sequence.length - 1) {  
@@ -88,7 +87,7 @@ const simon = {
           simon.changeColor(blueBtn);
           simon.playSound(blueBtn);
         }
-          console.log(`play ${index} ${sequence[index]} at ${new Date().toLocaleString()}`);  
+          //console.log(`play ${index} ${sequence[index]} at ${new Date().toLocaleString()}`);  
       }, simon.getSpeed(simon.score) * (index + 1) );  
       //simon.playSequence(sequence, ++index);  
     }  
@@ -105,7 +104,7 @@ const simon = {
     // When sound ends, will change to default color
     audio.onended = () => {
       simon.changeColor(colorBtn);
-      console.log('Change color after sound');
+      //console.log('Change color after sound');
     }
     audio.play();
   },
@@ -122,10 +121,10 @@ const simon = {
   renderStrictMsg: (strict) => {
     if (simon.strictMode) {
       strictMsg.textContent = 'strict mode on'.toUpperCase();
-      console.log('strict mode on');
+      //console.log('strict mode on');
     } else {
       strictMsg.textContent = 'strict mode off'.toUpperCase();
-      console.log('strict mode off');
+      //console.log('strict mode off');
     }
   },
   sendColor: (color) => {
@@ -162,33 +161,19 @@ const simon = {
     //console.log(`NEW COLOR ${color}`);
   }
 };
-/*const colorStyles = {
-  green: {standard: '#00924a', blink: '#649d81'},
-  red: {standard: '#9f201a', blink: '#9c7371'},
-  yellow: {standard: '#cfa20d', blink: '#d5c797'},
-  blue: {standard: '#054894', blink: '#6a819a'},
-};*/
-//const colorsArr = ['green', 'red', 'yellow', 'blue'];
-//const gamePattern = ['red', 'green', 'blue'];
 const colorsDiv = document.getElementById('colors');
 const controlsDiv = document.getElementById('controls');
-// [button.green, button.red, button.yellow, button.blue] 
 const colorsList = colorsDiv.children;
 const controlsList = controlsDiv.children;
 const greenBtn = document.getElementById('green');
 const blueBtn = document.getElementById('blue');
 const redBtn = document.getElementById('red');
 const yellowBtn = document.getElementById('yellow');
-/*const greenBtn = document.querySelector('.green');
-const blueBtn = document.querySelector('.blue');
-const redBtn = document.querySelector('.red');
-const yellowBtn = document.querySelector('.yellow');*/
 const startBtn = document.querySelector('.start');
 const resetBtn = document.querySelector('.reset');
 const strictBtn = document.querySelector('.strict');
 const scoreMsg = document.getElementsByTagName('span')[0];
 const strictMsg = document.getElementsByTagName('span')[1];
-//let testPattern = generatePattern();
 
 simon.init();
 
@@ -196,25 +181,25 @@ simon.init();
 colorsDiv.addEventListener('click', (e) => {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == greenBtn) {
-      console.log('Green button pressed');
+      //console.log('Green button pressed');
       simon.sendColor(greenBtn.id);
       simon.changeColor(greenBtn);
       simon.playSound(greenBtn);
     }
     if (e.target == redBtn) {
-      console.log('Red button pressed');
+      //console.log('Red button pressed');
       simon.sendColor(redBtn.id);
       simon.changeColor(redBtn);
       simon.playSound(redBtn);
     }
     if (e.target == yellowBtn) {
-      console.log('Yellow button pressed');
+      //console.log('Yellow button pressed');
       simon.sendColor(yellowBtn.id);
       simon.changeColor(yellowBtn);
       simon.playSound(yellowBtn);
     }
     if (e.target == blueBtn) {
-      console.log('Blue button pressed');
+      //console.log('Blue button pressed');
       simon.sendColor(blueBtn.id);
       simon.changeColor(blueBtn);
       simon.playSound(blueBtn);
@@ -227,70 +212,20 @@ controlsDiv.addEventListener('click', (e) => {
   if (e.target.tagName == 'BUTTON') {
     if (e.target == startBtn) {
       simon.sendColor(simon.colors[simon.rand()]);
-      //simon.playSequence(simon.sequence);
       //console.log('Start button pressed\nGame On!');
     }
     if (e.target == resetBtn) {
       simon.init();
-      console.log('Reset button pressed\nReset the game!');
+      //console.log('Reset button pressed\nReset the game!');
     }
     if (e.target == strictBtn) {
       simon.strictMode = !simon.strictMode;
       simon.renderStrictMsg(simon.strictMode);
-      console.log('Strict button pressed');
+      //console.log('Strict button pressed');
     }
   }
 });
-/*
-// Get a random integer between 0 and 3
-function getRandomInt() {
-  const min = 0;
-  const max = 4;
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-// Compare string equality, 1 means equality
-function strcmp(str1, str2) {
-  if (str1 < str2) {
-    return -1;
-  } else if (str1 > str2) {
-    return 0;
-  } else {
-    return 1;
-  }
-}
-*/
-// Recursive function to play array of colors
-// NOTE: -1 value ensures playPattern handles passed array at 0 index
-/*
-function playPattern(colors, index = -1) {
-  if (index === colors.length - 1) {  
-    return; 
-  } else {  
-    setTimeout(function() {  
-        console.log(`play ${index} ${colors[index]} at ${new Date().toLocaleString()}`);  
-    }, 2000 * (index + 1) );  
-    playPattern(colors, ++index);  
-  }  
-}*/
-/*
-//console.log(colorsArr[getRandomInt()]);
-// simon will create a random pattern that the player must play back correctly
-function generatePattern() {
-  const RADIX = 10;
-  let pattern = {};
-  let colors = [];
-  for (let count = 1; count <= 20; count += 1) {
-    //pattern[count.toString(RADIX)] = getRandomColor(getRandomInt());
-    pattern[count.toString(RADIX)] = colors.push(colorsArr[getRandomInt()]);
-    pattern[count.toString(RADIX)] = createArr(colors);
-  }
-  return pattern;
-}
-// Create an array without mutation
-function createArr(arr) {
-  return arr.slice(0);
-}
-*/
+
 // Disables/enables a button element
 function toggleBtn(btn) {
   if (btn.disabled) {
@@ -299,50 +234,3 @@ function toggleBtn(btn) {
     btn.disabled = true;
   }
 }
-/*
-function validateUserInput(userArr, gameArr) { 
-  let count = 0;
-  while (count < gameArr.length) {
-    if (strcmp(userArr[count], gameArr[count]) == 1) {
-      console.log('Match Found!');
-      count += 1;
-    } else {
-      if (strict) {
-        //toggleBtn(start);
-        console.log('Strict Mode Enabled');
-        console.log('Game Reset');
-        return;
-      }
-      console.log('Error! Try Again');
-      return;
-    }
-  }
-  console.log('Patterns Match\nPlay next pattern');
-}
-*/
-  /*
-  if (strcmp(userArr[counter.toString()][0], gameArr[counter.toString()][0] == 1)) { 
-    console.log(`User: ${userArr[counter]} Test: ${gameArr[counter]}`); 
-    console.log('Match Found!'); 
-    counter += 1; 
-  } else { 
-    if (strict) { 
-      gamePattern = generatePattern(); 
-      toggleBtn(start); 
-    } 
-    console.log('Error!'); 
-    playNext(gameArr[counter.toString()]); 
-  } 
-  */
-/* 
-startBtn.addEventListener('click', () => {
-  console.log('Start button pressed\nGame On!');
-});
-
-resetBtn.addEventListener('click', () => {
-  console.log('Reset button pressed\nReset the game!');
-});
-
-strictBtn.addEventListener('click', () => {
-  console.log('Strict button pressed\nStrict mode enabled');
-});*/
