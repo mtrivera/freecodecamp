@@ -18,7 +18,6 @@ const simon = {
   score: 0,
   step: 0,
   strictMode: false,
-  startGame: false,
   WIN: 20,
   changeColor: (colorBtn) => {
     if (simon.isBlinkClass(colorBtn.className)) {
@@ -74,16 +73,16 @@ const simon = {
       // This solved the playback issue
       simon.playSequence(sequence, ++index);
       setTimeout(() => {  
-        if (sequence[index] == greenBtn.id) {
+        if (sequence[index] === greenBtn.id) {
          simon.changeColor(greenBtn);
          simon.playSound(greenBtn);
-        } else if (sequence[index] == redBtn.id) {
+        } else if (sequence[index] === redBtn.id) {
           simon.changeColor(redBtn);
           simon.playSound(redBtn);
-        } else if (sequence[index] == yellowBtn.id) {
+        } else if (sequence[index] === yellowBtn.id) {
           simon.changeColor(yellowBtn);
           simon.playSound(yellowBtn);
-        } else if (sequence[index] == blueBtn.id) {
+        } else if (sequence[index] === blueBtn.id) {
           simon.changeColor(blueBtn);
           simon.playSound(blueBtn);
         }
@@ -134,8 +133,8 @@ const simon = {
     } else {
       if (color === simon.sequence[simon.step]) {
         // Go to next step
-        if (simon.step == simon.sequence.length - 1) {
-          console.log('sequence complete');
+        if (simon.step === simon.sequence.length - 1) {
+          //console.log('sequence complete');
           simon.step = 0;
           ++simon.score;
           simon.renderScore(simon.score);
@@ -179,46 +178,47 @@ simon.init();
 
 // Listen for colors being clicked
 colorsDiv.addEventListener('click', (e) => {
-  if (e.target.tagName == 'BUTTON') {
-    if (e.target == greenBtn) {
-      //console.log('Green button pressed');
-      simon.sendColor(greenBtn.id);
-      simon.changeColor(greenBtn);
-      simon.playSound(greenBtn);
+    if (e.target.tagName === 'BUTTON') {
+      if (e.target === greenBtn) {
+        //console.log('Green button pressed');
+        simon.sendColor(greenBtn.id);
+        simon.changeColor(greenBtn);
+        simon.playSound(greenBtn);
+      }
+      if (e.target === redBtn) {
+        //console.log('Red button pressed');
+        simon.sendColor(redBtn.id);
+        simon.changeColor(redBtn);
+        simon.playSound(redBtn);
+      }
+      if (e.target === yellowBtn) {
+        //console.log('Yellow button pressed');
+        simon.sendColor(yellowBtn.id);
+        simon.changeColor(yellowBtn);
+        simon.playSound(yellowBtn);
+      }
+      if (e.target === blueBtn) {
+        //console.log('Blue button pressed');
+        simon.sendColor(blueBtn.id);
+        simon.changeColor(blueBtn);
+        simon.playSound(blueBtn);
+      }
     }
-    if (e.target == redBtn) {
-      //console.log('Red button pressed');
-      simon.sendColor(redBtn.id);
-      simon.changeColor(redBtn);
-      simon.playSound(redBtn);
-    }
-    if (e.target == yellowBtn) {
-      //console.log('Yellow button pressed');
-      simon.sendColor(yellowBtn.id);
-      simon.changeColor(yellowBtn);
-      simon.playSound(yellowBtn);
-    }
-    if (e.target == blueBtn) {
-      //console.log('Blue button pressed');
-      simon.sendColor(blueBtn.id);
-      simon.changeColor(blueBtn);
-      simon.playSound(blueBtn);
-    }
-  }
 });
 
 // Listen for control buttons being clicked
 controlsDiv.addEventListener('click', (e) => {
-  if (e.target.tagName == 'BUTTON') {
-    if (e.target == startBtn) {
+  if (e.target.tagName === 'BUTTON') {
+    if (e.target === startBtn) {
+      toggleBtn(startBtn);
       simon.sendColor(simon.colors[simon.rand()]);
       //console.log('Start button pressed\nGame On!');
     }
-    if (e.target == resetBtn) {
+    if (e.target === resetBtn) {
       simon.init();
       //console.log('Reset button pressed\nReset the game!');
     }
-    if (e.target == strictBtn) {
+    if (e.target === strictBtn) {
       simon.strictMode = !simon.strictMode;
       simon.renderStrictMsg(simon.strictMode);
       //console.log('Strict button pressed');
