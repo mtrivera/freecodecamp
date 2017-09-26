@@ -152,7 +152,7 @@ var simon = {
         if (simon.strictMode) {
           toggleBtn(startBtn);
           simon.init();
-          setTimeout(simon.sendColor(simon.colors[simon.rand()]), 3000);
+          setTimeout(simon.nextSequence(), 3000);
         } else {
           // Clears step for traversing sequence
           simon.step = 0;
@@ -214,7 +214,7 @@ controlsDiv.addEventListener('click', function (e) {
   if (e.target.tagName === 'BUTTON') {
     if (e.target === startBtn) {
       toggleBtn(startBtn);
-      simon.sendColor(simon.colors[simon.rand()]);
+      simon.nextSequence();
       //console.log('Start button pressed\nGame On!');
     }
     if (e.target === resetBtn) {
