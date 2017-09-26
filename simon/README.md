@@ -63,7 +63,7 @@ Last front-end project for the Front-End Development Certificate of the freeCode
 
 * Add Sass styling
 * Make responsive
-* Solve [Known Issues](##known-issues)
+* Solve [Known Issues](#known-issues)
   * Maybe someone will like to pair program with me on these issues :)
 * Combine playErrorSound() and playSound()
   * Should not need two functions to play a sound.
