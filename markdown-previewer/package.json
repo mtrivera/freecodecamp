@@ -1,0 +1,15 @@
+{
+  "name": "markdown-previewer",
+  "version": "0.0.1",
+  "description": "A markdown-previwer made with marked and vue.js",
+  "main": "app.js",
+  "scripts": {
+    "build": "babel src -d build"
+  },
+  "author": "Miguel T Rivera",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1"
+  }
+}
