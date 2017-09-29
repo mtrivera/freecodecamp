@@ -5,6 +5,15 @@
 <link rel='stylesheet' href='styles/styles.css' />
 </head>
 <body>
+  <main>
+    <div id="app">
+      <textarea v-model="mdInput" placeholder="Enter markdown code here..."></textarea>
+      <div id="mdPreview">{{ mdInput }}</div>
+    </div>
+  </main>
+<!--These are the dev versions, switch to minified on completion-->
+<script src="marked.js"></script>
+<script src="vue.js"></script>
 <script src='build/app.js'></script>
 </body>
 </html>
