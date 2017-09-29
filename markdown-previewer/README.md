@@ -12,7 +12,11 @@
 
 ## Problems
 
+1. The `marked` library uses the `require` keyword which is not natively supported in browsers. 
+
 ## Solutions
+
+1. Use a module bundler or a build tool to add support. I've decided on [brunch](http://brunch.io/).
 
 ## Things I Learned (TIL)
 
@@ -22,6 +26,7 @@
 * CSS3
 * JavaScript
 * Babel
+* Brunch
 * Sass
 * marked
   * A markdown parser built for speed: https://cdnjs.com/libraries/marked
