@@ -2,7 +2,7 @@
 <html>
 <meta charset='UTF-8' />
 <head>
-<link rel='stylesheet' href='styles/styles.css' />
+<!--<link rel='stylesheet' href='styles/styles.css' />-->
 </head>
 <body>
   <main>
@@ -11,9 +11,8 @@
       <div id="mdPreview">{{ mdInput }}</div>
     </div>
   </main>
-<!--These are the dev versions, switch to minified on completion-->
-<script src="marked.js"></script>
-<script src="vue.js"></script>
-<script src='build/app.js'></script>
+<script src="./vendor.js"></script>
+<script src="./app.js"></script>
+<script>require('initialize');</script>
 </body>
 </html>
