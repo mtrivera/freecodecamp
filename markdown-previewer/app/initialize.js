@@ -9,7 +9,7 @@ marked.setOptions({
   tables: true,
   breaks: false,
   pedantic: false,
-  sanitize: false,
+  sanitize: true,
   smartLists: true,
   smartypants: false
 });
@@ -23,6 +23,11 @@ const mdapp = new Vue({
   el: '#app',
   data: {
     mdInput: ''
+  },
+  computed: {
+    compileToMarkdown: function() {
+      return marked(this.mdInput)
+    }  
   }/*,
   methods: {
     convertToMarkdown: function() {
