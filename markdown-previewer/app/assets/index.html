@@ -8,7 +8,7 @@
   <main>
     <div id="app">
       <textarea v-model="mdInput" placeholder="Enter markdown code here..."></textarea>
-      <div id="mdPreview">{{ mdInput }}</div>
+      <div v-html="compileToMarkdown"></div>
     </div>
   </main>
 <script src="./vendor.js"></script>
