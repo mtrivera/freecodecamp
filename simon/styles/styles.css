@@ -1,3 +1,7 @@
+body {
+  background: white;
+  font: 1.0em Arial, sans-serif;
+}
 #colors {
   display: grid;
   grid-template-columns: 150px 150px;
@@ -44,3 +48,16 @@
 .blink-blue {
   background-color: #6a819a;
 }
+/* Media Queries *****************************/
+/*
+@media (max-width: 599px) {
+}
+@media (min-width: 600px) and (max-width: 899px) {
+}
+@media (min-width: 900px) and (max-width: 1199px) {
+}
+@media (min-width: 1200px) and (max-width: 1799px) {
+} 
+@media (min-width: 1800px) {
+}
+*/
