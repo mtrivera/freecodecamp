@@ -1,3 +1,8 @@
+*, *::before, *::after {
+  -webkit-box-sizing: border-box; 
+  -moz-box-sizing: border-box; 
+  box-sizing: border-box;
+}
 body {
   background: white;
   font: 1.0em Arial, sans-serif;
@@ -5,9 +10,22 @@ body {
 #colors {
   display: grid;
   grid-template-columns: 150px 150px;
-  grid-template-rows: 100px 100px;
+  grid-template-rows: 150px 150px;
   grid-gap: 0 0;
   margin-bottom: 10px;
+}
+/* Button styles to mimic classic simon layout ***/
+#colors button:nth-of-type(1) {
+  border-top-left-radius: 100%;
+}
+#colors button:nth-of-type(2) {
+  border-top-right-radius: 100%;
+}
+#colors button:nth-of-type(3) {
+  border-bottom-left-radius: 100%;
+}
+#colors button:nth-of-type(4) {
+  border-bottom-right-radius: 100%;
 }
 #controls {
   margin-bottom: 10px;
