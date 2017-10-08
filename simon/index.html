@@ -7,27 +7,29 @@
 <link rel='stylesheet' href='styles/styles.css' />
 </head>
 <body>
-  <header>
-    <h1>Simon Game</h1>
-    <p>Created by Miguel T Rivera</p>
-  </header>
-  <main>
-    <div id="colors">
-      <button type="button" id="green"></button>
-      <button type="button" id="red"></button>
-      <button type="button" id="yellow"></button>
-      <button type="button" id="blue"></button>
-    </div>
-    <div id="game-info">
-      Count<span class="score strict-status"></span>
-      <span class="strict-status uppercase-txt"></span>
-    </div>
-    <div id="controls">
-      <button type="button" class="start uppercase-txt">start</button>
-      <button type="button" class="reset uppercase-txt">reset</button>
-      <button type="button" class="strict uppercase-txt">strict</button>
-    </div>
-  </main>
+  <div class="wrapper">
+    <header class="txt-center">
+      <h1>Simon Game</h1>
+      <p>Created by Miguel T Rivera</p>
+    </header>
+    <main>
+      <div id="colors" class="grid-colors">
+        <button type="button" id="green"></button>
+        <button type="button" id="red"></button>
+        <button type="button" id="yellow"></button>
+        <button type="button" id="blue"></button>
+      </div>
+      <div id="game-info">
+        Count<span class="score strict-status"></span>
+        <span class="strict-status uppercase-txt"></span>
+      </div>
+      <div id="controls">
+        <button type="button" class="btn start uppercase-txt">start</button>
+        <button type="button" class="btn reset uppercase-txt">reset</button>
+        <button type="button" class="btn strict uppercase-txt">strict</button>
+      </div>
+    </main>
+  </div>
 <script src='build/app.js'></script>
 </body>
 </html>
