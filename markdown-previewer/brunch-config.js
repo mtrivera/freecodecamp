@@ -16,6 +16,10 @@ exports.plugins = {
     // Do not use ES6 compiler in vendor code
     ignore: [/vendor/],
     presets: ['es2015']
+  },
+  sass: {
+    mode: 'native',
+    sourceMapEmbed: true
   }
 };
 
