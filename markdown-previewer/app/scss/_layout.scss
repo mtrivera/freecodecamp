@@ -1,0 +1,13 @@
+/* Layout *******************/
+textarea, #app div {
+  display: inline-block;
+  width: 49%;
+  height: 100%;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+#app div {
+  border: 1px solid #000;
+}

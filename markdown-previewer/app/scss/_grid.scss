@@ -1,0 +1,36 @@
+/* Grid styles *******************/
+header {
+  grid-area: header;
+}
+main {
+  max-width: 940px;
+  display: grid;
+  grid-auto-rows: minmax(100px, auto);
+  grid-template-columns: minmax(1fr, auto);
+  grid-template-areas: 
+  'header'
+  'mdinput'
+  'mdoutput'
+  'ft';
+  grid-gap: 1rem;
+}
+footer {
+  grid-area: ft;
+}
+#md_input {
+  grid-area: mdinput;
+}
+.md_output {
+  grid-area: mdoutput;
+}
+/*.wrapper {
+  height: 100vh;
+  display: grid;
+  grid-auto-rows: minmax(100px, auto);
+  grid-template-columns: minmax(1fr, auto);
+  grid-template-areas: 
+  'header header'
+  'main main'
+  'ft ft';
+  grid-gap: 20px;
+}*/
