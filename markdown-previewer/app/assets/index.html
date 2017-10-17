@@ -2,15 +2,25 @@
 <html>
 <meta charset='UTF-8' />
 <head>
-<!--<link rel='stylesheet' href='styles/styles.css' />-->
+<link rel='stylesheet' href='./app.css' />
 </head>
 <body>
+<div class="wrapper">
   <main>
+  <header>
+    <h1>Markdown Previewer</h1>
+    <p>by Miguel T Rivera</p>
+  </header>
     <div id="app">
-      <textarea v-model="mdInput" placeholder="Enter markdown code here..."></textarea>
-      <div v-html="compileToMarkdown"></div>
+      <label for="md_input">Markdown Input</label><br>
+      <textarea id="md_input" v-model="mdInput" v-on:input="update" placeholder="Enter markdown code here..."></textarea>
+      <div class="md_output" v-html="compileToMarkdown"></div>
     </div>
-  </main>
+  <footer>
+    &copy;2017 Miguel T Rivera
+  </footer>
+</main>
+</div>
 <script src="./vendor.js"></script>
 <script src="./app.js"></script>
 <script>require('initialize');</script>
