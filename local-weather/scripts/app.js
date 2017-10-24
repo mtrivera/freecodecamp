@@ -26,6 +26,7 @@ function getWeather(lat, long) {
       var $temp = $('#temperature');
       var $icon = $('#icon');
       var $desc = $('#description');
+      var $convertBtn = $('.convert-btn');
       var weatherUnit = '';
       
       // United States, Libera, and Myanmar use the Imperial Unit system
@@ -34,9 +35,11 @@ function getWeather(lat, long) {
          weatherData.sys.country === 'LR') {
               weatherUnit = 'F'; 
              $temp.text('').append(celToFah(weatherData.main.temp) +  ' &deg;' + weatherUnit); 
+             $convertBtn.text('Convert to Celsius');
       } else {
         weatherUnit = 'C';
         $temp.text('').append(fahToCel(weatherData.main.temp) +  ' &deg;' + weatherUnit);
+        $convertBtn.text('Convert to Fahrenheit');
       }
       
       $icon.append('<img src=' + weatherData.weather[0].icon + '>');
