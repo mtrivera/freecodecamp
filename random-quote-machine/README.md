@@ -19,10 +19,12 @@ You can tweet out the current quote via Twitter.
 ## Problems
 
 1. Hosting on Github is not suitable with a public API key
+2. Cross-origin issue accessing JSON data file
 
 ## Solutions
 
 1. Refactor the program to use a JSON data file
+2. Create a variable that contains the quote data, and omit the JSON file
 
 ## Things I Learned (TIL)
 
