@@ -7,6 +7,9 @@ error checking for quotes longer than 140 characters
 add toggle for changing quote category? http://www.bootstraptoggle.com/
 change magic numbers / strings to variables
 */
+// List of ten motivational quotes
+// "Motivational Quotes." BrainyQuote.com. Xplore Inc, 2017. 24 October 2017. 
+// https://www.brainyquote.com/quotes/topics/topic_motivational.html
 var quotes = [
   {
     "quote": "Only I can change my life. No one can do it for me.",
@@ -49,31 +52,33 @@ var quotes = [
     "author": "Muhammad Ali"
   }
 ];
-/*
-function getQuote() {
-  $.ajax({
-    url: "https://andruxnet-random-famous-quotes.p.mashape.com/",
-    data:{
-      cat: "famous"   //other option is 'movies'
-    }, 
-    headers:{
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Accept": "application/json"
-    },
-    type: "GET",
-    dataType: "json",
-    cache: false,
-    success: function(data) {
-      $('div.quote-content').empty().append(data.quote + '<br />');
-      $('div.quote-author').empty().append('-' + data.author);
-      $('.tweet').attr('href','https://twitter.com/intent/tweet?text=' + '"' + data.quote + '"' + ' -' + data.author + '&hashtags=randomquote');
-     }     
-  });
-}//end getQuote
-*/
+// Generate a random number
+function rand(arr) {
+  return Math.floor(Math.random() * arr.length);
+}
+// Get quote content
+function getQuote(quotesArr, index) {
+  return quotesArr[index].quote;
+}
+// Get quote author
+function getAuthor(quotesArr, index) {
+  return quotesArr[index].author;
+}
+// Render the quote and call tweet function
+function renderQuote(quotesArr) {
+  var index = rand(quotesArr);
+  $('div.quote-content').empty().append(getQuote(quotesArr, index) + '<br />');
+  $('div.quote-author').empty().append('-' + getAuthor(quotesArr, index));
+  buildTweetQuote(getQuote(quotesArr, index), getAuthor(quotesArr, index));
+}
+// Prepare quote and author content for Tweet button
+function buildTweetQuote(quote, author) {
+  $('.tweet').attr('href','https://twitter.com/intent/tweet?text=' + '"' + quote + '"' + ' -' + author + '&hashtags=randomquote');
+}
+// Main program
 $(document).ready(function() {
-  getQuote();  //initial quote display
+  renderQuote(quotes);   //initial quote display
   $('#newQuoteBtn').click(function() { 
-    getQuote();
+    renderQuote(quotes);   
   });
 });
