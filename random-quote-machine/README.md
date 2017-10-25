@@ -54,3 +54,4 @@ You can tweet out the current quote via Twitter.
 * Add CSS styling
 * Make responsive
 * Utilize Bootstrap
+* ~~Refactor to work without external API~~
