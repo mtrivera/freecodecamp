@@ -10,24 +10,24 @@
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
-  <!--Bootstrap CSS CDN-->
-  <link rel="stylesheet" 
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
-  integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   <link href="styles/styles.css" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <h1>Local Weather</h1>
-    <p>by Miguel T Rivera</p>
-  </header>
-  <main>
-    <div id="temperature"></div>
-    <div id="icon"></div>
-    <div id="description"></div>
-    <div id="wind"></div>
-    <button class="btn btn-default btn-primary convert-btn"></button>
-  </main>
+  <div class="grid center-block">
+    <header class="center-txt">
+      <h1>Local Weather</h1>
+      <p>by Miguel T Rivera</p>
+    </header>
+    <main class="center-txt">
+      <div id="city"></div>
+      <div id="temperature"></div>
+      <div class="center-block" id="icon"></div>
+      <div id="description"></div>
+      <div id="wind"></div>
+      <button class="convert-btn"></button>
+    </main>
+    <footer class="center-txt">&copy;2017 Miguel T Rivera</footer>
+  </div>
   <script src="scripts/app.js"></script>  
 </body>
 </html>
