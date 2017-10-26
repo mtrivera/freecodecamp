@@ -1,8 +1,8 @@
 function getLocation() {
   if (navigator.geolocation) {
      navigator.geolocation.getCurrentPosition(function(position) {
-       var lat = Math.floor(position.coords.latitude);
-       var long = Math.floor(position.coords.longitude);
+       var lat = position.coords.latitude;
+       var long = position.coords.longitude;
        getWeather(lat, long);
         //console.log(getWeather(lat, long));
        //console.log(position.coords.latitude, position.coords.longitude);
@@ -23,6 +23,7 @@ function getWeather(lat, long) {
     dataType: 'json',
     success: function(weatherData) { 
       //create setWeather function that contains all this
+      var $city = $('#city');
       var $temp = $('#temperature');
       var $icon = $('#icon');
       var $desc = $('#description');
@@ -41,9 +42,9 @@ function getWeather(lat, long) {
         $temp.text('').append(fahToCel(weatherData.main.temp) +  ' &deg;' + weatherUnit);
         $convertBtn.text('Convert to Fahrenheit');
       }
-      
+      $city.append(weatherData.name);
       $icon.append('<img src=' + weatherData.weather[0].icon + '>');
-      $desc.append(weatherData.weather.description);
+      $desc.append(weatherData.weather[0].description);
       getReading(weatherData.main.temp, weatherUnit);
         }
   });
