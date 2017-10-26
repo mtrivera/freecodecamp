@@ -10,25 +10,24 @@
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
-  <!--Bootstrap CSS CDN-->
-  <link rel="stylesheet" 
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
-  integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   <link href="styles/styles.css" rel="stylesheet">
 </head>
 <body>
-  <header>
+  <header class="center-txt">
     <h1>Random Quote Machine</h1>
     <p>Created by Miguel T Rivera</p>
   </header>
-  <main>
+  <main class="center-txt">
     <div class="quote">
       <div class="quote-content"></div>
       <div class="quote-author font-italic"></div>
     </div> 
-    <button id="newQuoteBtn" class="btn btn-primary">New Quote</button>
-    <a href="#" class="tweet" target="_blank"><button id="tweetBtn" class="btn btn-primary">Tweet Quote</button></a>
+    <div class="btn-group">
+      <button id="newQuoteBtn">New Quote</button>
+      <a href="#" class="tweet" target="_blank"><button id="tweetBtn">Tweet Quote</button></a>
+    </div>
   </main>
+  <footer class="center-txt">&copy;2017 Miguel T Rivera<br><cite>https://www.nationalparks.org/explore-parks/yosemite-national-park</cite></footer>
   <script src="scripts/app.js"></script>
 </body>
 </html>
