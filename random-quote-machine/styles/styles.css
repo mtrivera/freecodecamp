@@ -1,0 +1,30 @@
+*, *::before, *::after {
+  -webkit-box-sizing: border-box; 
+  -moz-box-sizing: border-box; 
+  box-sizing: border-box;
+}
+body {
+  margin-top: 20px;
+  color: white;
+  font: 1em Arial,sans-serif;
+  /* Images source: https://www.nationalparks.org/explore-parks/yosemite-national-park */
+  /* https://stackoverflow.com/questions/12609110/responsive-css-background-images */
+  background-image: url('../images/yosemite.jpg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+.quote {
+  margin-bottom: 10px;
+}
+.btn-group {
+  margin-bottom: 10px;
+}
+/* Utility Classes **********************/
+.center-txt {
+  text-align: center;
+}
+.center-block {
+  margin: 0 auto;
+}
