@@ -1,8 +1,64 @@
-#description {
-  text-transform: capitalize;
+*, *::before, *::after {
+  -webkit-box-sizing: border-box; 
+  -moz-box-sizing: border-box; 
+  box-sizing: border-box;
 }
-
+body {
+  color: white;
+  font: 1em Arial,sans-serif;
+  background: steelblue;
+}
+.convert-btn {
+  font-size: 1em;
+  border-radius: 10px;
+  color: white;
+  background: steelblue;
+  border: 3px solid white;
+  padding: 20px 15px;
+}
+#description {
+  font-size: 1.5em;
+  text-transform: capitalize;
+  margin-bottom: 10px;
+}
+#city {
+  font-size: 2.0em;
+  margin-bottom: 10px;
+}
 #icon {
   width: 50px;
   height: 50px;
+}
+#temperature {
+  font-size: 3em;
+}
+/* Grid Area Names ************************/
+footer {
+  grid-area: 'footer';
+}
+header {
+  grid-area: 'header';
+  margin-top: 20px;
+}
+main {
+  grid-area: 'main';
+}
+/* Grid Style ****************************/
+.grid {
+  max-width: 940px;
+  display: grid;
+  grid-auto-rows: minmax(100px, auto-fit);
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+  grid-template-areas: 
+  'header'
+  'main'
+  'footer';
+}
+/* Utility Classes ************************/
+.center-block {
+  margin: 0 auto;
+}
+.center-txt {
+  text-align: center;
 }
