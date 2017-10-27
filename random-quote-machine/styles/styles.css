@@ -16,10 +16,20 @@ body {
   background-size: cover;
 }
 .quote {
-  margin-bottom: 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  background: #4f4f4f;
 }
-.btn-group {
-  margin-bottom: 10px;
+.btn {
+  border-radius: 10px;
+  color: white;
+  padding: 10px 10px;
+  background: #e85500;
+}
+.btn:active {
+  background: #1752d3;
 }
 /* Utility Classes **********************/
 .center-txt {
@@ -27,4 +37,7 @@ body {
 }
 .center-block {
   margin: 0 auto;
+}
+.mb-10 {
+  margin-bottom: 10px;
 }
