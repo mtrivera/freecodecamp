@@ -24,7 +24,7 @@ You can tweet out the current quote via Twitter.
 ## Solutions
 
 1. Refactor the program to use a JSON data file
-2. Create a variable that contains the quote data, and omit the JSON file
+2. Tested on a server and works fine ~~Create a variable that contains the quote data, and omit the JSON file~~
 
 ## Things I Learned (TIL)
 
@@ -40,6 +40,7 @@ You can tweet out the current quote via Twitter.
 * HTML5
 * CSS3
 * JavaScript
+* AJAX
 * jQuery
 * JSON
 * Bootstrap
@@ -51,7 +52,8 @@ You can tweet out the current quote via Twitter.
 
 ## TODO
 
-* Add CSS styling
+* ~~Add CSS styling~~
+* Add CSS Grid
 * Make responsive
-* Utilize Bootstrap
+* ~~Utilize Bootstrap~~
 * ~~Refactor to work without external API~~
