@@ -10,7 +10,7 @@ change magic numbers / strings to variables
 // List of ten motivational quotes
 // "Motivational Quotes." BrainyQuote.com. Xplore Inc, 2017. 24 October 2017. 
 // https://www.brainyquote.com/quotes/topics/topic_motivational.html
-var quotes = [
+/*var quotes = [
   {
     "quote": "Only I can change my life. No one can do it for me.",
     "author": "Carol Burnett"
@@ -51,7 +51,22 @@ var quotes = [
     "quote": "I know where I'm going and I know the truth, and I don't have to be what you want me to be. I'm free to be what I want.",
     "author": "Muhammad Ali"
   }
-];
+];*/
+// AJAX GET Request
+var jqxhr = $.getJSON('data/quotes.json', function(data) {
+  renderQuote(data);
+}).fail(function(error) {
+  console.log('Error message:' + error);
+});
+/*$.ajax({
+  url: 'data/quotes.json', 
+  type: 'GET',
+  dataType: 'json',
+  success: function(quoteData) {
+    console.log(quoteData[3].quote);
+  }
+});
+*/
 // Generate a random number
 function rand(arr) {
   return Math.floor(Math.random() * arr.length);
@@ -68,7 +83,7 @@ function getAuthor(quotesArr, index) {
 function renderQuote(quotesArr) {
   var index = rand(quotesArr);
   $('div.quote-content').empty().append(getQuote(quotesArr, index) + '<br />');
-  $('div.quote-author').empty().append('-' + getAuthor(quotesArr, index));
+  $('cite.quote-author').empty().append('-' + getAuthor(quotesArr, index));
   buildTweetQuote(getQuote(quotesArr, index), getAuthor(quotesArr, index));
 }
 // Prepare quote and author content for Tweet button
@@ -77,8 +92,11 @@ function buildTweetQuote(quote, author) {
 }
 // Main program
 $(document).ready(function() {
-  renderQuote(quotes);   //initial quote display
+  //renderQuote(quotes);   //initial quote display
   $('#newQuoteBtn').click(function() { 
-    renderQuote(quotes);   
+    //renderQuote(quotes);   
+    jqxhr.done(function(data) {
+      renderQuote(data);
+    });
   });
 });
