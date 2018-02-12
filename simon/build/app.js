@@ -164,16 +164,17 @@ var simon = {
   }
 };
 var colorsDiv = document.getElementById('colors');
-var controlsDiv = document.getElementById('controls');
+//const controlsDiv = document.getElementById('controls');
+var controlsDiv = document.querySelector('.menu');
 var colorsList = colorsDiv.children;
 var controlsList = controlsDiv.children;
 var greenBtn = document.getElementById('green');
 var blueBtn = document.getElementById('blue');
 var redBtn = document.getElementById('red');
 var yellowBtn = document.getElementById('yellow');
-var startBtn = document.querySelector('.start');
-var resetBtn = document.querySelector('.reset');
-var strictBtn = document.querySelector('.strict');
+var startBtn = document.querySelector('.menu__start-button');
+var resetBtn = document.querySelector('.menu__reset-button');
+var strictBtn = document.querySelector('.menu__strict-button');
 var scoreMsg = document.getElementsByTagName('span')[0];
 var strictMsg = document.getElementsByTagName('span')[1];
 

@@ -161,16 +161,17 @@ const simon = {
   }
 };
 const colorsDiv = document.getElementById('colors');
-const controlsDiv = document.getElementById('controls');
+//const controlsDiv = document.getElementById('controls');
+const controlsDiv = document.querySelector('.menu');
 const colorsList = colorsDiv.children;
 const controlsList = controlsDiv.children;
 const greenBtn = document.getElementById('green');
 const blueBtn = document.getElementById('blue');
 const redBtn = document.getElementById('red');
 const yellowBtn = document.getElementById('yellow');
-const startBtn = document.querySelector('.start');
-const resetBtn = document.querySelector('.reset');
-const strictBtn = document.querySelector('.strict');
+const startBtn = document.querySelector('.menu__start-button');
+const resetBtn = document.querySelector('.menu__reset-button');
+const strictBtn = document.querySelector('.menu__strict-button');
 const scoreMsg = document.getElementsByTagName('span')[0];
 const strictMsg = document.getElementsByTagName('span')[1];
 
