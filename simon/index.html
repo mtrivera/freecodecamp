@@ -8,25 +8,25 @@
 </head>
 <body>
   <div class="wrapper">
-    <header class="txt-center">
+    <header>
       <h1>Simon Game</h1>
       <p>Created by Miguel T Rivera</p>
     </header>
     <main>
-      <div id="colors" class="grid-colors">
+      <div id="colors">
         <button type="button" id="green"></button>
         <button type="button" id="red"></button>
         <button type="button" id="yellow"></button>
         <button type="button" id="blue"></button>
       </div>
-      <div id="game-info">
-        Count<span class="score strict-status"></span>
-        <span class="strict-status uppercase-txt"></span>
+      <div class="feedback">
+        Count<span class="feedback__score-number"></span>
+        Strict Status<span class="feedback__status-text"></span>
       </div>
-      <div id="controls">
-        <button type="button" class="btn start uppercase-txt">start</button>
-        <button type="button" class="btn reset uppercase-txt">reset</button>
-        <button type="button" class="btn strict uppercase-txt">strict</button>
+      <div class="menu">
+        <button type="button" class="menu__start-button">start</button>
+        <button type="button" class="menu__reset-button">reset</button>
+        <button type="button" class="menu__strict-button">strict</button>
       </div>
     </main>
   </div>
