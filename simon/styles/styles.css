@@ -77,8 +77,8 @@ main {
   text-align: center;
   margin: 50px 10px;
 }
-.feedback__number,
-.feedback__text {
+.feedback__score-number,
+.feedback__status-text {
   display: inline;
   margin-left: 0.5em;
   color: #000;
