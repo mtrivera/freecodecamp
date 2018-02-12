@@ -1,7 +1,7 @@
 # Simon Game
 ### Miguel T Rivera
 
-![Render of my Simon Game](https://s26.postimg.org/ru43caryx/simon-render.png)
+![Render of my Simon Game](https://i.imgur.com/OmGOElV.png)
 
 ## Description
 The classic game that you can now play in your browser. No need for batteries! A sequence of random colors will be played and you must match, get 20 correct and you win! Watch out though, the difficulty of the game increases as you near 20. 
