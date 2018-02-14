@@ -2,7 +2,7 @@
 
 ## Description
 
-Choose between all time or the last 30 days of freeCodeCamp campers who earned the most Brownie points. Brownie points are giving for helping a learner with a question on the gitter chatrooms.
+Choose between all time or the last 30 days of freeCodeCamp campers who earned the most Brownie points. Brownie points are given for helping a camper with a question on the gitter chatrooms.
 
 A front-end project for the Data Visualization Certificate of the freeCodeCamp curriculum.
 
