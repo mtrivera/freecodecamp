@@ -5,6 +5,11 @@ const GDP_DATA_URL = 'https://raw.githubusercontent.com/FreeCodeCamp/ProjectRefe
 fetch(GDP_DATA_URL)
   .then((res) => res.json())
   .then((gdpData) => {
+    const dataArr = gdpData.data.slice(0);
+    // Quarter periods stored at index 0
+    const quarters = createArr(dataArr, 0);
+    // Amounts in billion stored at index 1
+    const billions = createArr(dataArr, 1);
     // generateBarChart(gdpData);
 }).catch((error) => {
     console.log(error);
@@ -42,4 +47,12 @@ function generateBarChart(chartdata) {
       }
     }
   });
+}
+
+function createArr(inputArr, indexFilter) {
+  const outputArr = [];
+  for (let count = 0; count < inputArr.length; count += 1) {
+    outputArr[count] = inputArr[count][indexFilter];
+  }
+  return outputArr;
 }
