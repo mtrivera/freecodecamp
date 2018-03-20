@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html>
-<meta charset='UTF-8' />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, minimum-scale = 1.0, initial-scale = 1.0, maximum-scale = 5.0, user-scalable=yes">
 <head>
-<link rel='stylesheet' href='styles/main.css' />
-<script src='scripts/main.js'></script>
+<link rel="stylesheet" href="styles/main.css" />
+<title>Twitch Viewer | Miguel T Rivera</title>
 </head>
 <body>
-<form method='POST'>
+<form>
   <fieldset>
-    <legend>Twitch Streamer Type</legend>
-      <input type='radio' name='status' value='all' />ALL<br />
-      <input type='radio' name='status' value='offline' />OFFLINE<br />
-      <input type='radio' name='status' value='online' />ONLINE<br />
+    <legend>Sort Twitch Channel by:</legend>
+    <label for="channelStatus1">All</label>  
+    <input type="radio" id="channelStatus1" name="channel" value="all" checked/>
+    <label for="channelStatus2">Online</label>
+    <input type="radio" id="channelStatus2" name="channel" value="online" />
+    <label for="channelStatus3">Offline</label>
+    <input type="radio" id="channelStatus3" name="channel" value="offline" />
   </fieldset>
 </form>
-<div id='contentList'></div>
+<div id="contentList"></div>
+<script src="scripts/main.js"></script>
 </body>
 </html>
