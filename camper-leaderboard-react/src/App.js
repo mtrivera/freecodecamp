@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
+//import './App.css';
+import '../node_modules/bulma/css/bulma.css';
 
 const Header = () => (
   <header>
-    <h1>freeCodeCamp Camper Leaderboard</h1>
+    <h1 className="title">freeCodeCamp Camper Leaderboard</h1>
     <p>View the top 100 brownie point earners of all time or the last 30 days.<br />Brownie points
     are given to campers for helping other campers with questions in the gitter chatrooms.</p>
   </header>  
@@ -31,9 +32,9 @@ class FilterableCamperTable extends Component {
     const campers = this.props.campers;
     const listCampers = campers.map((camper, index) => {
       return (
-        <tr>
+        <tr className='is-clearfix'>
           <td>{index + 1}</td>
-          <td><img width="64" height="64" src={camper.img} alt=''/>{camper.username}</td>
+          <td><img className='image is-64x64 is-pulled-left' src={camper.img} alt=''/>{camper.username}</td>
           <td>{camper.recent}</td>
           <td>{camper.alltime}</td>
           <td>{camper.lastUpdate}</td>
@@ -42,7 +43,10 @@ class FilterableCamperTable extends Component {
     });
 
     return (
-      <table>{listCampers}</table>
+      <table className='table is-bordered is-striped is-fullwidth'>
+      <TableHeader />
+      {listCampers}
+      </table>
     )
   }
 }
@@ -50,9 +54,8 @@ class FilterableCamperTable extends Component {
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <div className="container">
         <Header />
-        <TableHeader />
         <FilterableCamperTable campers={CAMPERS_R} />
         <Footer />
       </div>
