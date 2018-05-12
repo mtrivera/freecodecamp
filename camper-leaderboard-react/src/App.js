@@ -19,7 +19,8 @@ class TableHeader extends Component {
   // TODO: Create callback function to handle clicks
   handleClick = (e) => {
     e.preventDefault();
-    console.log("button value: ", e.target.value);
+    // e.target.value is the endpoint
+    this.props.onFilterBrownieClick(e.target.value);
   }
 
   render() {
@@ -49,8 +50,8 @@ class FilterableCamperTable extends Component {
     isLoaded: false,
   }
   // TODO: Create one function to handle AJAX request
-  handleBrownieAllSort = () => {
-    fetch('https://fcctop100.herokuapp.com/api/fccusers/top/alltime')
+  handleBrownieAllSort = (endpoint) => {
+    fetch(`https://fcctop100.herokuapp.com/api/fccusers/top/${endpoint}`)
       .then(res => res.json())
       .then(result => {
         this.setState({
@@ -66,8 +67,8 @@ class FilterableCamperTable extends Component {
       }
   }
 
-  handleBrownieRecentSort = () => {
-    fetch('https://fcctop100.herokuapp.com/api/fccusers/top/recent')
+  handleBrownieRecentSort = (endpoint) => {
+    fetch(`https://fcctop100.herokuapp.com/api/fccusers/top/${endpoint}`)
       .then(res => res.json())
       .then(result => {
         this.setState({
@@ -104,7 +105,7 @@ class FilterableCamperTable extends Component {
     const campers = this.state.campers;
     const listCampers = campers.map((camper, index) => {
       return (
-        <tr className='is-clearfix'>
+        <tr key={camper.username} className='is-clearfix'>
           <td>{index + 1}</td>
           <td><img className='image is-64x64 is-pulled-left' src={camper.img} alt=''/>{camper.username}</td>
           <td>{camper.recent}</td>
@@ -118,9 +119,7 @@ class FilterableCamperTable extends Component {
       <table className='table is-bordered is-striped is-fullwidth'>
         <tbody>
           <TableHeader 
-            onBrownieRecentSort={this.handleBrownieRecentSort}
-            onBrownieAllSort={this.handleBrownieAllSort}
-            hClick={this.handleClick}
+            onFilterBrownieClick={this.handleBrownieAllSort}
           />
           {listCampers}
         </tbody>
