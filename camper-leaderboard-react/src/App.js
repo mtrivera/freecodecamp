@@ -16,10 +16,7 @@ const Footer = () => (
 );
 
 class TableHeader extends Component {
-  // TODO: Create callback function to handle clicks
-  handleClick = (e) => {
-    e.preventDefault();
-    // e.target.value is the endpoint
+  handleBrownieSortClick = (e) => {
     this.props.onFilterBrownieClick(e.target.value);
   }
 
@@ -28,46 +25,23 @@ class TableHeader extends Component {
       <tr>
       <td>Rank</td>
       <td>Username</td>
-      <td>Last 30 Days<button onClick={this.handleClick} value="recent"><i className="fas fa-sort-up su"></i></button></td>
-      <td>All Time<button onClick={this.handleClick} value="alltime"><i className="fas fa-sort-up"></i></button></td>
+      <td>Last 30 Days<button onClick={this.handleBrownieSortClick} value="recent"><i className="fas fa-sort-up su"></i></button></td>
+      <td>All Time<button onClick={this.handleBrownieSortClick} value="alltime"><i className="fas fa-sort-up"></i></button></td>
       <td>Last Update</td>
     </tr>
     );
   }
 }
 
-/*
-Hint: To get the top 100 campers for the last 30 days: https://fcctop100.herokuapp.com/api/fccusers/top/recent.
-Hint: To get the top 100 campers of all time: https://fcctop100.herokuapp.com/api/fccusers/top/alltime.
-*/ 
-
 // TODO: Add style with Bulma
 class FilterableCamperTable extends Component {
   state = {
     campers: [],
     error: null,
-    isFiltered: false,
     isLoaded: false,
   }
-  // TODO: Create one function to handle AJAX request
-  handleBrownieAllSort = (endpoint) => {
-    fetch(`https://fcctop100.herokuapp.com/api/fccusers/top/${endpoint}`)
-      .then(res => res.json())
-      .then(result => {
-        this.setState({
-          isLoaded: true,
-          campers: result
-        });
-      }),
-      (error) => {
-        this.setState({
-          isLoaded: true,
-          error
-        });
-      }
-  }
 
-  handleBrownieRecentSort = (endpoint) => {
+  handleBrownieSort = (endpoint) => {
     fetch(`https://fcctop100.herokuapp.com/api/fccusers/top/${endpoint}`)
       .then(res => res.json())
       .then(result => {
@@ -85,20 +59,7 @@ class FilterableCamperTable extends Component {
   }
 
   componentDidMount() {
-    fetch('https://fcctop100.herokuapp.com/api/fccusers/top/recent')
-      .then(res => res.json())
-      .then(result => {
-        this.setState({
-          isLoaded: true,
-          campers: result
-        });
-      }),
-      (error) => {
-        this.setState({
-          isLoaded: true,
-          error
-        });
-      }
+    this.handleBrownieSort('recent');
   }
 
   render() {
@@ -119,7 +80,7 @@ class FilterableCamperTable extends Component {
       <table className='table is-bordered is-striped is-fullwidth'>
         <tbody>
           <TableHeader 
-            onFilterBrownieClick={this.handleBrownieAllSort}
+            onFilterBrownieClick={this.handleBrownieSort}
           />
           {listCampers}
         </tbody>
