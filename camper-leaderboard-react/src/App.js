@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import '../node_modules/bulma/css/bulma.css';
 
 const Header = () => (
@@ -33,6 +34,10 @@ class TableHeader extends Component {
   }
 }
 
+TableHeader.propTypes = {
+  handleBrownieSortClick: PropTypes.func
+}
+
 // TODO: Add style with Bulma
 class FilterableCamperTable extends Component {
   state = {
@@ -49,26 +54,27 @@ class FilterableCamperTable extends Component {
           isLoaded: true,
           campers: result
         });
-      }),
+      },
       (error) => {
         this.setState({
           isLoaded: true,
           error
         });
       }
+    )
   }
 
   componentDidMount() {
     this.handleBrownieSort('recent');
   }
-
+  // TODO: Change lastUpdate into natural language
   render() {
     const campers = this.state.campers;
     const listCampers = campers.map((camper, index) => {
       return (
         <tr key={camper.username} className='is-clearfix'>
           <td>{index + 1}</td>
-          <td><img className='image is-64x64 is-pulled-left' src={camper.img} alt=''/>{camper.username}</td>
+          <td><img className='image is-64x64 is-pulled-left' src={camper.img} alt={camper.username}/>{camper.username}</td>
           <td>{camper.recent}</td>
           <td>{camper.alltime}</td>
           <td>{camper.lastUpdate}</td>
@@ -87,6 +93,19 @@ class FilterableCamperTable extends Component {
       </table>
     )
   }
+}
+
+FilterableCamperTable.propTypes = {
+  campers: PropTypes.arrayOf(PropTypes.shape({
+    img: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    recent: PropTypes.number.isRequired,
+    alltime: PropTypes.number.isRequired,
+    lastUpdate: PropTypes.string.isRequired
+  })),
+  error: PropTypes.object,
+  isLoaded: PropTypes.bool,
+  handleBrownieSort: PropTypes.func,
 }
 
 class App extends Component {
